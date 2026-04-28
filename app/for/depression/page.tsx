@@ -1,0 +1,52 @@
+import { ConditionPageTemplate } from "@/components/seo/ConditionPage";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata = pageMetadata({
+  title: "AI Therapy for Depression | Calm Therapist — Stay Visible to Yourself",
+  description:
+    "AI therapy designed for depression. Calm Therapist holds the record so you don't have to, surfaces patterns you can't see, and keeps you visible to yourself.",
+  path: "/for/depression",
+});
+
+export default function DepressionPage() {
+  return (
+    <ConditionPageTemplate
+      slug="depression"
+      condition="Depression"
+      h1="AI therapy for depression — when getting up is the hardest part."
+      feeling={[
+        "Depression is not sadness. It is the absence of energy where energy used to be. It is the shower that takes three days. It is the friend's text you saw, meant to reply to, and never did.",
+        "Depression is the thing that makes the things that would help you feel impossible to do. It is recursive. Knowing what helps doesn't help.",
+        "Most therapy products ask you to track your mood, set goals, and stay engaged. None of those things work when you can't get out of bed. They become another way to feel like a failure.",
+      ]}
+      whyFails="Standard AI tools treat depression like a productivity problem. They build streak counters, daily check-ins, and quiz-style mood tracking. People with depression know exactly what these things do — they create another surface on which to disappoint yourself. Worse, they have no longitudinal memory. Every time you come back after a hard week, you start over. The disappearance is invisible to them. Calm Therapist is designed differently: there is no streak system, the journal works whether or not you wrote anything, and the agent remembers you across the gaps. That's the part that matters."
+      ctFeatures={[
+        { title: "No streaks. No guilt.", body: "Calm Therapist does not punish absence. The journal still works whether you wrote three lines or nothing. Coming back is the only thing that matters.", href: "/modes/journal" },
+        { title: "Memory across the gaps", body: "Depression makes you disappear from your own life. Calm Therapist holds your record while you're gone. When you return, your context is intact.", href: "/modes/chat" },
+        { title: "Monthly Reflect", body: "Depression makes you doubt that anything has changed. The Monthly Reflect shows you, in your own words, what actually shifted.", href: "/modes/reflect" },
+      ]}
+      modeLinks={[
+        { href: "/modes/chat", label: "Chat Agent" },
+        { href: "/modes/journal", label: "Weekly Journal" },
+        { href: "/modes/reflect", label: "Monthly Reflect" },
+      ]}
+      testimonials={[
+        { name: "James, 41", text: "I don't do therapy. I never have. But Calm Therapist doesn't feel like therapy. It feels like finally having somewhere to think out loud." },
+        { name: "Aisha, 27", text: "I disappeared for three weeks. When I came back, Calm Therapist remembered everything. I didn't have to explain why I'd been gone. I just kept going." },
+        { name: "Noah, 35", text: "The Monthly Reflect saved me. I'd convinced myself nothing had changed. Then I read my own quotes and saw I was wrong." },
+      ]}
+      faqs={[
+        { q: "I can't keep up with apps. Will this be different?", a: "Calm Therapist has no streak system. There is no shame in coming back after weeks away. The agent remembers, and meets you where you are." },
+        { q: "Is it safe if I'm having dark thoughts?", a: "Calm Therapist's Crisis Safe protocol activates automatically when language indicates suicidal ideation or self-harm. It will not minimise. It will surface verified resources for your region." },
+        { q: "How is this different from a journaling app?", a: "Journaling apps are passive. Calm Therapist actively reads what you write across all modes and reflects patterns back to you in plain language." },
+        { q: "Can I export my history if I want to share it with a therapist?", a: "Yes. You can export your full record as a structured PDF or JSON, anytime." },
+        { q: "Does it work in languages other than English?", a: "Yes. Calm Therapist supports English, Arabic, Urdu, Hindi, French, and Spanish, with more languages rolling out." },
+      ]}
+      related={[
+        { href: "/for/anxiety", label: "For Anxiety" },
+        { href: "/for/grief", label: "For Grief" },
+        { href: "/blog/men-therapy-stigma", label: "Men, therapy, and the stigma we're done with" },
+      ]}
+    />
+  );
+}

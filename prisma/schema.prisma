@@ -1,0 +1,85 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String         @id @default(cuid())
+  email          String         @unique
+  name           String
+  ageGroup       String?
+  tone           String         @default("warm")
+  focusAreas     String[]
+  language       String         @default("en")
+  createdAt      DateTime       @default(now())
+  sessions       Session[]
+  memories       Memory[]
+  goals          Goal[]
+  journalEntries JournalEntry[]
+  subscription   Subscription?
+}
+
+model Session {
+  id         String    @id @default(cuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id])
+  mode       String
+  startedAt  DateTime  @default(now())
+  endedAt    DateTime?
+  transcript Json
+  summary    String?
+  moodBefore Int?
+  moodAfter  Int?
+}
+
+model Memory {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  statement      String
+  category       String
+  mentions       Int      @default(1)
+  firstMentioned DateTime @default(now())
+  lastMentioned  DateTime @default(now())
+}
+
+model Goal {
+  id          String           @id @default(cuid())
+  userId      String
+  user        User             @relation(fields: [userId], references: [id])
+  title       String
+  description String?
+  frequency   String
+  createdAt   DateTime         @default(now())
+  completions GoalCompletion[]
+}
+
+model GoalCompletion {
+  id     String   @id @default(cuid())
+  goalId String
+  goal   Goal     @relation(fields: [goalId], references: [id])
+  date   DateTime @default(now())
+}
+
+model JournalEntry {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  weekStart  DateTime
+  content    String
+  aiAnalysis String?
+  createdAt  DateTime @default(now())
+}
+
+model Subscription {
+  id        String    @id @default(cuid())
+  userId    String    @unique
+  user      User      @relation(fields: [userId], references: [id])
+  tier      String
+  startDate DateTime  @default(now())
+  endDate   DateTime?
+}
