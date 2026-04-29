@@ -13,13 +13,16 @@
     "@11labs/react": "^0.0.7",
     "@anthropic-ai/sdk": "^0.27.0",
     "@prisma/client": "^5.20.0",
+    "bcryptjs": "^2.4.3",
     "framer-motion": "^11.5.4",
+    "jose": "^5.9.6",
     "next": "14.2.15",
     "next-seo": "^6.6.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20.16.10",
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.0",

@@ -2,7 +2,7 @@
 
 import { Style } from "@/components/ui/Style";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Logo } from "@/components/ui/Logo";
 
@@ -20,8 +20,10 @@ const STORAGE_KEY = "calm-therapist:sidebar-collapsed";
 
 export function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -35,6 +37,16 @@ export function Sidebar() {
       window.localStorage.setItem(STORAGE_KEY, next ? "1" : "0");
       return next;
     });
+  };
+
+  const logout = async () => {
+    if (loggingOut) return;
+    setLoggingOut(true);
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+    } catch {}
+    router.push("/auth/login");
+    router.refresh();
   };
 
   return (
@@ -79,12 +91,19 @@ export function Sidebar() {
         </nav>
 
         <div className="sidebar-footer">
-          <Link href="/" className="sidebar-link" title={collapsed ? "Back to site" : undefined}>
+          <button
+            type="button"
+            onClick={logout}
+            disabled={loggingOut}
+            className="sidebar-link sidebar-link-button"
+            title={collapsed ? "Log out" : undefined}
+            aria-label="Log out"
+          >
             <span className="sidebar-link-icon">
               <ExitIcon />
             </span>
-            <span className="sidebar-link-label">Back to site</span>
-          </Link>
+            <span className="sidebar-link-label">{loggingOut ? "Logging out…" : "Log out"}</span>
+          </button>
         </div>
       </aside>
 
@@ -196,6 +215,13 @@ export function Sidebar() {
         .sidebar-link[data-active="true"] {
           background: var(--calm-forest-10);
           color: var(--calm-forest);
+        }
+        .sidebar-link-button {
+          width: 100%;
+          background: none;
+          border: none;
+          text-align: left;
+          cursor: pointer;
         }
         .sidebar-link-icon {
           width: 20px;
