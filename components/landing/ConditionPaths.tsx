@@ -1,5 +1,7 @@
 "use client";
 
+import { Style } from "@/components/ui/Style";
+
 import Link from "next/link";
 
 const CONDITIONS = [
@@ -62,7 +64,7 @@ export function ConditionPaths() {
         </div>
       </div>
 
-      <style>{`
+      <Style>{`
         @media (max-width: 960px) {
           .condition-row {
             display: flex !important;
@@ -74,7 +76,7 @@ export function ConditionPaths() {
             scroll-snap-align: start;
           }
         }
-      `}</style>
+      `}</Style>
     </section>
   );
 }

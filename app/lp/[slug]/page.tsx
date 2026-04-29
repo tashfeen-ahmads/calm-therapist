@@ -1,3 +1,4 @@
+import { Style } from "@/components/ui/Style";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Logo } from "@/components/ui/Logo";
@@ -149,7 +150,7 @@ export default function LpPage({ params }: { params: { slug: string } }) {
               </div>
             ))}
           </div>
-          <style>{`@media (max-width: 800px) { .lp-testi-grid { grid-template-columns: 1fr !important; } }`}</style>
+          <Style>{`@media (max-width: 800px) { .lp-testi-grid { grid-template-columns: 1fr !important; } }`}</Style>
         </section>
 
         <section style={{ maxWidth: 760, margin: "80px auto 0", textAlign: "center" }}>

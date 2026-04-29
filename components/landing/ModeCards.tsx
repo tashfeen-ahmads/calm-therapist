@@ -1,5 +1,7 @@
 "use client";
 
+import { Style } from "@/components/ui/Style";
+
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { MODE_LIST } from "@/lib/modes";
@@ -77,7 +79,7 @@ export function ModeCards() {
         </div>
       </div>
 
-      <style>{`
+      <Style>{`
         @media (max-width: 960px) {
           .modes-row {
             display: flex !important;
@@ -91,7 +93,7 @@ export function ModeCards() {
             scroll-snap-align: start;
           }
         }
-      `}</style>
+      `}</Style>
     </section>
   );
 }

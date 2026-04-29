@@ -1,3 +1,4 @@
+import { Style } from "@/components/ui/Style";
 import Link from "next/link";
 import { PageShell } from "@/components/seo/PageShell";
 import { JsonLd, breadcrumbSchema } from "@/lib/seo";
@@ -59,7 +60,7 @@ export function ModePageTemplate(props: ModePageProps) {
               </div>
             ))}
           </div>
-          <style>{`@media (max-width: 800px) { .how-grid { grid-template-columns: 1fr !important; } }`}</style>
+          <Style>{`@media (max-width: 800px) { .how-grid { grid-template-columns: 1fr !important; } }`}</Style>
         </div>
       </section>
 

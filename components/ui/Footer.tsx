@@ -1,3 +1,4 @@
+import { Style } from "@/components/ui/Style";
 import Link from "next/link";
 import { Logo } from "./Logo";
 
@@ -81,11 +82,11 @@ export function Footer() {
         </div>
       </div>
 
-      <style>{`
+      <Style>{`
         @media (max-width: 768px) {
           .footer-grid { grid-template-columns: 1fr 1fr !important; }
         }
-      `}</style>
+      `}</Style>
     </footer>
   );
 }

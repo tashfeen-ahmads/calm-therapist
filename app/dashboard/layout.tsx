@@ -1,3 +1,4 @@
+import { Style } from "@/components/ui/Style";
 import { Sidebar } from "@/components/dashboard/Sidebar";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -5,7 +6,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <div style={{ minHeight: "100vh", background: "var(--calm-white)" }}>
       <Sidebar />
       <main className="dashboard-main">{children}</main>
-      <style>{`
+      <Style>{`
         .dashboard-main {
           margin-left: 64px;
           min-height: 100vh;
@@ -17,7 +18,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             padding-bottom: 80px;
           }
         }
-      `}</style>
+      `}</Style>
     </div>
   );
 }

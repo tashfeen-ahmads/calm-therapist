@@ -1,5 +1,7 @@
 "use client";
 
+import { Style } from "@/components/ui/Style";
+
 import { motion } from "framer-motion";
 
 const PROBLEMS = [
@@ -67,14 +69,14 @@ export function Problems() {
         </div>
       </div>
 
-      <style>{`
+      <Style>{`
         @media (max-width: 960px) {
           .problems-grid { grid-template-columns: 1fr 1fr !important; }
         }
         @media (max-width: 600px) {
           .problems-grid { grid-template-columns: 1fr !important; }
         }
-      `}</style>
+      `}</Style>
     </section>
   );
 }

@@ -1,3 +1,4 @@
+import { Style } from "@/components/ui/Style";
 import Link from "next/link";
 
 export function Pricing() {
@@ -50,9 +51,9 @@ export function Pricing() {
         </div>
       </div>
 
-      <style>{`
+      <Style>{`
         @media (max-width: 760px) { .pricing-grid { grid-template-columns: 1fr !important; } }
-      `}</style>
+      `}</Style>
     </section>
   );
 }

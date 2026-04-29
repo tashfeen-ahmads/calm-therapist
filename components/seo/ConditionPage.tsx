@@ -1,3 +1,4 @@
+import { Style } from "@/components/ui/Style";
 import Link from "next/link";
 import { PageShell } from "@/components/seo/PageShell";
 import { JsonLd, faqSchema, breadcrumbSchema } from "@/lib/seo";
@@ -73,7 +74,7 @@ export function ConditionPageTemplate(p: ConditionPageProps) {
               </Link>
             ))}
           </div>
-          <style>{`@media (max-width: 800px) { .ct-grid { grid-template-columns: 1fr !important; } }`}</style>
+          <Style>{`@media (max-width: 800px) { .ct-grid { grid-template-columns: 1fr !important; } }`}</Style>
         </div>
       </section>
 

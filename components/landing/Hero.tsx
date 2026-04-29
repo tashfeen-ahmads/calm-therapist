@@ -1,5 +1,7 @@
 "use client";
 
+import { Style } from "@/components/ui/Style";
+
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { DashboardPreview } from "./DashboardPreview";
@@ -96,12 +98,12 @@ export function Hero() {
         </div>
       </div>
 
-      <style>{`
+      <Style>{`
         @media (max-width: 960px) {
           .hero-grid { grid-template-columns: 1fr !important; gap: 48px !important; }
           .hero-stats { grid-template-columns: 1fr !important; gap: 12px !important; }
         }
-      `}</style>
+      `}</Style>
     </section>
   );
 }

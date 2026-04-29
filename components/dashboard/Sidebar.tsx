@@ -1,5 +1,7 @@
 "use client";
 
+import { Style } from "@/components/ui/Style";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Logo } from "@/components/ui/Logo";
@@ -99,7 +101,7 @@ export function Sidebar() {
         })}
       </nav>
 
-      <style>{`
+      <Style>{`
         .sidebar-link {
           display: flex;
           align-items: center;
@@ -136,7 +138,7 @@ export function Sidebar() {
           .dashboard-sidebar { display: none !important; }
           .dashboard-tabbar { display: flex !important; }
         }
-      `}</style>
+      `}</Style>
     </>
   );
 }

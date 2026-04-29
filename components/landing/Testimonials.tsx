@@ -1,5 +1,7 @@
 "use client";
 
+import { Style } from "@/components/ui/Style";
+
 import { motion } from "framer-motion";
 
 const QUOTES = [
@@ -97,10 +99,10 @@ export function Testimonials() {
         </div>
       </div>
 
-      <style>{`
+      <Style>{`
         @media (max-width: 900px) { .testi-grid { grid-template-columns: 1fr 1fr !important; } }
         @media (max-width: 600px) { .testi-grid { grid-template-columns: 1fr !important; } }
-      `}</style>
+      `}</Style>
     </section>
   );
 }

@@ -1,5 +1,7 @@
 "use client";
 
+import { Style } from "@/components/ui/Style";
+
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { readState } from "@/components/onboarding/OnboardingShell";
@@ -93,9 +95,9 @@ export default function DashboardHome() {
         </ul>
       </Card>
 
-      <style>{`
+      <Style>{`
         @media (max-width: 760px) { .dash-grid { grid-template-columns: 1fr !important; } }
-      `}</style>
+      `}</Style>
     </div>
   );
 }

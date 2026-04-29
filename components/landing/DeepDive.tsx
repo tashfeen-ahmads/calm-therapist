@@ -1,5 +1,7 @@
 "use client";
 
+import { Style } from "@/components/ui/Style";
+
 import Link from "next/link";
 import { motion } from "framer-motion";
 
@@ -71,12 +73,12 @@ function Row({
         </Link>
       </div>
 
-      <style>{`
+      <Style>{`
         @media (max-width: 800px) {
           .deep-row { grid-template-columns: 1fr !important; gap: 32px !important; }
           .deep-row > *:first-child { order: 0 !important; }
         }
-      `}</style>
+      `}</Style>
     </motion.div>
   );
 }

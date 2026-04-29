@@ -1,3 +1,4 @@
+import { Style } from "@/components/ui/Style";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageShell } from "@/components/seo/PageShell";
@@ -94,7 +95,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
               </Link>
             ))}
           </div>
-          <style>{`@media (max-width: 700px) { .related-grid { grid-template-columns: 1fr !important; } }`}</style>
+          <Style>{`@media (max-width: 700px) { .related-grid { grid-template-columns: 1fr !important; } }`}</Style>
         </div>
       </section>
 

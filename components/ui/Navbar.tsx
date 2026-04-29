@@ -1,5 +1,7 @@
 "use client";
 
+import { Style } from "@/components/ui/Style";
+
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Logo } from "./Logo";
@@ -86,7 +88,7 @@ export function Navbar() {
         </div>
       )}
 
-      <style>{`
+      <Style>{`
         .nav-link {
           font-family: var(--font-body);
           font-size: 14px;
@@ -101,7 +103,7 @@ export function Navbar() {
           .nav-links { display: none !important; }
           .nav-burger { display: inline-flex !important; align-items: center; justify-content: center; width: 40px; height: 40px; }
         }
-      `}</style>
+      `}</Style>
     </>
   );
 }
