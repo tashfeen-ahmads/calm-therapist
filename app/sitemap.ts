@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { POSTS } from "@/lib/blog";
-import { MODE_LIST } from "@/lib/modes";
+import { MODE_LIST } from "@/lib/features";
 
 const BASE = process.env.NEXT_PUBLIC_APP_URL ?? "https://calmtherapist.implenix.net";
 
@@ -10,13 +10,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const staticPaths: { path: string; priority: number; freq: "monthly" | "weekly" | "daily" }[] = [
     { path: "/", priority: 1.0, freq: "weekly" },
     { path: "/how-it-works", priority: 0.9, freq: "monthly" },
-    { path: "/modes", priority: 0.85, freq: "monthly" },
+    { path: "/features", priority: 0.85, freq: "monthly" },
     { path: "/about", priority: 0.7, freq: "monthly" },
     { path: "/privacy", priority: 0.6, freq: "monthly" },
   ];
 
   const modes = MODE_LIST.map((m) => ({
-    path: `/modes/${m.slug}`,
+    path: `/features/${m.slug}`,
     priority: 0.8,
     freq: "monthly" as const,
   }));

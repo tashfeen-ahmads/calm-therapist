@@ -18,14 +18,14 @@ export function DeepDive() {
           visual={<VoiceVisual />}
           title="Voice Agent"
           body="The Voice Agent picks up emotional cadence, not just words. It pauses where you'd want a person to pause. It never asks you to repeat yourself, never forgets your name, and never uses scripted prompts. When you can't type, you can speak."
-          href="/modes/voice"
+          href="/features/voice"
         />
         <Row
           imageLeft={false}
           visual={<JournalVisual />}
           title="Weekly Journal + Monthly Reflect"
           body="Writing changes how you metabolize what happened. Calm Therapist holds the longitudinal record — what you said three weeks ago, the patterns you didn't see, the words you used yourself. Then it shows you, gently."
-          href="/modes/journal"
+          href="/features/journal"
         />
         <Row
           imageLeft

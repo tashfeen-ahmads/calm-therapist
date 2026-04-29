@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import type { UserProfile } from "@/lib/claude";
-import type { ModeKey } from "@/lib/modes";
+import type { ModeKey } from "@/lib/features";
 
 interface Message {
   role: "user" | "assistant";

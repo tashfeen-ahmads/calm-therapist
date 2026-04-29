@@ -7,32 +7,26 @@ import { motion } from "framer-motion";
 const QUOTES = [
   {
     name: "Amir, 34",
-    role: "Software engineer",
     text: "I've tried three other apps. They all felt like talking to a FAQ. Calm Therapist actually remembered what I told it about my father in week one. That changed everything.",
   },
   {
     name: "Priya, 28",
-    role: "Designer",
-    text: "The voice mode is the reason I keep coming back. I can't type when I'm anxious. But I can speak. And Calm Therapist listens without rushing me.",
+    text: "The voice agent is the reason I keep coming back. I can't type when I'm anxious. But I can speak. And Calm Therapist listens without rushing me.",
   },
   {
     name: "James, 41",
-    role: "Operations lead",
     text: "I don't do therapy. I never have. But Calm Therapist doesn't feel like therapy. It feels like finally having somewhere to think out loud.",
   },
   {
     name: "Leila, 26",
-    role: "Med student",
     text: "I was worried about my data. I read the privacy page three times. Then I trusted it. That was six months ago. I've never looked back.",
   },
   {
     name: "Tom, 38",
-    role: "Father of two",
-    text: "The monthly reflect feature showed me I've had the same argument with my wife twelve times this year. Seeing that pattern written down was the most useful thing any tool has ever done for me.",
+    text: "The monthly reflect showed me I've had the same argument with my wife twelve times this year. Seeing that pattern written down was the most useful thing any tool has ever done for me.",
   },
   {
     name: "Sara, 31",
-    role: "Founder",
     text: "It asked me how my sister was doing — the one I mentioned in passing two weeks ago. A human therapist has never done that.",
   },
 ];
@@ -79,8 +73,7 @@ export function Testimonials() {
               </p>
               <div style={{ marginTop: "auto" }}>
                 <p style={{ fontSize: 14, fontWeight: 500 }}>{q.name}</p>
-                <p style={{ fontSize: 13, color: "var(--calm-ink-40)" }}>{q.role}</p>
-                <div style={{ display: "flex", gap: 5, marginTop: 12 }}>
+                <div style={{ display: "flex", gap: 5, marginTop: 10 }}>
                   {[...Array(5)].map((_, j) => (
                     <span
                       key={j}

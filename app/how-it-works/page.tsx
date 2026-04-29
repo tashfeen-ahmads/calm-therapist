@@ -16,9 +16,9 @@ const STEPS = [
       "Five questions. Less than five minutes. Calm Therapist learns your name, the things on your mind, the tone you want to be spoken to in, and what you'd like to be true a month from now. This is the foundation it builds everything on.",
   },
   {
-    title: "2. Choose your mode",
+    title: "2. Choose your way in",
     body:
-      "Voice when typing is impossible. Chat when you'd rather write. The journal for the long view. Crisis Safe when things get serious. You can switch any time — Calm Therapist's memory is shared across all of them.",
+      "Voice when typing is impossible. Chat when you'd rather write. The journal for the long view. Crisis Safe when things get serious. You can switch any time — Calm Therapist's memory is shared across every feature.",
   },
   {
     title: "3. Build a longitudinal record",
@@ -60,8 +60,8 @@ export default function HowItWorksPage() {
             <Link href="/onboarding/step-1" className="btn-primary">
               Start your first session
             </Link>
-            <Link href="/modes" className="btn-ghost">
-              Explore modes
+            <Link href="/features" className="btn-ghost">
+              Explore features
             </Link>
           </div>
         </div>

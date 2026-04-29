@@ -4,11 +4,15 @@
 
 :root {
   --calm-forest: #4A7A6D;
+  --calm-forest-deep: #355A4F;
   --calm-mist: #D6E8E4;
+  --calm-mist-deep: #BFD7D2;
   --calm-ink: #2D2D2D;
   --calm-white: #FAFAF8;
-  --calm-ink-40: rgba(45, 45, 45, 0.40);
-  --calm-ink-10: rgba(45, 45, 45, 0.08);
+  --calm-ink-70: rgba(45, 45, 45, 0.72);
+  --calm-ink-40: rgba(45, 45, 45, 0.60);
+  --calm-ink-30: rgba(45, 45, 45, 0.40);
+  --calm-ink-10: rgba(45, 45, 45, 0.10);
   --calm-forest-10: rgba(74, 122, 109, 0.10);
   --calm-forest-20: rgba(74, 122, 109, 0.20);
 }

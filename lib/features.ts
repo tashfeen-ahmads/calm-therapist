@@ -1,15 +1,21 @@
-export type ModeKey = "chat" | "voice" | "journal" | "reflect" | "crisis";
+// Public name: features (Chat Agent, Voice Agent, Weekly Journal, Monthly
+// Reflect, Crisis Safe). Internal alias `MODES` is kept because it represents
+// the AI's behavioural mode addendum at the prompt level.
 
-export interface ModeDefinition {
-  key: ModeKey;
+export type FeatureKey = "chat" | "voice" | "journal" | "reflect" | "crisis";
+export type ModeKey = FeatureKey;
+
+export interface FeatureDefinition {
+  key: FeatureKey;
   label: string;
   slug: string;
   oneLiner: string;
   longDescription: string;
   systemAddendum: string;
 }
+export type ModeDefinition = FeatureDefinition;
 
-export const MODES: Record<ModeKey, ModeDefinition> = {
+export const FEATURES: Record<FeatureKey, FeatureDefinition> = {
   chat: {
     key: "chat",
     label: "Chat Agent",
@@ -56,10 +62,14 @@ export const MODES: Record<ModeKey, ModeDefinition> = {
     slug: "crisis",
     oneLiner: "When things get serious. Immediate grounding, and a real human if needed.",
     longDescription:
-      "Crisis Safe mode skips the small talk. It grounds you in the present, surfaces the right resources for your region, and connects you to a human if you need one.",
+      "Crisis Safe skips the small talk. It grounds you in the present, surfaces the right resources for your region, and connects you to a human if you need one.",
     systemAddendum:
       "CRISIS MODE ACTIVE. This person may be in distress. Follow the crisis protocol strictly. Prioritise safety above all else. Do not attempt to continue therapeutic work until safety is established.",
   },
 };
 
-export const MODE_LIST: ModeDefinition[] = Object.values(MODES);
+export const FEATURE_LIST: FeatureDefinition[] = Object.values(FEATURES);
+
+// Backwards-compat aliases for code that referenced the older naming.
+export const MODES = FEATURES;
+export const MODE_LIST = FEATURE_LIST;

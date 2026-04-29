@@ -75,8 +75,10 @@ export function AgentDemo() {
           style={{
             background: "rgba(255,255,255,0.04)",
             borderRadius: 16,
-            padding: 32,
+            padding: tab === "chat" ? "20px 16px" : 32,
             border: "1px solid rgba(255,255,255,0.08)",
+            maxWidth: 760,
+            margin: "0 auto",
           }}
         >
           {tab === "chat" ? (
@@ -125,7 +127,7 @@ function DemoTab({
 
 function ChatDemo() {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 12, maxWidth: 720 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 14, width: "100%" }}>
       {CHAT_THREAD.map((m, i) => (
         <div
           key={i}
@@ -134,15 +136,15 @@ function ChatDemo() {
             justifyContent: m.role === "user" ? "flex-end" : "flex-start",
           }}
         >
-          <div style={{ maxWidth: "78%" }}>
+          <div style={{ maxWidth: "82%", display: "flex", flexDirection: "column" }}>
             <div
               style={{
-                padding: "14px 18px",
+                padding: "12px 16px",
                 borderRadius: 12,
                 background: m.role === "user" ? "white" : "rgba(214,232,228,0.95)",
                 color: "var(--calm-ink)",
                 fontSize: 15,
-                lineHeight: 1.65,
+                lineHeight: 1.6,
               }}
             >
               {m.text}
@@ -150,9 +152,9 @@ function ChatDemo() {
             <p
               style={{
                 fontSize: 11,
-                color: "rgba(255,255,255,0.4)",
+                color: "rgba(255,255,255,0.45)",
                 marginTop: 4,
-                textAlign: m.role === "user" ? "right" : "left",
+                alignSelf: m.role === "user" ? "flex-end" : "flex-start",
               }}
             >
               {m.time}

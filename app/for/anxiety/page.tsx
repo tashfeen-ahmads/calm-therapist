@@ -21,14 +21,14 @@ export default function AnxietyPage() {
       ]}
       whyFails={`Standard AI therapy products treat anxiety as a category to look up, not a state to meet. They forget you between sessions, so every conversation begins by re-establishing context — the worst possible task for an anxious mind. They fall back on canned reassurances ("that sounds really hard") that anxious users see through immediately. And they have no way to handle the moments when anxiety becomes panic — no clear handoff, no grounding protocol, no human backup. Anxiety needs continuity. Most tools only offer episodes.`}
       ctFeatures={[
-        { title: "Voice-first when needed", body: "When typing is impossible, you can speak. Calm Therapist's voice agent is built for anxious moments — short responses, slow pacing, no rush.", href: "/modes/voice" },
-        { title: "Memory that holds", body: "Anxious people repeat themselves because they have to. Calm Therapist remembers — your job, your relationships, your triggers — so you don't.", href: "/modes/chat" },
-        { title: "Pattern detection", body: "Most anxiety has triggers you haven't named yet. The weekly journal surfaces them in your own words.", href: "/modes/journal" },
+        { title: "Voice-first when needed", body: "When typing is impossible, you can speak. Calm Therapist's voice agent is built for anxious moments — short responses, slow pacing, no rush.", href: "/features/voice" },
+        { title: "Memory that holds", body: "Anxious people repeat themselves because they have to. Calm Therapist remembers — your job, your relationships, your triggers — so you don't.", href: "/features/chat" },
+        { title: "Pattern detection", body: "Most anxiety has triggers you haven't named yet. The weekly journal surfaces them in your own words.", href: "/features/journal" },
       ]}
       modeLinks={[
-        { href: "/modes/voice", label: "Voice Agent" },
-        { href: "/modes/chat", label: "Chat Agent" },
-        { href: "/modes/journal", label: "Weekly Journal" },
+        { href: "/features/voice", label: "Voice Agent" },
+        { href: "/features/chat", label: "Chat Agent" },
+        { href: "/features/journal", label: "Weekly Journal" },
       ]}
       testimonials={[
         { name: "Priya, 28", text: "The voice mode is the reason I keep coming back. I can't type when I'm anxious. But I can speak. And Calm Therapist listens without rushing me." },

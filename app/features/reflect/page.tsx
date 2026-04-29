@@ -1,16 +1,16 @@
-import { ModePageTemplate } from "@/components/seo/ModePage";
+import { FeaturePageTemplate } from "@/components/seo/FeaturePage";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
   title: "Monthly Reflect AI Therapy | Calm Therapist — Real Progress, Not Performance",
   description:
     "Monthly Reflect by Calm Therapist gives you a real summary of your inner life across the month. See your shift, your themes, and your own quotes back to you.",
-  path: "/modes/reflect",
+  path: "/features/reflect",
 });
 
 export default function ReflectModePage() {
   return (
-    <ModePageTemplate
+    <FeaturePageTemplate
       slug="reflect"
       label="Monthly Reflect"
       oneLiner="Every month, a summary of your growth. Real progress, not performance."
@@ -30,8 +30,8 @@ export default function ReflectModePage() {
         { title: "If you've doubted you've grown", body: "Your own words back to you, in italics, will tell you the truth." },
       ]}
       related={[
-        { href: "/modes/journal", label: "Weekly Journal" },
-        { href: "/modes/chat", label: "Chat Agent" },
+        { href: "/features/journal", label: "Weekly Journal" },
+        { href: "/features/chat", label: "Chat Agent" },
         { href: "/for/depression", label: "For Depression" },
       ]}
       body={[

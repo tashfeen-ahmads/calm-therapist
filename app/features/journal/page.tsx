@@ -1,16 +1,16 @@
-import { ModePageTemplate } from "@/components/seo/ModePage";
+import { FeaturePageTemplate } from "@/components/seo/FeaturePage";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
   title: "Weekly Journal AI Therapy | Calm Therapist — Patterns You Couldn't See",
   description:
     "AI-powered weekly journaling that reads back to you what you didn't notice. Calm Therapist's Weekly Journal turns scattered sessions into a coherent story.",
-  path: "/modes/journal",
+  path: "/features/journal",
 });
 
 export default function JournalModePage() {
   return (
-    <ModePageTemplate
+    <FeaturePageTemplate
       slug="journal"
       label="Weekly Journal"
       oneLiner="A private space to track your week. Calm Therapist surfaces patterns you didn't notice."
@@ -30,8 +30,8 @@ export default function JournalModePage() {
         { title: "If you forget how the week went", body: "By Sunday, Monday's argument has vanished. The journal holds what your memory let go." },
       ]}
       related={[
-        { href: "/modes/reflect", label: "Monthly Reflect" },
-        { href: "/modes/chat", label: "Chat Agent" },
+        { href: "/features/reflect", label: "Monthly Reflect" },
+        { href: "/features/chat", label: "Chat Agent" },
         { href: "/for/burnout", label: "For Burnout" },
       ]}
       body={[

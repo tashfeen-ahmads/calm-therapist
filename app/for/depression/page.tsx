@@ -21,14 +21,14 @@ export default function DepressionPage() {
       ]}
       whyFails="Standard AI tools treat depression like a productivity problem. They build streak counters, daily check-ins, and quiz-style mood tracking. People with depression know exactly what these things do — they create another surface on which to disappoint yourself. Worse, they have no longitudinal memory. Every time you come back after a hard week, you start over. The disappearance is invisible to them. Calm Therapist is designed differently: there is no streak system, the journal works whether or not you wrote anything, and the agent remembers you across the gaps. That's the part that matters."
       ctFeatures={[
-        { title: "No streaks. No guilt.", body: "Calm Therapist does not punish absence. The journal still works whether you wrote three lines or nothing. Coming back is the only thing that matters.", href: "/modes/journal" },
-        { title: "Memory across the gaps", body: "Depression makes you disappear from your own life. Calm Therapist holds your record while you're gone. When you return, your context is intact.", href: "/modes/chat" },
-        { title: "Monthly Reflect", body: "Depression makes you doubt that anything has changed. The Monthly Reflect shows you, in your own words, what actually shifted.", href: "/modes/reflect" },
+        { title: "No streaks. No guilt.", body: "Calm Therapist does not punish absence. The journal still works whether you wrote three lines or nothing. Coming back is the only thing that matters.", href: "/features/journal" },
+        { title: "Memory across the gaps", body: "Depression makes you disappear from your own life. Calm Therapist holds your record while you're gone. When you return, your context is intact.", href: "/features/chat" },
+        { title: "Monthly Reflect", body: "Depression makes you doubt that anything has changed. The Monthly Reflect shows you, in your own words, what actually shifted.", href: "/features/reflect" },
       ]}
       modeLinks={[
-        { href: "/modes/chat", label: "Chat Agent" },
-        { href: "/modes/journal", label: "Weekly Journal" },
-        { href: "/modes/reflect", label: "Monthly Reflect" },
+        { href: "/features/chat", label: "Chat Agent" },
+        { href: "/features/journal", label: "Weekly Journal" },
+        { href: "/features/reflect", label: "Monthly Reflect" },
       ]}
       testimonials={[
         { name: "James, 41", text: "I don't do therapy. I never have. But Calm Therapist doesn't feel like therapy. It feels like finally having somewhere to think out loud." },

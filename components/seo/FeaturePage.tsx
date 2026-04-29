@@ -3,7 +3,7 @@ import Link from "next/link";
 import { PageShell } from "@/components/seo/PageShell";
 import { JsonLd, breadcrumbSchema } from "@/lib/seo";
 
-export interface ModePageProps {
+export interface FeaturePageProps {
   slug: string;
   label: string;
   oneLiner: string;
@@ -14,23 +14,23 @@ export interface ModePageProps {
   body: string[];
 }
 
-export function ModePageTemplate(props: ModePageProps) {
+export function FeaturePageTemplate(props: FeaturePageProps) {
   return (
     <PageShell>
       <JsonLd
         data={breadcrumbSchema([
           { name: "Calm Therapist", path: "/" },
-          { name: "Modes", path: "/modes" },
-          { name: props.label, path: `/modes/${props.slug}` },
+          { name: "Features", path: "/features" },
+          { name: props.label, path: `/features/${props.slug}` },
         ])}
       />
       <section className="section">
         <div className="container" style={{ maxWidth: 880 }}>
           <p className="micro-label micro-label-bordered" style={{ marginBottom: 24 }}>
-            Mode
+            Feature
           </p>
           <h1 style={{ marginBottom: 24 }}>{props.label}</h1>
-          <p className="body-large" style={{ color: "var(--calm-ink-40)", marginBottom: 32 }}>
+          <p className="body-large" style={{ color: "var(--calm-ink-70)", marginBottom: 32 }}>
             {props.oneLiner}
           </p>
           <Link href="/onboarding/step-1" className="btn-primary">
@@ -76,7 +76,7 @@ export function ModePageTemplate(props: ModePageProps) {
 
       <section style={{ background: "var(--calm-mist)", padding: "80px 24px" }}>
         <div className="container" style={{ maxWidth: 880 }}>
-          <h2 style={{ marginBottom: 32 }}>Who this mode is for</h2>
+          <h2 style={{ marginBottom: 32 }}>Who this is for</h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             {props.who.map((s, i) => (
               <div key={i} className="card">

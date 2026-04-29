@@ -80,7 +80,7 @@ export function ConditionPageTemplate(p: ConditionPageProps) {
 
       <section style={{ background: "var(--calm-mist)", padding: "80px 24px" }}>
         <div className="container" style={{ maxWidth: 880 }}>
-          <h2 style={{ marginBottom: 32 }}>Most relevant modes</h2>
+          <h2 style={{ marginBottom: 32 }}>Most relevant features</h2>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
             {p.modeLinks.map((m) => (
               <Link key={m.href} href={m.href} className="btn-ghost">

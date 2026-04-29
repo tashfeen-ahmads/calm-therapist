@@ -1,16 +1,16 @@
-import { ModePageTemplate } from "@/components/seo/ModePage";
+import { FeaturePageTemplate } from "@/components/seo/FeaturePage";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
   title: "Voice Agent AI Therapy | Calm Therapist — Talk When Typing Is Too Much",
   description:
     "Voice-based AI therapy that listens, reflects, and remembers. Calm Therapist's voice agent is built for the moments you can't type — anxiety, exhaustion, grief, or just walking.",
-  path: "/modes/voice",
+  path: "/features/voice",
 });
 
 export default function VoiceModePage() {
   return (
-    <ModePageTemplate
+    <FeaturePageTemplate
       slug="voice"
       label="Voice Agent"
       oneLiner="Talk. Calm Therapist listens, reflects, and responds — like a conversation, not a form."
@@ -30,8 +30,8 @@ export default function VoiceModePage() {
         { title: "When you're driving home", body: "Hands-free. Eyes on the road. Mind on what you actually feel." },
       ]}
       related={[
-        { href: "/modes/chat", label: "Chat Agent" },
-        { href: "/modes/journal", label: "Weekly Journal" },
+        { href: "/features/chat", label: "Chat Agent" },
+        { href: "/features/journal", label: "Weekly Journal" },
         { href: "/for/anxiety", label: "For Anxiety" },
       ]}
       body={[

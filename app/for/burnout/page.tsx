@@ -21,14 +21,14 @@ export default function BurnoutPage() {
       ]}
       whyFails="Most AI tools treat burnout as a stress problem and offer breathing exercises. The breathing exercises are not the issue. The issue is that nobody has been watching the slow shape of your week. Calm Therapist is built to do exactly that — to track sleep mentions, work mentions, weekend mentions, and patterns over time. The point isn't fixing burnout in one session. The point is catching it earlier, by surfacing patterns that you cannot see from inside."
       ctFeatures={[
-        { title: "Pattern over time", body: "The Weekly Journal cross-references your sessions and surfaces signals — sleep declining, work mentions increasing — before you'd notice yourself.", href: "/modes/journal" },
-        { title: "Structured tone for engineers and founders", body: "The clinical tone preference removes the hand-holding. Direct, evidence-based, fast.", href: "/modes/chat" },
-        { title: "Voice on the commute", body: "Burnout often crystallises on the drive home. Voice mode is the only therapy that meets you there.", href: "/modes/voice" },
+        { title: "Pattern over time", body: "The Weekly Journal cross-references your sessions and surfaces signals — sleep declining, work mentions increasing — before you'd notice yourself.", href: "/features/journal" },
+        { title: "Structured tone for engineers and founders", body: "The clinical tone preference removes the hand-holding. Direct, evidence-based, fast.", href: "/features/chat" },
+        { title: "Voice on the commute", body: "Burnout often crystallises on the drive home. Voice mode is the only therapy that meets you there.", href: "/features/voice" },
       ]}
       modeLinks={[
-        { href: "/modes/journal", label: "Weekly Journal" },
-        { href: "/modes/reflect", label: "Monthly Reflect" },
-        { href: "/modes/voice", label: "Voice Agent" },
+        { href: "/features/journal", label: "Weekly Journal" },
+        { href: "/features/reflect", label: "Monthly Reflect" },
+        { href: "/features/voice", label: "Voice Agent" },
       ]}
       testimonials={[
         { name: "Tom, 38", text: "The monthly reflect feature showed me I've had the same argument with my wife twelve times this year. Seeing that pattern written down was the most useful thing any tool has ever done for me." },

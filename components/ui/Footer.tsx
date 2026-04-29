@@ -4,7 +4,7 @@ import { Logo } from "./Logo";
 
 const productLinks = [
   { href: "/how-it-works", label: "How it works" },
-  { href: "/modes", label: "Modes" },
+  { href: "/features", label: "Features" },
   { href: "/#pricing", label: "Pricing" },
 ];
 
@@ -23,12 +23,12 @@ const companyLinks = [
   { href: "/privacy", label: "Privacy" },
 ];
 
-const modeLinks = [
-  { href: "/modes/voice", label: "Voice Agent" },
-  { href: "/modes/chat", label: "Chat Agent" },
-  { href: "/modes/journal", label: "Weekly Journal" },
-  { href: "/modes/reflect", label: "Monthly Reflect" },
-  { href: "/modes/crisis", label: "Crisis Safe" },
+const featureLinks = [
+  { href: "/features/voice", label: "Voice Agent" },
+  { href: "/features/chat", label: "Chat Agent" },
+  { href: "/features/journal", label: "Weekly Journal" },
+  { href: "/features/reflect", label: "Monthly Reflect" },
+  { href: "/features/crisis", label: "Crisis Safe" },
 ];
 
 export function Footer() {
@@ -57,7 +57,7 @@ export function Footer() {
             </p>
           </div>
 
-          <FooterColumn title="Product" links={productLinks.concat(modeLinks)} />
+          <FooterColumn title="Product" links={productLinks.concat(featureLinks)} />
           <FooterColumn title="Resources" links={resourcesLinks} />
           <FooterColumn title="Company" links={companyLinks} />
         </div>

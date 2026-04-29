@@ -1,16 +1,16 @@
-import { ModePageTemplate } from "@/components/seo/ModePage";
+import { FeaturePageTemplate } from "@/components/seo/FeaturePage";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
   title: "Chat Agent AI Therapy | Calm Therapist — Write Your Way Back",
   description:
     "Chat-based AI therapy that builds on every message. The Calm Therapist chat agent is structured, private, and builds a longitudinal record of your inner life.",
-  path: "/modes/chat",
+  path: "/features/chat",
 });
 
 export default function ChatModePage() {
   return (
-    <ModePageTemplate
+    <FeaturePageTemplate
       slug="chat"
       label="Chat Agent"
       oneLiner="Write when you're not ready to speak. Structured, safe, and always available."
@@ -30,8 +30,8 @@ export default function ChatModePage() {
         { title: "When you don't trust voice", body: "Some people don't speak well. They write well. The chat agent honours that." },
       ]}
       related={[
-        { href: "/modes/voice", label: "Voice Agent" },
-        { href: "/modes/journal", label: "Weekly Journal" },
+        { href: "/features/voice", label: "Voice Agent" },
+        { href: "/features/journal", label: "Weekly Journal" },
         { href: "/for/depression", label: "For Depression" },
       ]}
       body={[

@@ -1,5 +1,5 @@
 import { streamChatResponse, UserProfile, DEFAULT_PROFILE } from "@/lib/claude";
-import { MODES, ModeKey } from "@/lib/modes";
+import { MODES, ModeKey } from "@/lib/features";
 import type Anthropic from "@anthropic-ai/sdk";
 
 export const runtime = "nodejs";

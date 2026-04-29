@@ -46,7 +46,7 @@ export function Navbar() {
           <Logo />
           <div className="nav-links" style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <Link href="/how-it-works" className="nav-link">How it works</Link>
-            <Link href="/modes" className="nav-link">Modes</Link>
+            <Link href="/features" className="nav-link">Features</Link>
             <Link href="/onboarding/step-1" className="btn-primary">Start free</Link>
           </div>
           <button
@@ -82,7 +82,7 @@ export function Navbar() {
             onClick={(e) => e.stopPropagation()}
           >
             <Link href="/how-it-works" onClick={() => setOpen(false)} style={{ fontSize: 20, fontFamily: "var(--font-heading)" }}>How it works</Link>
-            <Link href="/modes" onClick={() => setOpen(false)} style={{ fontSize: 20, fontFamily: "var(--font-heading)" }}>Modes</Link>
+            <Link href="/features" onClick={() => setOpen(false)} style={{ fontSize: 20, fontFamily: "var(--font-heading)" }}>Features</Link>
             <Link href="/onboarding/step-1" className="btn-primary" onClick={() => setOpen(false)}>Start free</Link>
           </div>
         </div>

@@ -21,14 +21,14 @@ export default function RelationshipsPage() {
       ]}
       whyFails="Therapy products that operate on a per-session basis miss the pattern entirely. They engage with whatever's in front of them — Tuesday's fight — and lose the bigger arc. Calm Therapist is built around longitudinal memory, which means you can see the shape of a relationship, not just its incidents. People often discover they've described one specific dynamic 12 different times in 12 different ways. That discovery is where the work begins."
       ctFeatures={[
-        { title: "Cross-session pattern", body: "Calm Therapist tracks how often a person comes up, what kind of language you use about them, and whether your tone changes over time.", href: "/modes/journal" },
-        { title: "Your own quotes back to you", body: "The Monthly Reflect surfaces direct quotes from your sessions. Your words about your partner, in your own voice, in chronological order.", href: "/modes/reflect" },
-        { title: "Voice for hard conversations", body: "Voice mode helps you rehearse what you actually want to say — without the partner, without the pressure.", href: "/modes/voice" },
+        { title: "Cross-session pattern", body: "Calm Therapist tracks how often a person comes up, what kind of language you use about them, and whether your tone changes over time.", href: "/features/journal" },
+        { title: "Your own quotes back to you", body: "The Monthly Reflect surfaces direct quotes from your sessions. Your words about your partner, in your own voice, in chronological order.", href: "/features/reflect" },
+        { title: "Voice for hard conversations", body: "Voice mode helps you rehearse what you actually want to say — without the partner, without the pressure.", href: "/features/voice" },
       ]}
       modeLinks={[
-        { href: "/modes/journal", label: "Weekly Journal" },
-        { href: "/modes/reflect", label: "Monthly Reflect" },
-        { href: "/modes/voice", label: "Voice Agent" },
+        { href: "/features/journal", label: "Weekly Journal" },
+        { href: "/features/reflect", label: "Monthly Reflect" },
+        { href: "/features/voice", label: "Voice Agent" },
       ]}
       testimonials={[
         { name: "Sara, 31", text: "It asked me how my sister was doing — the one I mentioned in passing two weeks ago. A human therapist has never done that." },

@@ -1,16 +1,16 @@
-import { ModePageTemplate } from "@/components/seo/ModePage";
+import { FeaturePageTemplate } from "@/components/seo/FeaturePage";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
   title: "Crisis Safe AI Therapy | Calm Therapist — Real Human Backup When It Matters",
   description:
     "When things get serious. Calm Therapist's Crisis Safe mode grounds you, surfaces verified crisis resources, and connects you to a real person within minutes.",
-  path: "/modes/crisis",
+  path: "/features/crisis",
 });
 
 export default function CrisisModePage() {
   return (
-    <ModePageTemplate
+    <FeaturePageTemplate
       slug="crisis"
       label="Crisis Safe"
       oneLiner="When things get serious. Immediate grounding, and a real human if needed."
@@ -30,8 +30,8 @@ export default function CrisisModePage() {
         { title: "If you want a real person", body: "Calm Therapist is not a replacement for human help. Crisis Safe makes the handoff fast." },
       ]}
       related={[
-        { href: "/modes/voice", label: "Voice Agent" },
-        { href: "/modes/chat", label: "Chat Agent" },
+        { href: "/features/voice", label: "Voice Agent" },
+        { href: "/features/chat", label: "Chat Agent" },
         { href: "/for/depression", label: "For Depression" },
       ]}
       body={[

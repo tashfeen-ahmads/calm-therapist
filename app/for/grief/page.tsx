@@ -21,14 +21,14 @@ export default function GriefPage() {
       ]}
       whyFails="Generic AI therapy products forget that you lost someone. By session three they no longer reference your loss, and asking you to repeat the story of how someone died is a form of cruelty. They also fail at anniversaries — birthdays, death dates, holidays — which are the moments where grief intensifies and most people fall through the cracks. Calm Therapist holds onto these dates and meets you on them, not in a scripted way, but in a remembering way."
       ctFeatures={[
-        { title: "It remembers who you lost", body: "You don't have to retell. Calm Therapist holds the name, the relationship, and the date, and references them naturally only when relevant.", href: "/modes/chat" },
-        { title: "Anniversary awareness", body: "On the days that matter — death dates, birthdays, holidays — Calm Therapist proactively checks in.", href: "/modes/reflect" },
-        { title: "Voice when words fail", body: "Grief makes typing impossible. The voice agent is there for the worst days.", href: "/modes/voice" },
+        { title: "It remembers who you lost", body: "You don't have to retell. Calm Therapist holds the name, the relationship, and the date, and references them naturally only when relevant.", href: "/features/chat" },
+        { title: "Anniversary awareness", body: "On the days that matter — death dates, birthdays, holidays — Calm Therapist proactively checks in.", href: "/features/reflect" },
+        { title: "Voice when words fail", body: "Grief makes typing impossible. The voice agent is there for the worst days.", href: "/features/voice" },
       ]}
       modeLinks={[
-        { href: "/modes/voice", label: "Voice Agent" },
-        { href: "/modes/journal", label: "Weekly Journal" },
-        { href: "/modes/reflect", label: "Monthly Reflect" },
+        { href: "/features/voice", label: "Voice Agent" },
+        { href: "/features/journal", label: "Weekly Journal" },
+        { href: "/features/reflect", label: "Monthly Reflect" },
       ]}
       testimonials={[
         { name: "Amir, 34", text: "Calm Therapist actually remembered what I told it about my father in week one. That changed everything." },
