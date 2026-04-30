@@ -10,7 +10,6 @@ import { PrivacyBlock } from "@/components/landing/Privacy";
 import { Testimonials } from "@/components/landing/Testimonials";
 import { Pricing } from "@/components/landing/Pricing";
 import { FinalCTA } from "@/components/landing/FinalCTA";
-import { LeadPopup } from "@/components/landing/LeadPopup";
 import { JsonLd, organizationSchema } from "@/lib/seo";
 
 export default function HomePage() {
@@ -31,7 +30,6 @@ export default function HomePage() {
         <FinalCTA />
       </main>
       <Footer />
-      <LeadPopup />
     </>
   );
 }
