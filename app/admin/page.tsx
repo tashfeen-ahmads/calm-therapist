@@ -1,4 +1,5 @@
 import { StatCard } from "@/components/admin/AdminShell";
+import { GrowthCharts } from "@/components/admin/GrowthCharts";
 import { computeAdminStats } from "@/lib/admin-stats";
 
 export const dynamic = "force-dynamic";
@@ -11,6 +12,8 @@ export default function AdminOverview() {
       <p style={{ color: "var(--calm-ink-70)", marginBottom: 32 }}>
         Live state from the in-memory MVP store. Numbers reset on server restart until Prisma is wired up.
       </p>
+
+      <GrowthCharts />
 
       <Section title="Acquisition">
         <Grid>
