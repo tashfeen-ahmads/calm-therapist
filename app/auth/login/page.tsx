@@ -54,6 +54,37 @@ function LoginInner() {
         Sign in to pick up where you left off.
       </p>
 
+      <div
+        style={{
+          marginBottom: 24,
+          padding: "12px 16px",
+          background: "var(--calm-mist)",
+          borderRadius: 10,
+          fontSize: 13,
+          lineHeight: 1.6,
+          color: "var(--calm-ink)",
+          display: "flex",
+          flexDirection: "column",
+          gap: 8,
+        }}
+      >
+        <span style={{ fontWeight: 500 }}>Demo admin (development)</span>
+        <span style={{ color: "var(--calm-ink-70)" }}>
+          email <code>admin@calmtherapist.local</code> · password <code>admin1234</code>
+        </span>
+        <button
+          type="button"
+          onClick={() => {
+            setEmail("admin@calmtherapist.local");
+            setPassword("admin1234");
+          }}
+          className="btn-ghost"
+          style={{ alignSelf: "flex-start", height: 32, fontSize: 12 }}
+        >
+          Fill demo admin
+        </button>
+      </div>
+
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
         <GoogleButton next={next} label="Sign in with Google" />
       </div>

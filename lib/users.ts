@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+import { DEMO_ADMIN_EMAIL, DEMO_ADMIN_PASSWORD } from "./auth";
 
 export interface UserRecord {
   id: string;
@@ -11,13 +12,44 @@ export interface UserRecord {
 
 // MVP user store. In-memory + survives hot-reload via globalThis.
 // TODO: swap for Prisma when DB is wired up.
-const globalAny = globalThis as unknown as { __calmUsers?: Map<string, UserRecord> };
+const globalAny = globalThis as unknown as { __calmUsers?: Map<string, UserRecord>; __calmUsersSeeded?: boolean };
 const store: Map<string, UserRecord> = globalAny.__calmUsers ?? new Map();
 globalAny.__calmUsers = store;
 
 function key(email: string) {
   return email.trim().toLowerCase();
 }
+
+// Seed a default admin user on first import so /admin is reachable
+// without manual setup. Override ADMIN_EMAIL in env to change which email
+// is treated as admin; this seed user matches the default admin email.
+function seedDefaultAdmin() {
+  if (globalAny.__calmUsersSeeded) return;
+  globalAny.__calmUsersSeeded = true;
+
+  const adminEmail = (process.env.ADMIN_EMAIL ?? DEMO_ADMIN_EMAIL).trim().toLowerCase();
+  if (!adminEmail) return;
+  if (store.has(adminEmail)) return;
+
+  const password = process.env.ADMIN_INITIAL_PASSWORD ?? DEMO_ADMIN_PASSWORD;
+  const passwordHash = bcrypt.hashSync(password, 10);
+  store.set(adminEmail, {
+    id: `usr_admin_seed`,
+    email: adminEmail,
+    name: "Admin",
+    passwordHash,
+    plan: "pro",
+    createdAt: new Date().toISOString(),
+  });
+
+  if (!process.env.ADMIN_EMAIL) {
+    console.log(
+      `[calm-therapist] Demo admin seeded → ${adminEmail} / ${password}. ` +
+        "Override with ADMIN_EMAIL + ADMIN_INITIAL_PASSWORD in your env."
+    );
+  }
+}
+seedDefaultAdmin();
 
 export async function createUser(input: { email: string; password: string; name: string }): Promise<UserRecord> {
   const k = key(input.email);

@@ -48,8 +48,11 @@ export async function verifySession(token: string | undefined): Promise<SessionC
   }
 }
 
+export const DEMO_ADMIN_EMAIL = "admin@calmtherapist.local";
+export const DEMO_ADMIN_PASSWORD = "admin1234";
+
 export function isAdminEmail(email: string): boolean {
-  const adminEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
+  const adminEmail = (process.env.ADMIN_EMAIL ?? DEMO_ADMIN_EMAIL).trim().toLowerCase();
   if (!adminEmail) return false;
   return email.trim().toLowerCase() === adminEmail;
 }
