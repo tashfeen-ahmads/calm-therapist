@@ -10,6 +10,7 @@ const REWRITE_PASSTHROUGH = [
   "/dashboard",
   "/onboarding",
   "/auth",
+  "/admin",
   "/static",
   "/favicon",
   "/robots",
@@ -33,21 +34,20 @@ export async function middleware(req: NextRequest) {
     pathname = url.pathname;
   }
 
-  // 2) Auth gate for anything under /dashboard.
-  if (pathname.startsWith("/dashboard") && !PUBLIC_DASHBOARD_PATHS.some((p) => pathname.startsWith(p))) {
+  // 2) Auth gate for anything under /dashboard or /admin.
+  const needsAuth = pathname.startsWith("/dashboard") || pathname.startsWith("/admin");
+  if (needsAuth && !PUBLIC_DASHBOARD_PATHS.some((p) => pathname.startsWith(p))) {
     const token = req.cookies.get(SESSION_COOKIE)?.value;
     const claims = await verifySession(token);
     if (!claims) {
       const loginUrl = req.nextUrl.clone();
       loginUrl.pathname = "/auth/login";
-      // Preserve the path the user was trying to reach (relative to the public site).
       const intended = isDashboardHost
         ? req.nextUrl.pathname === "/"
           ? "/dashboard"
           : `/dashboard${req.nextUrl.pathname}`
         : req.nextUrl.pathname;
       loginUrl.searchParams.set("next", intended);
-      // Send to the main domain's /auth/login if we're on the dashboard subdomain.
       if (isDashboardHost) {
         const mainHost = hostname.replace(`${DASHBOARD_SUBDOMAIN}.`, "");
         if (mainHost) {
@@ -56,6 +56,12 @@ export async function middleware(req: NextRequest) {
         }
       }
       return NextResponse.redirect(loginUrl);
+    }
+    // Admin gate — only the configured admin can see /admin.
+    if (pathname.startsWith("/admin") && !claims.isAdmin) {
+      const denied = req.nextUrl.clone();
+      denied.pathname = "/dashboard";
+      return NextResponse.redirect(denied);
     }
   }
 

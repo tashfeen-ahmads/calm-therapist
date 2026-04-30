@@ -12,7 +12,7 @@ export function FinalCTA() {
           Start your first session. No appointment. No waiting list. No judgment.
         </p>
         <Link
-          href="/onboarding/step-1"
+          href="/auth/signup"
           className="btn-light"
           style={{ marginTop: 40, height: 52, padding: "0 32px", fontSize: 15 }}
         >

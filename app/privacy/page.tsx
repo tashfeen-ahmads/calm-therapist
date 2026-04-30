@@ -88,7 +88,7 @@ export default function PrivacyPage() {
           </div>
 
           <div style={{ marginTop: 64 }}>
-            <Link href="/onboarding/step-1" className="btn-primary">
+            <Link href="/auth/signup" className="btn-primary">
               Start your first session
             </Link>
           </div>

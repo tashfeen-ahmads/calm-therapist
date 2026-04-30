@@ -82,7 +82,7 @@ export default function LpPage({ params }: { params: { slug: string } }) {
   const c = CAMPAIGNS[params.slug];
   if (!c) return notFound();
 
-  const ctaHref = `/onboarding/step-1?utm_source=meta&utm_campaign=${c.slug}`;
+  const ctaHref = `/auth/signup?utm_source=meta&utm_campaign=${c.slug}`;
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--calm-white)" }}>

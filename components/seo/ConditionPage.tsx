@@ -39,7 +39,7 @@ export function ConditionPageTemplate(p: ConditionPageProps) {
             time.
           </p>
           <div style={{ marginTop: 32, display: "flex", gap: 12, flexWrap: "wrap" }}>
-            <Link href="/onboarding/step-1" className="btn-primary">Start free</Link>
+            <Link href="/auth/signup" className="btn-primary">Start free</Link>
             <Link href="/how-it-works" className="btn-ghost">How it works</Link>
           </div>
         </div>
@@ -135,7 +135,7 @@ export function ConditionPageTemplate(p: ConditionPageProps) {
           <p className="body-large" style={{ color: "var(--calm-ink-40)", marginBottom: 32 }}>
             No appointment. No waiting. No judgment.
           </p>
-          <Link href="/onboarding/step-1" className="btn-primary">Begin with Calm Therapist</Link>
+          <Link href="/auth/signup" className="btn-primary">Begin with Calm Therapist</Link>
 
           <div style={{ marginTop: 48, display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
             {p.related.map((r) => (

@@ -56,7 +56,7 @@ export default function AboutPage() {
           </ul>
 
           <div style={{ marginTop: 64 }}>
-            <Link href="/onboarding/step-1" className="btn-primary">Start with Calm Therapist</Link>
+            <Link href="/auth/signup" className="btn-primary">Start with Calm Therapist</Link>
           </div>
         </div>
       </article>

@@ -33,7 +33,7 @@ export function FeaturePageTemplate(props: FeaturePageProps) {
           <p className="body-large" style={{ color: "var(--calm-ink-70)", marginBottom: 32 }}>
             {props.oneLiner}
           </p>
-          <Link href="/onboarding/step-1" className="btn-primary">
+          <Link href="/auth/signup" className="btn-primary">
             Try {props.label.toLowerCase()} free
           </Link>
         </div>
@@ -99,7 +99,7 @@ export function FeaturePageTemplate(props: FeaturePageProps) {
             ))}
           </div>
           <div style={{ marginTop: 48 }}>
-            <Link href="/onboarding/step-1" className="btn-primary">
+            <Link href="/auth/signup" className="btn-primary">
               Try {props.label.toLowerCase()} free
             </Link>
           </div>

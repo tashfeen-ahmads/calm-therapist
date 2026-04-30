@@ -27,7 +27,7 @@ export function Pricing() {
               "Crisis Safe protocol",
             ]}
             cta="Start free"
-            href="/onboarding/step-1"
+            href="/auth/signup"
             primary={false}
           />
           <PriceCard
@@ -45,7 +45,7 @@ export function Pricing() {
               "Export your data anytime",
             ]}
             cta="Start with Pro"
-            href="/onboarding/step-1?plan=pro"
+            href="/auth/signup?next=%2Fdashboard%26plan=pro"
             primary
           />
         </div>

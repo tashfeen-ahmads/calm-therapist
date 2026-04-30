@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
+import { AuthDivider, GoogleButton } from "@/components/auth/GoogleButton";
 
 export default function LoginPage() {
   return (
@@ -52,6 +53,18 @@ function LoginInner() {
       <p className="body-large" style={{ color: "var(--calm-ink-40)", marginBottom: 32 }}>
         Sign in to pick up where you left off.
       </p>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <GoogleButton next={next} label="Sign in with Google" />
+      </div>
+
+      {params.get("google") === "unavailable" && (
+        <p style={{ marginTop: 8, fontSize: 12, color: "var(--calm-ink-40)" }}>
+          Google sign-in needs <code>GOOGLE_CLIENT_ID</code> configured. Use email & password for now.
+        </p>
+      )}
+
+      <AuthDivider />
 
       <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
         <Field label="Email">

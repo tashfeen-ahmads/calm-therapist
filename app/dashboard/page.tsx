@@ -5,6 +5,7 @@ import { Style } from "@/components/ui/Style";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { readState } from "@/components/onboarding/OnboardingShell";
+import { FeedbackPrompt } from "@/components/dashboard/FeedbackPrompt";
 
 const MOOD_LABELS = ["Struggling", "Low", "Okay", "Good", "Settled"];
 
@@ -94,6 +95,10 @@ export default function DashboardHome() {
           <SessionRow date="Apr 22" mode="Voice" summary="Tuesdays again. You named the trigger more directly." />
         </ul>
       </Card>
+
+      <div style={{ marginTop: 32 }}>
+        <FeedbackPrompt />
+      </div>
 
       <Style>{`
         @media (max-width: 760px) { .dash-grid { grid-template-columns: 1fr !important; } }

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { SESSION_COOKIE, verifySession, signSession, buildSessionCookie, cookieDomainFor } from "@/lib/auth";
+import { SESSION_COOKIE, verifySession, signSession, buildSessionCookie, cookieDomainFor, isAdminEmail } from "@/lib/auth";
 import { getUserById, setUserPlan } from "@/lib/users";
 
 export const runtime = "nodejs";
@@ -27,6 +27,7 @@ export async function POST(req: Request) {
     email: updated.email,
     name: updated.name,
     plan: updated.plan,
+    isAdmin: isAdminEmail(updated.email),
   });
   const host = req.headers.get("host");
   const cookie = buildSessionCookie(newToken, {

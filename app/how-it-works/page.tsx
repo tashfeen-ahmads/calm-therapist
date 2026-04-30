@@ -57,7 +57,7 @@ export default function HowItWorksPage() {
           </div>
 
           <div style={{ marginTop: 56, display: "flex", gap: 12, flexWrap: "wrap" }}>
-            <Link href="/onboarding/step-1" className="btn-primary">
+            <Link href="/auth/signup" className="btn-primary">
               Start your first session
             </Link>
             <Link href="/features" className="btn-ghost">

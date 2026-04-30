@@ -92,7 +92,7 @@ export function AgentDemo() {
           <p style={{ color: "rgba(255,255,255,0.7)", fontSize: 16 }}>
             This is not a simulation. This is what your first session looks like.
           </p>
-          <Link href="/onboarding/step-1" className="btn-light">
+          <Link href="/auth/signup" className="btn-light">
             Start your session
           </Link>
         </div>

@@ -12,6 +12,7 @@ export interface SessionClaims {
   email: string;
   name: string;
   plan: "free" | "pro";
+  isAdmin?: boolean;
 }
 
 export async function signSession(claims: SessionClaims): Promise<string> {
@@ -33,12 +34,24 @@ export async function verifySession(token: string | undefined): Promise<SessionC
       typeof payload.name === "string"
     ) {
       const plan = payload.plan === "pro" ? "pro" : "free";
-      return { sub: payload.sub, email: payload.email, name: payload.name, plan };
+      return {
+        sub: payload.sub,
+        email: payload.email,
+        name: payload.name,
+        plan,
+        isAdmin: payload.isAdmin === true,
+      };
     }
     return null;
   } catch {
     return null;
   }
+}
+
+export function isAdminEmail(email: string): boolean {
+  const adminEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
+  if (!adminEmail) return false;
+  return email.trim().toLowerCase() === adminEmail;
 }
 
 export interface CookieOpts {

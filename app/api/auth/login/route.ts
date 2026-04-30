@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { verifyCredentials } from "@/lib/users";
-import { buildSessionCookie, cookieDomainFor, signSession } from "@/lib/auth";
+import { buildSessionCookie, cookieDomainFor, isAdminEmail, signSession } from "@/lib/auth";
 
 export const runtime = "nodejs";
 
@@ -27,7 +27,13 @@ export async function POST(req: Request) {
     );
   }
 
-  const token = await signSession({ sub: user.id, email: user.email, name: user.name, plan: user.plan });
+  const token = await signSession({
+    sub: user.id,
+    email: user.email,
+    name: user.name,
+    plan: user.plan,
+    isAdmin: isAdminEmail(user.email),
+  });
   const host = req.headers.get("host");
   const cookie = buildSessionCookie(token, {
     domain: cookieDomainFor(host),

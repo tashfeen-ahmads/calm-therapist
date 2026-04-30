@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
+import { AuthDivider, GoogleButton } from "@/components/auth/GoogleButton";
 
 export default function SignupPage() {
   return (
@@ -64,6 +65,12 @@ function SignupInner() {
       <p className="body-large" style={{ color: "var(--calm-ink-40)", marginBottom: 32 }}>
         It takes thirty seconds. Calm Therapist is free to start.
       </p>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <GoogleButton next={next} label="Sign up with Google" />
+      </div>
+
+      <AuthDivider />
 
       <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
         <Field label="What should Calm Therapist call you?">

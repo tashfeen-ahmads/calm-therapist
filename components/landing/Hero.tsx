@@ -60,7 +60,7 @@ export function Hero() {
               transition={{ duration: 0.5, ease: "easeOut", delay: 0.3 }}
               style={{ display: "flex", gap: 12, marginTop: 40, flexWrap: "wrap" }}
             >
-              <Link href="/onboarding/step-1" className="btn-primary">
+              <Link href="/auth/signup" className="btn-primary">
                 Begin your first session
               </Link>
               <Link href="/how-it-works" className="btn-ghost">

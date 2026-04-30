@@ -3,8 +3,9 @@
 import { Style } from "@/components/ui/Style";
 
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
-const QUOTES = [
+const SEED_QUOTES = [
   {
     name: "Amir, 34",
     text: "I've tried three other apps. They all felt like talking to a FAQ. Calm Therapist actually remembered what I told it about my father in week one. That changed everything.",
@@ -31,7 +32,24 @@ const QUOTES = [
   },
 ];
 
+interface Quote { name: string; text: string }
+
 export function Testimonials() {
+  const [quotes, setQuotes] = useState<Quote[]>(SEED_QUOTES);
+
+  useEffect(() => {
+    fetch("/api/feedback/highlights")
+      .then((r) => r.json())
+      .then((data: { items?: Quote[] }) => {
+        if (Array.isArray(data.items) && data.items.length > 0) {
+          // Live feedback first, then top up from the seed list to reach 6.
+          const merged = [...data.items, ...SEED_QUOTES].slice(0, 6);
+          setQuotes(merged);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <section style={{ background: "var(--calm-mist)", padding: "120px 24px" }}>
       <div className="container">
@@ -43,7 +61,7 @@ export function Testimonials() {
             gap: 16,
           }}
         >
-          {QUOTES.map((q, i) => (
+          {quotes.map((q, i) => (
             <motion.div
               key={q.name}
               initial={{ y: 12, opacity: 0 }}

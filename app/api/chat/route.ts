@@ -1,5 +1,8 @@
 import { streamChatResponse, UserProfile, DEFAULT_PROFILE } from "@/lib/claude";
 import { MODES, ModeKey } from "@/lib/features";
+import { recordClaudeUsage } from "@/lib/usage";
+import { cookies } from "next/headers";
+import { SESSION_COOKIE, verifySession } from "@/lib/auth";
 import type Anthropic from "@anthropic-ai/sdk";
 
 export const runtime = "nodejs";
@@ -28,6 +31,10 @@ export async function POST(req: Request) {
 
   const addendum = body.mode ? MODES[body.mode]?.systemAddendum : undefined;
 
+  const claims = await verifySession(cookies().get(SESSION_COOKIE)?.value);
+  const userId = claims?.sub;
+  const start = Date.now();
+
   if (!process.env.ANTHROPIC_API_KEY) {
     return mockStream(profile, body.messages);
   }
@@ -35,11 +42,21 @@ export async function POST(req: Request) {
   const encoder = new TextEncoder();
   const stream = new ReadableStream({
     async start(controller) {
+      let tokensIn: number | undefined;
+      let tokensOut: number | undefined;
       try {
         const claudeStream = streamChatResponse(body.messages, profile, addendum);
         for await (const event of claudeStream) {
           if (event.type === "content_block_delta" && event.delta.type === "text_delta") {
             controller.enqueue(encoder.encode(event.delta.text));
+          }
+          if (event.type === "message_start" && "message" in event) {
+            const msg = (event as unknown as { message: { usage?: { input_tokens?: number } } }).message;
+            tokensIn = msg.usage?.input_tokens;
+          }
+          if (event.type === "message_delta" && "usage" in event) {
+            const usage = (event as unknown as { usage?: { output_tokens?: number } }).usage;
+            tokensOut = usage?.output_tokens;
           }
         }
       } catch (err) {
@@ -49,6 +66,12 @@ export async function POST(req: Request) {
         );
       } finally {
         controller.close();
+        recordClaudeUsage({
+          userId,
+          tokensIn,
+          tokensOut,
+          durationMs: Date.now() - start,
+        });
       }
     },
   });

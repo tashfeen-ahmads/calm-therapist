@@ -102,7 +102,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
       <section className="section">
         <div className="container" style={{ maxWidth: 720, textAlign: "center" }}>
           <h2 style={{ marginBottom: 24 }}>Start your first session.</h2>
-          <Link href="/onboarding/step-1" className="btn-primary">Begin with Calm Therapist</Link>
+          <Link href="/auth/signup" className="btn-primary">Begin with Calm Therapist</Link>
         </div>
       </section>
     </PageShell>
