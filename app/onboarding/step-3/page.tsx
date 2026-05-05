@@ -12,20 +12,38 @@ const TONES = [
 
 const MODES = ["Voice", "Chat", "I'm not sure yet"];
 
+const CULTURAL_CONTEXTS = [
+  { key: "communal", title: "Communal", desc: "Family and community shape my decisions." },
+  { key: "individualist", title: "Individualist", desc: "I largely chart my own path." },
+  { key: "mixed-diaspora", title: "Mixed / diaspora", desc: "I move between two cultural worlds." },
+];
+
+const STIGMA = [
+  { key: "high", label: "High — talking about this is risky around me" },
+  { key: "moderate", label: "Moderate" },
+  { key: "low", label: "Low — open conversation is fine" },
+];
+
 export default function Step3Page() {
   const router = useRouter();
   const [tone, setTone] = useState<string>("warm");
   const [mode, setMode] = useState<string>("I'm not sure yet");
+  const [culturalContext, setCulturalContext] = useState<string>("");
+  const [stigmaContext, setStigmaContext] = useState<string>("moderate");
+  const [country, setCountry] = useState<string>("");
 
   useEffect(() => {
     const s = readState() as Record<string, string>;
     if (s.tone) setTone(s.tone);
     if (s.startingMode) setMode(s.startingMode);
+    if (s.culturalContext) setCulturalContext(s.culturalContext);
+    if (s.stigmaContext) setStigmaContext(s.stigmaContext);
+    if (s.country) setCountry(s.country);
   }, []);
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    writeState({ tone, startingMode: mode });
+    writeState({ tone, startingMode: mode, culturalContext, stigmaContext, country });
     router.push("/onboarding/step-4");
   };
 
@@ -85,6 +103,68 @@ export default function Step3Page() {
             ))}
           </div>
         </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <span className="body-micro" style={{ color: "var(--calm-ink-40)" }}>
+            How does your world work?
+          </span>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            {CULTURAL_CONTEXTS.map((c) => (
+              <button
+                type="button"
+                key={c.key}
+                onClick={() => setCulturalContext(c.key)}
+                className={`pill ${culturalContext === c.key ? "active" : ""}`}
+                title={c.desc}
+              >
+                {c.title}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <span className="body-micro" style={{ color: "var(--calm-ink-40)" }}>
+            Mental-health stigma in your environment?
+          </span>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {STIGMA.map((s) => (
+              <label
+                key={s.key}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 10,
+                  padding: "10px 14px",
+                  border: "1px solid var(--calm-ink-10)",
+                  borderRadius: 8,
+                  cursor: "pointer",
+                  background: stigmaContext === s.key ? "var(--calm-forest-10)" : "transparent",
+                }}
+              >
+                <input
+                  type="radio"
+                  name="stigma"
+                  value={s.key}
+                  checked={stigmaContext === s.key}
+                  onChange={() => setStigmaContext(s.key)}
+                />
+                <span style={{ fontSize: 14 }}>{s.label}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        <label style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          <span className="body-micro" style={{ color: "var(--calm-ink-40)" }}>Country (so we route the right crisis line if needed)</span>
+          <input
+            className="input"
+            placeholder="e.g. PK, US, UK, IN, AE…"
+            value={country}
+            onChange={(e) => setCountry(e.target.value.toUpperCase())}
+            maxLength={3}
+          />
+        </label>
 
         <button type="submit" className="btn-primary" style={{ alignSelf: "flex-start" }}>
           Continue

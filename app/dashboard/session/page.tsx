@@ -28,6 +28,11 @@ function SessionInner() {
     const s = readState() as Record<string, unknown>;
     const memories = loadMemories();
     setMemoryCount(memories.length);
+    let activeModes: UserProfile["activeModes"] = [];
+    try {
+      const raw = window.localStorage.getItem("calm-therapist:active-modes");
+      if (raw) activeModes = JSON.parse(raw);
+    } catch {}
     setProfile({
       name: (s.name as string) || "friend",
       age: (s.age as string) || undefined,
@@ -40,6 +45,14 @@ function SessionInner() {
       sessionCount: 14,
       memories: memories.map((m) => m.statement),
       language: (s.language as string) ?? "en",
+      culture: (s.culture as UserProfile["culture"]) ?? {
+        primaryLanguage: ((s.language as string) ?? "en"),
+        countryOfResidence: (s.country as string) ?? undefined,
+        culturalContext: (s.culturalContext as "individualist" | "communal" | "mixed-diaspora") ?? undefined,
+        stigmaContext: (s.stigmaContext as "high" | "moderate" | "low") ?? "moderate",
+        somaticExpression: (s.somaticExpression as "yes" | "no" | "unknown") ?? "unknown",
+      },
+      activeModes,
     });
   }, []);
 

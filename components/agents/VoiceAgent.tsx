@@ -2,7 +2,8 @@
 
 import { useConversation } from "@11labs/react";
 import { useEffect, useRef, useState } from "react";
-import { UserProfile, buildSystemPrompt } from "@/lib/claude";
+import { UserProfile, composeSystemPrompt } from "@/lib/claude";
+import { modeAddendaFor } from "@/lib/agent-modes";
 
 interface VoiceAgentProps {
   profile: UserProfile;
@@ -54,12 +55,17 @@ export function VoiceAgent({ profile, onSessionEnd, onSwitchToChat }: VoiceAgent
     setError(null);
     try {
       await navigator.mediaDevices.getUserMedia({ audio: true });
+      const fullPrompt = composeSystemPrompt({
+        profile,
+        modeAddenda: modeAddendaFor(profile.activeModes),
+        voice: true,
+      });
       await conversation.startSession({
         agentId,
         overrides: {
           agent: {
-            prompt: { prompt: buildSystemPrompt(profile) },
-            firstMessage: `Hello ${profile.name}. I'm glad you came today. How are you arriving?`,
+            prompt: { prompt: fullPrompt },
+            firstMessage: `Hi ${profile.name}. I'm here. How are you arriving today?`,
           },
           tts: {
             voiceId:

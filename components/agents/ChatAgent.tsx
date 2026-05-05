@@ -2,8 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import type { UserProfile } from "@/lib/claude";
+import type { AgentModeKey, UserProfile } from "@/lib/claude";
 import type { ModeKey } from "@/lib/features";
+import { ModeBar } from "./ModeBar";
+import { CrisisBanner } from "./CrisisBanner";
 
 interface Message {
   role: "user" | "assistant";
@@ -39,8 +41,25 @@ export function ChatAgent({
   ]);
   const [input, setInput] = useState("");
   const [streaming, setStreaming] = useState(false);
+  const [activeModes, setActiveModes] = useState<AgentModeKey[]>(profile.activeModes ?? []);
+  const [crisisTier, setCrisisTier] = useState(0);
   const threadRef = useRef<HTMLDivElement>(null);
   const taRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem("calm-therapist:active-modes");
+      if (raw) {
+        const parsed = JSON.parse(raw) as AgentModeKey[];
+        setActiveModes(parsed);
+      }
+    } catch {}
+  }, []);
+
+  const persistModes = (next: AgentModeKey[]) => {
+    setActiveModes(next);
+    try { window.localStorage.setItem("calm-therapist:active-modes", JSON.stringify(next)); } catch {}
+  };
 
   useEffect(() => {
     if (threadRef.current) {
@@ -66,11 +85,13 @@ export function ChatAgent({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           messages: next.map((m) => ({ role: m.role, content: m.content })),
-          profile,
+          profile: { ...profile, activeModes },
           mode,
         }),
       });
       if (!res.body) throw new Error("No body");
+      const tierHeader = Number(res.headers.get("X-Crisis-Tier") ?? "0");
+      if (tierHeader > 0) setCrisisTier(tierHeader);
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
       let acc = "";
@@ -78,9 +99,11 @@ export function ChatAgent({
         const { value, done } = await reader.read();
         if (done) break;
         acc += decoder.decode(value, { stream: true });
+        // Strip the optional [crisis_tier:N] header chunk emitted by the server.
+        const cleaned = acc.replace(/\n?\[crisis_tier:\d+\]\n?/g, "");
         setMessages((msgs) => {
           const copy = [...msgs];
-          copy[copy.length - 1] = { ...copy[copy.length - 1], content: acc };
+          copy[copy.length - 1] = { ...copy[copy.length - 1], content: cleaned };
           return copy;
         });
       }
@@ -133,6 +156,12 @@ export function ChatAgent({
           </button>
         )}
       </div>
+
+      <ModeBar active={activeModes} onChange={persistModes} />
+
+      {crisisTier > 0 && (
+        <CrisisBanner tier={crisisTier} country={profile.culture?.countryOfResidence} onDismiss={() => setCrisisTier(0)} />
+      )}
 
       <div ref={threadRef} className="subtle-scroll" style={{ flex: 1, overflowY: "auto", padding: 24, display: "flex", flexDirection: "column", gap: 14 }}>
         {messages.map((m, i) => (
