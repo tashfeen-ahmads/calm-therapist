@@ -41,24 +41,39 @@ export function ChatAgent({
   ]);
   const [input, setInput] = useState("");
   const [streaming, setStreaming] = useState(false);
-  const [activeModes, setActiveModes] = useState<AgentModeKey[]>(profile.activeModes ?? []);
+  const [activeMode, setActiveMode] = useState<AgentModeKey | null>(
+    profile.activeModes && profile.activeModes.length > 0 ? profile.activeModes[0] : null
+  );
   const [crisisTier, setCrisisTier] = useState(0);
   const threadRef = useRef<HTMLDivElement>(null);
   const taRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     try {
-      const raw = window.localStorage.getItem("calm-therapist:active-modes");
+      const raw = window.localStorage.getItem("calm-therapist:active-mode");
       if (raw) {
-        const parsed = JSON.parse(raw) as AgentModeKey[];
-        setActiveModes(parsed);
+        setActiveMode(raw as AgentModeKey);
+        return;
+      }
+      // Migrate from older multi-select storage.
+      const legacy = window.localStorage.getItem("calm-therapist:active-modes");
+      if (legacy) {
+        const arr = JSON.parse(legacy) as AgentModeKey[];
+        if (arr.length > 0) {
+          setActiveMode(arr[0]);
+          window.localStorage.setItem("calm-therapist:active-mode", arr[0]);
+        }
+        window.localStorage.removeItem("calm-therapist:active-modes");
       }
     } catch {}
   }, []);
 
-  const persistModes = (next: AgentModeKey[]) => {
-    setActiveModes(next);
-    try { window.localStorage.setItem("calm-therapist:active-modes", JSON.stringify(next)); } catch {}
+  const persistMode = (next: AgentModeKey | null) => {
+    setActiveMode(next);
+    try {
+      if (next) window.localStorage.setItem("calm-therapist:active-mode", next);
+      else window.localStorage.removeItem("calm-therapist:active-mode");
+    } catch {}
   };
 
   useEffect(() => {
@@ -85,7 +100,7 @@ export function ChatAgent({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           messages: next.map((m) => ({ role: m.role, content: m.content })),
-          profile: { ...profile, activeModes },
+          profile: { ...profile, activeModes: activeMode ? [activeMode] : [] },
           mode,
         }),
       });
@@ -150,14 +165,15 @@ export function ChatAgent({
             ◯ Calm Therapist remembers {memoryCount} things about you
           </span>
         </div>
-        {onSwitchToVoice && (
-          <button onClick={onSwitchToVoice} className="btn-ghost" style={{ height: 36, fontSize: 13 }}>
-            Switch to voice
-          </button>
-        )}
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <ModeBar active={activeMode} onChange={persistMode} />
+          {onSwitchToVoice && (
+            <button onClick={onSwitchToVoice} className="btn-ghost" style={{ height: 36, fontSize: 13 }}>
+              Voice
+            </button>
+          )}
+        </div>
       </div>
-
-      <ModeBar active={activeModes} onChange={persistModes} />
 
       {crisisTier > 0 && (
         <CrisisBanner tier={crisisTier} country={profile.culture?.countryOfResidence} onDismiss={() => setCrisisTier(0)} />

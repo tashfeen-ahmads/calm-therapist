@@ -30,8 +30,8 @@ function SessionInner() {
     setMemoryCount(memories.length);
     let activeModes: UserProfile["activeModes"] = [];
     try {
-      const raw = window.localStorage.getItem("calm-therapist:active-modes");
-      if (raw) activeModes = JSON.parse(raw);
+      const single = window.localStorage.getItem("calm-therapist:active-mode");
+      if (single) activeModes = [single as NonNullable<UserProfile["activeModes"]>[number]];
     } catch {}
     setProfile({
       name: (s.name as string) || "friend",
