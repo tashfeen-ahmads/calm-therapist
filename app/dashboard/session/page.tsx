@@ -28,11 +28,9 @@ function SessionInner() {
     const s = readState() as Record<string, unknown>;
     const memories = loadMemories();
     setMemoryCount(memories.length);
-    let activeModes: UserProfile["activeModes"] = [];
-    try {
-      const single = window.localStorage.getItem("calm-therapist:active-mode");
-      if (single) activeModes = [single as NonNullable<UserProfile["activeModes"]>[number]];
-    } catch {}
+    // Mode always starts at None for a new session. ChatAgent rehydrates from
+    // sessionStorage if the user has chosen one in the same browser tab.
+    const activeModes: UserProfile["activeModes"] = [];
     setProfile({
       name: (s.name as string) || "friend",
       age: (s.age as string) || undefined,

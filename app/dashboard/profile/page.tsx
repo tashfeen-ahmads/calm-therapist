@@ -109,19 +109,72 @@ export default function ProfilePage() {
       </div>
 
       <div className="card">
-        <p className="body-micro" style={{ color: "var(--calm-forest)", marginBottom: 16 }}>
+        <p className="body-micro" style={{ color: "var(--calm-forest)", marginBottom: 8 }}>
           Your data
         </p>
+        <p style={{ fontSize: 14, color: "var(--calm-ink-70)", marginBottom: 16 }}>
+          Spreadsheet-friendly. Opens in Excel, Numbers, Google Sheets — anything.
+        </p>
         <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-          <button className="btn-ghost">Download all my data (JSON)</button>
-          <button className="btn-ghost">What does Calm Therapist know about me? (Full export)</button>
-          <button className="btn-ghost" style={{ color: "var(--calm-ink)" }}>
+          <button className="btn-primary" onClick={() => downloadCsv(memories)}>
+            Download my data (CSV)
+          </button>
+          <button className="btn-ghost" style={{ color: "var(--calm-ink)" }} onClick={confirmDelete}>
             Delete all my data
           </button>
         </div>
       </div>
     </div>
   );
+}
+
+function csvEscape(value: string | number | null | undefined): string {
+  if (value === null || value === undefined) return "";
+  const s = String(value);
+  if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
+  return s;
+}
+
+function downloadCsv(memories: { statement: string; category: string; mentions: number; firstMentioned: string; lastMentioned: string }[]) {
+  const rows: string[][] = [];
+
+  rows.push(["Section", "Type", "Detail", "Mentions", "First", "Last"]);
+  memories.forEach((m) => {
+    rows.push(["Memory", m.category, m.statement, String(m.mentions), m.firstMentioned, m.lastMentioned]);
+  });
+  // Blank separator row
+  rows.push([""]);
+  rows.push(["Section", "Date", "Mode", "Duration", "Summary"]);
+  SESSION_HISTORY.forEach((s) => {
+    rows.push(["Session", s.date, s.mode, s.duration, s.summary]);
+  });
+
+  const csv = rows.map((r) => r.map(csvEscape).join(",")).join("\n");
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `calm-therapist-export-${new Date().toISOString().slice(0, 10)}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function confirmDelete() {
+  if (typeof window === "undefined") return;
+  const ok = window.confirm("Delete everything? This wipes your local memories, mood data, and onboarding state on this device. It cannot be undone.");
+  if (!ok) return;
+  try {
+    Object.keys(window.localStorage)
+      .filter((k) => k.startsWith("calm-therapist:"))
+      .forEach((k) => window.localStorage.removeItem(k));
+    Object.keys(window.sessionStorage)
+      .filter((k) => k.startsWith("calm-therapist:"))
+      .forEach((k) => window.sessionStorage.removeItem(k));
+  } catch {}
+  window.alert("Cleared. The page will reload.");
+  window.location.reload();
 }
 
 function ProfileRow({ label, value, last }: { label: string; value: string; last?: boolean }) {

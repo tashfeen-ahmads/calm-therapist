@@ -231,6 +231,9 @@ export function Sidebar() {
           align-items: center;
           justify-content: center;
         }
+        .dashboard-sidebar[data-collapsed="true"] .sidebar-link-icon {
+          margin: 0 auto;
+        }
         .sidebar-link-label {
           opacity: 1;
           transition: opacity 0.2s ease;
@@ -238,11 +241,18 @@ export function Sidebar() {
         }
         .dashboard-sidebar[data-collapsed="true"] .sidebar-link {
           justify-content: center;
-          padding: 10px;
+          padding: 10px 0;
+          gap: 0;
         }
         .dashboard-sidebar[data-collapsed="true"] .sidebar-link-label {
           opacity: 0;
           width: 0;
+          margin: 0;
+          padding: 0;
+          display: none;
+        }
+        .dashboard-sidebar[data-collapsed="true"] .sidebar-header {
+          padding: 8px 0 16px;
         }
 
         .dashboard-tabbar {

@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
+import { LeadPopup } from "@/components/landing/LeadPopup";
 import { ReactNode } from "react";
 
 export function PageShell({ children }: { children: ReactNode }) {
@@ -8,6 +9,7 @@ export function PageShell({ children }: { children: ReactNode }) {
       <Navbar />
       <main style={{ paddingTop: 72 }}>{children}</main>
       <Footer />
+      <LeadPopup />
     </>
   );
 }

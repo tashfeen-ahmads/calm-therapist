@@ -41,38 +41,28 @@ export function ChatAgent({
   ]);
   const [input, setInput] = useState("");
   const [streaming, setStreaming] = useState(false);
-  const [activeMode, setActiveMode] = useState<AgentModeKey | null>(
-    profile.activeModes && profile.activeModes.length > 0 ? profile.activeModes[0] : null
-  );
+  const [activeMode, setActiveMode] = useState<AgentModeKey | null>(null);
   const [crisisTier, setCrisisTier] = useState(0);
   const threadRef = useRef<HTMLDivElement>(null);
   const taRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
+    // Mode resets to None each new browser tab/session — but persists while
+    // the user is bouncing around the dashboard within a single tab.
     try {
-      const raw = window.localStorage.getItem("calm-therapist:active-mode");
-      if (raw) {
-        setActiveMode(raw as AgentModeKey);
-        return;
-      }
-      // Migrate from older multi-select storage.
-      const legacy = window.localStorage.getItem("calm-therapist:active-modes");
-      if (legacy) {
-        const arr = JSON.parse(legacy) as AgentModeKey[];
-        if (arr.length > 0) {
-          setActiveMode(arr[0]);
-          window.localStorage.setItem("calm-therapist:active-mode", arr[0]);
-        }
-        window.localStorage.removeItem("calm-therapist:active-modes");
-      }
+      const raw = window.sessionStorage.getItem("calm-therapist:active-mode");
+      if (raw) setActiveMode(raw as AgentModeKey);
+      // Clear any old localStorage entries from earlier multi-select build.
+      window.localStorage.removeItem("calm-therapist:active-mode");
+      window.localStorage.removeItem("calm-therapist:active-modes");
     } catch {}
   }, []);
 
   const persistMode = (next: AgentModeKey | null) => {
     setActiveMode(next);
     try {
-      if (next) window.localStorage.setItem("calm-therapist:active-mode", next);
-      else window.localStorage.removeItem("calm-therapist:active-mode");
+      if (next) window.sessionStorage.setItem("calm-therapist:active-mode", next);
+      else window.sessionStorage.removeItem("calm-therapist:active-mode");
     } catch {}
   };
 
@@ -157,12 +147,16 @@ export function ChatAgent({
           gap: 12,
         }}
       >
-        <div style={{ display: "flex", flexDirection: "column" }}>
+        <div style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
           <span className="body-micro" style={{ color: "var(--calm-ink-40)" }}>
             Session {sessionNumber} · {new Date().toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" })}
           </span>
-          <span style={{ fontSize: 13, color: "var(--calm-forest)", marginTop: 4 }}>
-            ◯ Calm Therapist remembers {memoryCount} things about you
+          <span style={{ fontSize: 13, color: "var(--calm-forest)", marginTop: 4, display: "inline-flex", alignItems: "center", gap: 6 }}>
+            <span
+              aria-hidden
+              style={{ width: 6, height: 6, borderRadius: 999, background: "var(--calm-forest)", display: "inline-block" }}
+            />
+            Aura remembers {memoryCount} {memoryCount === 1 ? "thing" : "things"} about you
           </span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
