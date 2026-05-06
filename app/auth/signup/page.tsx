@@ -61,9 +61,9 @@ function SignupInner() {
 
   return (
     <div>
-      <h2 style={{ marginBottom: 12 }}>Create your account.</h2>
+      <h2 style={{ marginBottom: 12 }}>Continue the conversation.</h2>
       <p className="body-large" style={{ color: "var(--calm-ink-40)", marginBottom: 32 }}>
-        It takes thirty seconds. Calm Therapist is free to start.
+        Thirty seconds to open your space — so we can pick up next time where we left off.
       </p>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -112,7 +112,7 @@ function SignupInner() {
         )}
 
         <button type="submit" className="btn-primary" disabled={loading} style={{ marginTop: 8 }}>
-          {loading ? "Creating account…" : "Create account"}
+          {loading ? "Opening your space…" : "Open my space"}
         </button>
       </form>
 

@@ -51,7 +51,7 @@ function LoginInner() {
     <div>
       <h2 style={{ marginBottom: 12 }}>Welcome back.</h2>
       <p className="body-large" style={{ color: "var(--calm-ink-40)", marginBottom: 32 }}>
-        Sign in to pick up where you left off.
+        Pick up where we left off.
       </p>
 
       <div
@@ -126,7 +126,7 @@ function LoginInner() {
         )}
 
         <button type="submit" className="btn-primary" disabled={loading} style={{ marginTop: 8 }}>
-          {loading ? "Signing in…" : "Sign in"}
+          {loading ? "Thinking with you…" : "Continue"}
         </button>
       </form>
 

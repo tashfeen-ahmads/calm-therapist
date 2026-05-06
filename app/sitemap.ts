@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { POSTS } from "@/lib/blog";
 import { MODE_LIST } from "@/lib/features";
+import { PAGES, GLOSSARY } from "@/lib/seo-pages";
 
 const BASE = process.env.NEXT_PUBLIC_APP_URL ?? "https://calmtherapist.implenix.net";
 
@@ -34,6 +35,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastMod: new Date(p.publishedAt),
   }));
 
+  const seoPillars = Object.keys(PAGES).map((slug) => ({
+    path: `/${slug}`,
+    priority: 0.9,
+    freq: "monthly" as const,
+  }));
+
+  const glossary = [
+    { path: "/glossary", priority: 0.7, freq: "monthly" as const },
+    ...Object.keys(GLOSSARY).map((slug) => ({
+      path: `/glossary/${slug}`,
+      priority: 0.65,
+      freq: "monthly" as const,
+    })),
+  ];
+
   return [
     ...staticPaths.map((p) => ({
       url: `${BASE}${p.path}`,
@@ -56,6 +72,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...blog.map((p) => ({
       url: `${BASE}${p.path}`,
       lastModified: p.lastMod,
+      changeFrequency: p.freq,
+      priority: p.priority,
+    })),
+    ...seoPillars.map((p) => ({
+      url: `${BASE}${p.path}`,
+      lastModified: now,
+      changeFrequency: p.freq,
+      priority: p.priority,
+    })),
+    ...glossary.map((p) => ({
+      url: `${BASE}${p.path}`,
+      lastModified: now,
       changeFrequency: p.freq,
       priority: p.priority,
     })),

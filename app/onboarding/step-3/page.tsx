@@ -44,7 +44,9 @@ export default function Step3Page() {
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     writeState({ tone, startingMode: mode, culturalContext, stigmaContext, country });
-    router.push("/onboarding/step-4");
+    // Skip the goals step in onboarding — users can add goals from the
+    // dashboard once they've felt the value of the first conversation.
+    router.push("/onboarding/step-5");
   };
 
   return (

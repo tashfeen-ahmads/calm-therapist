@@ -1,6 +1,6 @@
 import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
-import { Hero } from "@/components/landing/Hero";
+import { FeelItFirst } from "@/components/landing/FeelItFirst";
 import { Problems } from "@/components/landing/Problems";
 import { ModeCards } from "@/components/landing/ModeCards";
 import { AgentDemo } from "@/components/landing/AgentDemo";
@@ -20,11 +20,11 @@ export default function HomePage() {
       <JsonLd data={organizationSchema()} />
       <Navbar />
       <main>
-        <Hero />
+        <FeelItFirst />
         <Problems />
-        <ModeCards />
-        <AgentDemo />
         <AgentModesSection />
+        <AgentDemo />
+        <ModeCards />
         <DeepDive />
         <ConditionPaths />
         <PrivacyBlock />

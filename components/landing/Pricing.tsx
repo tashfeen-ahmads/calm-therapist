@@ -5,7 +5,14 @@ export function Pricing() {
   return (
     <section id="pricing" style={{ background: "var(--calm-white)", padding: "120px 24px" }}>
       <div className="container">
-        <h2 style={{ textAlign: "center", marginBottom: 64 }}>One price. Everything included.</h2>
+        <div style={{ textAlign: "center", maxWidth: 720, margin: "0 auto 56px" }}>
+          <span className="micro-label" style={{ color: "var(--calm-forest)" }}>Keep your space open</span>
+          <h2 style={{ marginTop: 16, marginBottom: 16 }}>Two ways to stay.</h2>
+          <p className="body-large" style={{ color: "var(--calm-ink-70)" }}>
+            Try a few conversations on us. If it feels useful, keep your space open. You can pause
+            anytime — coming back is the point, not the payment.
+          </p>
+        </div>
 
         <div
           className="pricing-grid"
@@ -18,37 +25,41 @@ export function Pricing() {
           }}
         >
           <PriceCard
-            title="Try Calm Therapist"
+            title="Just exploring"
             price="Free"
             features={[
-              "3 sessions per week",
-              "Chat agent only",
-              "7-day session history",
-              "Crisis Safe protocol",
+              "Three conversations a week",
+              "Text together, anytime",
+              "We hold the last seven days",
+              "Crisis-aware from message one",
             ]}
-            cta="Start free"
+            cta="Open your space"
             href="/auth/signup"
             primary={false}
           />
           <PriceCard
-            title="Calm Therapist Pro"
+            title="Keep your space open"
             price="$19"
             priceSuffix="/month"
-            yearly="or $159/year"
+            yearly="or $159/year — pause whenever"
             badge="Most chosen"
             features={[
-              "Unlimited sessions",
-              "Voice + chat + journal",
-              "Full longitudinal history",
-              "Monthly reflect with AI analysis",
-              "Crisis Safe + human handoff",
-              "Export your data anytime",
+              "As many conversations as you need",
+              "Talk or type, your call",
+              "Your full record, kept for you",
+              "Monthly look-back, in your own words",
+              "Crisis-safe with a real human, fast",
+              "Take your data with you, any time",
             ]}
-            cta="Start with Pro"
+            cta="Keep my space open"
             href="/auth/signup?next=%2Fdashboard%26plan=pro"
             primary
           />
         </div>
+
+        <p style={{ marginTop: 32, textAlign: "center", fontSize: 13, color: "var(--calm-ink-40)" }}>
+          You can pause your space instead of cancelling. Coming back is welcome.
+        </p>
       </div>
 
       <Style>{`

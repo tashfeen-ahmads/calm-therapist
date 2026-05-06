@@ -47,8 +47,8 @@ export function Navbar() {
           <div className="nav-links" style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <Link href="/how-it-works" className="nav-link">How it works</Link>
             <Link href="/features" className="nav-link">Features</Link>
-            <Link href="/auth/login" className="nav-link">Sign in</Link>
-            <Link href="/auth/signup" className="btn-primary">Start free</Link>
+            <Link href="/auth/login" className="nav-link">Continue</Link>
+            <Link href="/auth/signup" className="btn-primary">Let's talk</Link>
           </div>
           <button
             className="nav-burger"
@@ -84,8 +84,8 @@ export function Navbar() {
           >
             <Link href="/how-it-works" onClick={() => setOpen(false)} style={{ fontSize: 20, fontFamily: "var(--font-heading)" }}>How it works</Link>
             <Link href="/features" onClick={() => setOpen(false)} style={{ fontSize: 20, fontFamily: "var(--font-heading)" }}>Features</Link>
-            <Link href="/auth/login" onClick={() => setOpen(false)} style={{ fontSize: 20, fontFamily: "var(--font-heading)" }}>Sign in</Link>
-            <Link href="/auth/signup" className="btn-primary" onClick={() => setOpen(false)}>Start free</Link>
+            <Link href="/auth/login" onClick={() => setOpen(false)} style={{ fontSize: 20, fontFamily: "var(--font-heading)" }}>Continue</Link>
+            <Link href="/auth/signup" className="btn-primary" onClick={() => setOpen(false)}>Let's talk</Link>
           </div>
         </div>
       )}

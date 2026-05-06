@@ -6,6 +6,7 @@ import type { AgentModeKey, UserProfile } from "@/lib/claude";
 import type { ModeKey } from "@/lib/features";
 import { ModeBar } from "./ModeBar";
 import { CrisisBanner } from "./CrisisBanner";
+import { Aftercare } from "./Aftercare";
 
 interface Message {
   role: "user" | "assistant";
@@ -43,6 +44,7 @@ export function ChatAgent({
   const [streaming, setStreaming] = useState(false);
   const [activeMode, setActiveMode] = useState<AgentModeKey | null>(null);
   const [crisisTier, setCrisisTier] = useState(0);
+  const [wrappingUp, setWrappingUp] = useState(false);
   const threadRef = useRef<HTMLDivElement>(null);
   const taRef = useRef<HTMLTextAreaElement>(null);
 
@@ -134,6 +136,14 @@ export function ChatAgent({
     }
   };
 
+  if (wrappingUp) {
+    return (
+      <div style={{ display: "flex", flexDirection: "column", height: "100%", overflowY: "auto" }}>
+        <Aftercare name={profile.name} onClose={() => setWrappingUp(false)} />
+      </div>
+    );
+  }
+
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%", maxWidth: 760, margin: "0 auto", width: "100%" }}>
       <div
@@ -166,8 +176,19 @@ export function ChatAgent({
               Voice
             </button>
           )}
+          <button
+            type="button"
+            onClick={() => setWrappingUp(true)}
+            className="btn-ghost"
+            style={{ height: 36, fontSize: 13 }}
+            disabled={messages.length < 2}
+            title="Wrap up the session"
+          >
+            Wrap up
+          </button>
         </div>
       </div>
+
 
       {crisisTier > 0 && (
         <CrisisBanner tier={crisisTier} country={profile.culture?.countryOfResidence} onDismiss={() => setCrisisTier(0)} />

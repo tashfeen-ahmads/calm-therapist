@@ -5,8 +5,18 @@ import { useRouter } from "next/navigation";
 import { OnboardingShell, readState, writeState } from "@/components/onboarding/OnboardingShell";
 
 const FOCUS_OPTIONS = [
-  "Anxiety", "Depression", "Grief", "Burnout", "Relationships", "Work stress",
-  "Sleep", "Self-esteem", "Loneliness", "Trauma", "Anger", "Identity",
+  "Work",
+  "Relationships",
+  "Family",
+  "Sleep",
+  "Overthinking",
+  "Low energy",
+  "Direction",
+  "Self-talk",
+  "Loneliness",
+  "Loss",
+  "Anger",
+  "Who I am",
 ];
 
 export default function Step2Page() {
@@ -38,10 +48,10 @@ export default function Step2Page() {
 
   return (
     <OnboardingShell step={2}>
-      <h2 style={{ marginBottom: 16 }}>What&apos;s been on your mind?</h2>
+      <h2 style={{ marginBottom: 16 }}>What do you want to think more clearly about?</h2>
       <p className="body-large" style={{ color: "var(--calm-ink-40)", marginBottom: 32 }}>
-        Pick up to three. You can change these later. Calm Therapist will use these to shape your
-        first conversation.
+        Pick up to three. You can change these later. Aura will use them to shape your first
+        conversation.
       </p>
 
       <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: 32 }}>

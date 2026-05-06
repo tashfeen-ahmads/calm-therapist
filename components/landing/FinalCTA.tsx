@@ -9,14 +9,14 @@ export function FinalCTA() {
           className="body-large"
           style={{ marginTop: 24, color: "rgba(255,255,255,0.85)" }}
         >
-          Start your first session. No appointment. No waiting list. No judgment.
+          No appointment. No waiting list. No form before you feel anything.
         </p>
         <Link
           href="/auth/signup"
           className="btn-light"
           style={{ marginTop: 40, height: 52, padding: "0 32px", fontSize: 15 }}
         >
-          Begin with Calm Therapist
+          Open your space
         </Link>
       </div>
     </section>

@@ -8,12 +8,12 @@ import { Logo } from "@/components/ui/Logo";
 
 const ITEMS = [
   { href: "/dashboard", label: "Today", icon: HomeIcon },
-  { href: "/dashboard/session", label: "Session", icon: ChatIcon },
-  { href: "/dashboard/journal", label: "Weekly journal", icon: JournalIcon },
-  { href: "/dashboard/reflect", label: "Monthly reflect", icon: ReflectIcon },
-  { href: "/dashboard/goals", label: "Goals", icon: GoalsIcon },
-  { href: "/dashboard/profile", label: "Profile", icon: ProfileIcon },
-  { href: "/dashboard/settings", label: "Settings", icon: SettingsIcon },
+  { href: "/dashboard/session", label: "Talk", icon: ChatIcon },
+  { href: "/dashboard/journal", label: "This week", icon: JournalIcon },
+  { href: "/dashboard/reflect", label: "Looking back", icon: ReflectIcon },
+  { href: "/dashboard/goals", label: "What you're after", icon: GoalsIcon },
+  { href: "/dashboard/profile", label: "Your space", icon: ProfileIcon },
+  { href: "/dashboard/settings", label: "Preferences", icon: SettingsIcon },
 ];
 
 const STORAGE_KEY = "calm-therapist:sidebar-collapsed";
@@ -96,13 +96,13 @@ export function Sidebar() {
             onClick={logout}
             disabled={loggingOut}
             className="sidebar-link sidebar-link-button"
-            title={collapsed ? "Log out" : undefined}
-            aria-label="Log out"
+            title={collapsed ? "See you soon" : undefined}
+            aria-label="See you soon"
           >
             <span className="sidebar-link-icon">
               <ExitIcon />
             </span>
-            <span className="sidebar-link-label">{loggingOut ? "Logging out…" : "Log out"}</span>
+            <span className="sidebar-link-label">{loggingOut ? "See you soon…" : "See you soon"}</span>
           </button>
         </div>
       </aside>
@@ -291,8 +291,10 @@ export function Sidebar() {
 }
 
 function shortLabel(s: string): string {
-  if (s === "Weekly journal") return "Journal";
-  if (s === "Monthly reflect") return "Reflect";
+  if (s === "This week") return "Week";
+  if (s === "Looking back") return "Back";
+  if (s === "What you're after") return "Goals";
+  if (s === "Your space") return "Space";
   return s;
 }
 
