@@ -171,11 +171,6 @@ export function ChatAgent({
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <ModeBar active={activeMode} onChange={persistMode} />
-          {onSwitchToVoice && (
-            <button onClick={onSwitchToVoice} className="btn-ghost" style={{ height: 36, fontSize: 13 }}>
-              Voice
-            </button>
-          )}
           <button
             type="button"
             onClick={() => setWrappingUp(true)}

@@ -9,35 +9,34 @@ interface Me {
   plan: "free" | "pro";
 }
 
-const PLANS = [
+interface Quota {
+  plan: "free" | "pro";
+  weeklyLimitSec: number;
+  weeklyUsedSec: number;
+  weeklyRemainingSec: number;
+  monthlyLimitSec: number;
+  monthlyUsedSec: number;
+  monthlyRemainingSec: number;
+  topupsThisMonth: number;
+}
+
+// Dashboard upgrade flow — paid options only. The user is already on free if
+// they're seeing this; show them what opening a space looks like.
+const PAID_OPTIONS = [
   {
-    key: "free" as const,
-    label: "Free",
-    price: "$0",
-    suffix: "/forever",
-    description: "Try Calm Therapist with everything you need to get started.",
-    features: [
-      "3 sessions per week",
-      "Chat agent only",
-      "7-day session history",
-      "Crisis Safe protocol",
-    ],
-  },
-  {
-    key: "pro" as const,
-    label: "Pro",
+    key: "monthly" as const,
+    label: "Monthly",
     price: "$19",
     suffix: "/month",
-    yearly: "or $159/year",
-    description: "Everything Calm Therapist can do, with the long view.",
-    features: [
-      "Unlimited sessions",
-      "Voice + chat + journal",
-      "Full longitudinal history",
-      "Monthly Reflect",
-      "Crisis Safe + human handoff",
-      "Export your data anytime",
-    ],
+    blurb: "Light commitment. Pause whenever.",
+  },
+  {
+    key: "yearly" as const,
+    label: "Yearly",
+    price: "$149",
+    suffix: "/year",
+    badge: "Best value",
+    blurb: "Saves $79 across the year. Same flexibility — pause whenever.",
   },
 ];
 
@@ -127,77 +126,13 @@ export default function SettingsPage() {
         </div>
       )}
 
-      <Group title="Plans">
-        <p style={{ fontSize: 14, color: "var(--calm-ink-40)", marginBottom: 24 }}>
-          Switch any time. We never bill you without telling you first.
-        </p>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }} className="plans-grid">
-          {PLANS.map((p) => {
-            const active = currentPlan === p.key;
-            return (
-              <div
-                key={p.key}
-                style={{
-                  background: active ? "var(--calm-forest)" : "var(--calm-white)",
-                  color: active ? "white" : "var(--calm-ink)",
-                  border: active ? "1px solid var(--calm-forest)" : "1px solid var(--calm-ink-10)",
-                  borderRadius: 16,
-                  padding: 28,
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 16,
-                }}
-              >
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-                  <h3 style={{ color: active ? "white" : "var(--calm-ink)" }}>{p.label}</h3>
-                  {active && (
-                    <span style={{ fontSize: 11, fontWeight: 500, letterSpacing: "0.06em", textTransform: "uppercase", opacity: 0.85 }}>
-                      Current
-                    </span>
-                  )}
-                </div>
-                <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
-                  <span style={{ fontFamily: "var(--font-heading)", fontSize: 40, fontWeight: 500 }}>{p.price}</span>
-                  <span style={{ fontSize: 14, opacity: active ? 0.85 : 0.6 }}>{p.suffix}</span>
-                </div>
-                {p.yearly && (
-                  <p style={{ fontSize: 12, opacity: active ? 0.85 : 0.6 }}>{p.yearly}</p>
-                )}
-                <p style={{ fontSize: 14, lineHeight: 1.6, opacity: active ? 0.95 : 0.85 }}>{p.description}</p>
-                <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 8 }}>
-                  {p.features.map((f) => (
-                    <li key={f} style={{ fontSize: 13, display: "flex", alignItems: "flex-start", gap: 8 }}>
-                      <span
-                        style={{
-                          width: 5,
-                          height: 5,
-                          borderRadius: 999,
-                          background: active ? "rgba(255,255,255,0.85)" : "var(--calm-forest)",
-                          marginTop: 8,
-                          flexShrink: 0,
-                        }}
-                      />
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <button
-                  type="button"
-                  className={active ? "btn-light" : "btn-primary"}
-                  disabled={active || planLoading}
-                  onClick={() => switchPlan(p.key)}
-                  style={{ marginTop: "auto" }}
-                >
-                  {active ? "Current plan" : p.key === "pro" ? "Upgrade to Pro" : "Switch to Free"}
-                </button>
-              </div>
-            );
-          })}
-        </div>
-        {planMsg && (
-          <p style={{ marginTop: 16, fontSize: 14, color: "var(--calm-forest)" }}>{planMsg}</p>
-        )}
-      </Group>
+      <UsageBilling
+        plan={currentPlan}
+        onUpgrade={() => switchPlan("pro")}
+        switching={planLoading}
+        planMsg={planMsg}
+        onPause={() => switchPlan("free")}
+      />
 
       <Group title="Notifications">
         <Field label="Daily check-in reminder">
@@ -290,5 +225,204 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
       <span style={{ fontSize: 13, color: "var(--calm-ink-40)" }}>{label}</span>
       {children}
     </label>
+  );
+}
+
+interface UsageBillingProps {
+  plan: "free" | "pro";
+  onUpgrade: () => void;
+  onPause: () => void;
+  switching: boolean;
+  planMsg: string | null;
+}
+
+function UsageBilling({ plan, onUpgrade, onPause, switching, planMsg }: UsageBillingProps) {
+  const [quota, setQuota] = useState<Quota | null>(null);
+  const [topupBusy, setTopupBusy] = useState(false);
+  const [topupMsg, setTopupMsg] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/voice/quota")
+      .then((r) => r.json())
+      .then((d: Quota) => setQuota(d))
+      .catch(() => {});
+  }, [plan]);
+
+  const buyTopup = async () => {
+    setTopupBusy(true);
+    setTopupMsg(null);
+    try {
+      const res = await fetch("/api/voice/topup", { method: "POST" });
+      const data = await res.json();
+      if (!res.ok) {
+        setTopupMsg(data.error ?? "Could not apply top-up.");
+      } else {
+        setQuota({ plan: "pro", ...data.quota });
+        setTopupMsg("Added 30 min this week and 50 min for the month.");
+      }
+    } catch {
+      setTopupMsg("Network error.");
+    } finally {
+      setTopupBusy(false);
+    }
+  };
+
+  if (plan === "free") {
+    return (
+      <Group title="Open your space">
+        <p style={{ fontSize: 14, color: "var(--calm-ink-70)", marginBottom: 16 }}>
+          Choose how you want to keep going. Pause anytime.
+        </p>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }} className="plans-grid">
+          {PAID_OPTIONS.map((p) => {
+            const isYearly = p.key === "yearly";
+            return (
+              <div
+                key={p.key}
+                style={{
+                  position: "relative",
+                  background: isYearly ? "var(--calm-forest)" : "var(--calm-white)",
+                  color: isYearly ? "white" : "var(--calm-ink)",
+                  border: isYearly ? "1px solid var(--calm-forest)" : "1px solid var(--calm-ink-10)",
+                  borderRadius: 16,
+                  padding: 28,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 16,
+                }}
+              >
+                {p.badge && (
+                  <span
+                    style={{
+                      position: "absolute",
+                      top: -10,
+                      left: 24,
+                      padding: "3px 10px",
+                      borderRadius: 999,
+                      background: "var(--calm-ink)",
+                      color: "white",
+                      fontSize: 10,
+                      fontWeight: 500,
+                      letterSpacing: "0.06em",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    {p.badge}
+                  </span>
+                )}
+                <h3 style={{ color: isYearly ? "white" : "var(--calm-ink)" }}>{p.label}</h3>
+                <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
+                  <span style={{ fontFamily: "var(--font-heading)", fontSize: 40, fontWeight: 500 }}>{p.price}</span>
+                  <span style={{ fontSize: 14, opacity: 0.85 }}>{p.suffix}</span>
+                </div>
+                <p style={{ fontSize: 13, lineHeight: 1.6, opacity: 0.9 }}>{p.blurb}</p>
+                <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 8 }}>
+                  {[
+                    "Voice — 20 min a week, included",
+                    "Unlimited text",
+                    "Weekly journal + monthly reflect",
+                    "Crisis-safe + human handoff",
+                  ].map((f) => (
+                    <li key={f} style={{ fontSize: 13, display: "flex", alignItems: "flex-start", gap: 8 }}>
+                      <span
+                        style={{
+                          width: 5,
+                          height: 5,
+                          borderRadius: 999,
+                          background: isYearly ? "rgba(255,255,255,0.85)" : "var(--calm-forest)",
+                          marginTop: 8,
+                          flexShrink: 0,
+                        }}
+                      />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <button
+                  type="button"
+                  className={isYearly ? "btn-light" : "btn-primary"}
+                  disabled={switching}
+                  onClick={onUpgrade}
+                  style={{ marginTop: "auto" }}
+                >
+                  {switching ? "Opening your space…" : isYearly ? `Keep my space open — ${p.price}/year` : `Keep my space open — ${p.price}/month`}
+                </button>
+              </div>
+            );
+          })}
+        </div>
+        {planMsg && (
+          <p style={{ marginTop: 16, fontSize: 14, color: "var(--calm-forest)" }}>{planMsg}</p>
+        )}
+      </Group>
+    );
+  }
+
+  // Pro user: show usage + billing.
+  const weekUsedMin = quota ? Math.floor(quota.weeklyUsedSec / 60) : 0;
+  const weekLimitMin = quota ? Math.floor(quota.weeklyLimitSec / 60) : 0;
+  const weekRemainMin = quota ? Math.floor(quota.weeklyRemainingSec / 60) : 0;
+  const monthUsedMin = quota ? Math.floor(quota.monthlyUsedSec / 60) : 0;
+  const monthLimitMin = quota ? Math.floor(quota.monthlyLimitSec / 60) : 0;
+  const usedPct = weekLimitMin === 0 ? 0 : Math.min(100, (weekUsedMin / weekLimitMin) * 100);
+
+  return (
+    <Group title="Usage & billing">
+      <div className="card" style={{ padding: 24, display: "flex", flexDirection: "column", gap: 16 }}>
+        <div>
+          <p className="body-micro" style={{ color: "var(--calm-ink-40)" }}>Plan</p>
+          <p style={{ fontSize: 16, marginTop: 4 }}>Pro · $19/month (or $149/year)</p>
+        </div>
+        <div>
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+            <span className="body-micro" style={{ color: "var(--calm-ink-40)" }}>Voice this week</span>
+            <span style={{ fontSize: 13, color: "var(--calm-ink-70)" }}>
+              {weekUsedMin} / {weekLimitMin} min · {weekRemainMin} left
+            </span>
+          </div>
+          <div style={{ height: 6, background: "var(--calm-ink-10)", borderRadius: 999, overflow: "hidden" }}>
+            <div style={{ width: `${usedPct}%`, height: "100%", background: "var(--calm-forest)", transition: "width 0.4s ease" }} />
+          </div>
+          <p style={{ marginTop: 6, fontSize: 12, color: "var(--calm-ink-40)" }}>
+            {monthUsedMin} of {monthLimitMin} min this month · resets on the 1st · weekly resets every Monday
+          </p>
+        </div>
+      </div>
+
+      <div className="card" style={{ padding: 24, display: "flex", flexDirection: "column", gap: 12 }}>
+        <p className="body-micro" style={{ color: "var(--calm-forest)" }}>Voice top-up · $12</p>
+        <h3 style={{ fontSize: 22 }}>Need more this week?</h3>
+        <p style={{ fontSize: 14, color: "var(--calm-ink-70)", lineHeight: 1.6 }}>
+          One-time pack: <strong>+30 minutes this week</strong> and <strong>+50 minutes for the
+          month</strong>. Applied immediately. Caps at 4 packs/month so you can&apos;t accidentally
+          spend half your rent.
+        </p>
+        <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
+          <button onClick={buyTopup} className="btn-primary" disabled={topupBusy}>
+            {topupBusy ? "Adding…" : "Add 30 min — $12"}
+          </button>
+          {quota && quota.topupsThisMonth > 0 && (
+            <span style={{ fontSize: 13, color: "var(--calm-ink-40)" }}>
+              {quota.topupsThisMonth} / 4 top-ups this month
+            </span>
+          )}
+        </div>
+        {topupMsg && (
+          <p style={{ fontSize: 13, color: "var(--calm-forest)" }}>{topupMsg}</p>
+        )}
+      </div>
+
+      <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+        <button onClick={onPause} className="btn-ghost" disabled={switching}>
+          {switching ? "…" : "Pause your space"}
+        </button>
+      </div>
+      <p style={{ fontSize: 12, color: "var(--calm-ink-40)" }}>
+        Pausing keeps your record. You can come back anytime.
+      </p>
+      {planMsg && (
+        <p style={{ fontSize: 14, color: "var(--calm-forest)" }}>{planMsg}</p>
+      )}
+    </Group>
   );
 }

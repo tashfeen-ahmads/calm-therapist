@@ -8,11 +8,8 @@ const AGE_OPTIONS = ["under 18", "18-24", "25-34", "35-44", "45-54", "55+"];
 const GENDER_OPTIONS = ["Woman", "Man", "Non-binary", "Prefer to self-describe", "Prefer not to say"];
 const LANGUAGE_OPTIONS = [
   ["en", "English"],
-  ["ar", "Arabic"],
-  ["ur", "Urdu"],
-  ["hi", "Hindi"],
-  ["fr", "French"],
   ["es", "Spanish"],
+  ["fr", "French"],
 ];
 
 export default function Step1Page() {

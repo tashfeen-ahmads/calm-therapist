@@ -41,7 +41,7 @@ export function Pricing() {
             title="Keep your space open"
             price="$19"
             priceSuffix="/month"
-            yearly="or $159/year — pause whenever"
+            yearly="or $149/year — pause whenever"
             badge="Most chosen"
             features={[
               "As many conversations as you need",

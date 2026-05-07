@@ -3,32 +3,84 @@
 import { Style } from "@/components/ui/Style";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { readState } from "@/components/onboarding/OnboardingShell";
 import { FeedbackPrompt } from "@/components/dashboard/FeedbackPrompt";
+import { UpgradePopup } from "@/components/billing/UpgradePopup";
 
 const MOOD_LABELS = ["Struggling", "Low", "Okay", "Good", "Settled"];
 
 export default function DashboardHome() {
+  const router = useRouter();
   const [name, setName] = useState("friend");
   const [mood, setMood] = useState<number | null>(null);
+  const [plan, setPlan] = useState<"free" | "pro">("free");
+  const [showUpgrade, setShowUpgrade] = useState(false);
 
   useEffect(() => {
     const s = readState() as Record<string, string>;
     if (s.name) setName(s.name);
+    fetch("/api/auth/me")
+      .then((r) => r.json())
+      .then((d: { user?: { plan?: "free" | "pro" } }) => {
+        if (d.user?.plan === "pro") setPlan("pro");
+      })
+      .catch(() => {});
   }, []);
 
   const greeting = useGreeting();
+
+  const onVoiceClick = () => {
+    if (plan === "pro") router.push("/dashboard/voice");
+    else setShowUpgrade(true);
+  };
 
   return (
     <div style={{ padding: "48px 32px", maxWidth: 980, margin: "0 auto" }}>
       <h2 style={{ marginBottom: 8 }}>
         {greeting}, {name}.
       </h2>
-      <p className="body-large" style={{ color: "var(--calm-ink-40)", marginBottom: 48 }}>
+      <p className="body-large" style={{ color: "var(--calm-ink-40)", marginBottom: 32 }}>
         {new Date().toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" })}.
-        You&apos;ve had three conversations about work this week.
       </p>
+
+      <div className="start-grid" style={{ marginBottom: 40 }}>
+        <Link href="/dashboard/session" className="start-card">
+          <div className="start-card-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+              <path d="M3 5h18v12H8l-5 4z" strokeLinejoin="round" />
+            </svg>
+          </div>
+          <div className="start-card-body">
+            <h3>Talk it out — text</h3>
+            <p>Type at your own pace. Always open. Free.</p>
+          </div>
+          <span className="start-card-arrow">→</span>
+        </Link>
+
+        <button type="button" onClick={onVoiceClick} className="start-card start-card-voice" data-locked={plan === "free" ? "true" : "false"}>
+          <div className="start-card-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+              <path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z" />
+              <path d="M5 11a7 7 0 0 0 14 0" />
+              <path d="M12 18v3" />
+            </svg>
+          </div>
+          <div className="start-card-body">
+            <h3>
+              Talk it out — voice
+              {plan === "free" && <span className="start-card-badge">Pro</span>}
+            </h3>
+            <p>
+              {plan === "free"
+                ? "Unlock voice with a paid space — 20 min/week included."
+                : "Speak when typing's too much. 20 min a week, included."}
+            </p>
+          </div>
+          <span className="start-card-arrow">{plan === "free" ? "🔒" : "→"}</span>
+        </button>
+      </div>
 
       <section className="card" style={{ marginBottom: 32 }}>
         <p className="body-micro" style={{ color: "var(--calm-forest)", marginBottom: 16 }}>
@@ -100,8 +152,88 @@ export default function DashboardHome() {
         <FeedbackPrompt />
       </div>
 
+      <UpgradePopup
+        open={showUpgrade}
+        reason="Voice is part of keeping your space open."
+        onClose={() => setShowUpgrade(false)}
+        onUpgraded={() => {
+          setShowUpgrade(false);
+          setPlan("pro");
+        }}
+      />
+
       <Style>{`
         @media (max-width: 760px) { .dash-grid { grid-template-columns: 1fr !important; } }
+        .start-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 16px;
+        }
+        @media (max-width: 700px) { .start-grid { grid-template-columns: 1fr !important; } }
+        .start-card {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          background: var(--calm-white);
+          border: 1px solid var(--calm-ink-10);
+          border-radius: 14px;
+          padding: 22px 24px;
+          text-align: left;
+          color: var(--calm-ink);
+          font-family: var(--font-body);
+          cursor: pointer;
+          transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+          width: 100%;
+          text-decoration: none;
+        }
+        .start-card:hover {
+          background: var(--calm-mist);
+          transform: translateY(-1px);
+        }
+        .start-card-voice[data-locked="true"] {
+          background: var(--calm-mist);
+        }
+        .start-card-icon {
+          width: 44px;
+          height: 44px;
+          border-radius: 12px;
+          background: var(--calm-forest-10);
+          color: var(--calm-forest);
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+        .start-card-body { flex: 1; min-width: 0; }
+        .start-card-body h3 {
+          font-size: 18px;
+          line-height: 1.2;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin-bottom: 4px;
+        }
+        .start-card-body p {
+          font-size: 13px;
+          color: var(--calm-ink-70);
+          line-height: 1.55;
+          margin: 0;
+        }
+        .start-card-arrow {
+          font-size: 20px;
+          color: var(--calm-ink-40);
+        }
+        .start-card-badge {
+          padding: 2px 8px;
+          font-family: var(--font-body);
+          font-size: 10px;
+          font-weight: 500;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+          background: var(--calm-forest);
+          color: white;
+          border-radius: 999px;
+        }
       `}</Style>
     </div>
   );

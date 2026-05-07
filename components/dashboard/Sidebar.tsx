@@ -8,7 +8,8 @@ import { Logo } from "@/components/ui/Logo";
 
 const ITEMS = [
   { href: "/dashboard", label: "Today", icon: HomeIcon },
-  { href: "/dashboard/session", label: "Talk", icon: ChatIcon },
+  { href: "/dashboard/session", label: "Text", icon: ChatIcon },
+  { href: "/dashboard/voice", label: "Voice", icon: VoiceIcon },
   { href: "/dashboard/journal", label: "This week", icon: JournalIcon },
   { href: "/dashboard/reflect", label: "Looking back", icon: ReflectIcon },
   { href: "/dashboard/goals", label: "What you're after", icon: GoalsIcon },
@@ -294,7 +295,7 @@ function shortLabel(s: string): string {
   if (s === "This week") return "Week";
   if (s === "Looking back") return "Back";
   if (s === "What you're after") return "Goals";
-  if (s === "Your space") return "Space";
+  if (s === "Your space") return "Profile";
   return s;
 }
 
@@ -310,6 +311,15 @@ function ChatIcon({ active }: { active: boolean }) {
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 1.8 : 1.5}>
       <path d="M3 5h18v12H8l-5 4z" strokeLinejoin="round" />
+    </svg>
+  );
+}
+function VoiceIcon({ active }: { active: boolean }) {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 1.8 : 1.5}>
+      <path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z" />
+      <path d="M5 11a7 7 0 0 0 14 0" />
+      <path d="M12 18v3" />
     </svg>
   );
 }
