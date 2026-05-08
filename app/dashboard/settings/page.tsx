@@ -131,7 +131,25 @@ export default function SettingsPage() {
         onUpgrade={() => switchPlan("pro")}
         switching={planLoading}
         planMsg={planMsg}
-        onPause={() => switchPlan("free")}
+        onPause={async () => {
+          // Stripe customer portal if configured. Falls back to the
+          // demo "switch plan to free" if Stripe isn't set up.
+          try {
+            const res = await fetch("/api/billing/portal", { method: "POST" });
+            const data = await res.json();
+            if (res.ok && data?.url) {
+              window.location.href = data.url as string;
+              return;
+            }
+            if (data?.mock) {
+              await switchPlan("free");
+              return;
+            }
+            window.alert(data.error ?? "Could not open the billing portal.");
+          } catch {
+            window.alert("Network error.");
+          }
+        }}
       />
 
       <Group title="Notifications">
@@ -228,7 +246,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 interface UsageBillingProps {
   plan: "free" | "pro";
   onUpgrade: () => void;
-  onPause: () => void;
+  onPause: () => void | Promise<void>;
   switching: boolean;
   planMsg: string | null;
 }
@@ -249,14 +267,26 @@ function UsageBilling({ plan, onUpgrade, onPause, switching, planMsg }: UsageBil
     setTopupBusy(true);
     setTopupMsg(null);
     try {
-      const res = await fetch("/api/voice/topup", { method: "POST" });
-      const data = await res.json();
-      if (!res.ok) {
-        setTopupMsg(data.error ?? "Could not apply top-up.");
-      } else {
-        setQuota({ plan: "pro", ...data.quota });
-        setTopupMsg("Added 30 min this week and 50 min for the month.");
+      // Stripe Checkout if configured.
+      const stripeRes = await fetch("/api/billing/topup-checkout", { method: "POST" });
+      const stripeData = await stripeRes.json();
+      if (stripeRes.ok && stripeData?.url) {
+        window.location.href = stripeData.url as string;
+        return;
       }
+      if (stripeData?.mock) {
+        // Demo mode — apply instantly.
+        const res = await fetch("/api/voice/topup", { method: "POST" });
+        const data = await res.json();
+        if (!res.ok) {
+          setTopupMsg(data.error ?? "Could not apply top-up.");
+        } else {
+          setQuota({ plan: "pro", ...data.quota });
+          setTopupMsg("Added 30 min this week and 50 min for the month.");
+        }
+        return;
+      }
+      setTopupMsg(stripeData.error ?? "Could not start checkout.");
     } catch {
       setTopupMsg("Network error.");
     } finally {

@@ -100,12 +100,28 @@ export default function VoicePage() {
           onTopup={async () => {
             const ok = window.confirm("Top-up: $12 → 30 more minutes this week, 50 more this month. Continue?");
             if (!ok) return;
-            const res = await fetch("/api/voice/topup", { method: "POST" });
-            const data = await res.json();
-            if (res.ok) {
-              setQuota({ plan: "pro", ...data.quota });
-            } else {
-              window.alert(data.error ?? "Could not apply top-up.");
+            // Try Stripe-hosted Checkout first.
+            try {
+              const stripeRes = await fetch("/api/billing/topup-checkout", { method: "POST" });
+              const stripeData = await stripeRes.json();
+              if (stripeRes.ok && stripeData?.url) {
+                window.location.href = stripeData.url as string;
+                return;
+              }
+              // Mock fallback for dev (Stripe not configured).
+              if (stripeData?.mock) {
+                const res = await fetch("/api/voice/topup", { method: "POST" });
+                const data = await res.json();
+                if (res.ok) {
+                  setQuota({ plan: "pro", ...data.quota });
+                } else {
+                  window.alert(data.error ?? "Could not apply top-up.");
+                }
+                return;
+              }
+              window.alert(stripeData.error ?? "Could not start checkout.");
+            } catch {
+              window.alert("Network error.");
             }
           }}
         />

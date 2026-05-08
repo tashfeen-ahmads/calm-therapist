@@ -27,17 +27,32 @@ export function UpgradePopup({ reason, open, onClose, onUpgraded }: Props) {
     setBusy(true);
     setError(null);
     try {
-      // Stripe will replace this with a checkout session. For now we just
-      // flip the user's plan via /api/auth/upgrade — same pattern already
-      // used in settings.
-      const res = await fetch("/api/auth/upgrade", {
+      // Try Stripe Checkout first. If the server reports Stripe isn't
+      // configured (mock: true), fall back to the legacy /api/auth/upgrade
+      // mock so the demo still works in dev.
+      const res = await fetch("/api/billing/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cadence: choice }),
+      });
+      const data = await res.json();
+      if (!res.ok && !data?.mock) {
+        setError(data.error ?? "Could not start checkout.");
+        return;
+      }
+      if (data?.url) {
+        window.location.href = data.url as string;
+        return;
+      }
+      // Mock mode — just flip the plan instantly.
+      const mockRes = await fetch("/api/auth/upgrade", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ plan: "pro" }),
       });
-      const data = await res.json();
-      if (!res.ok) {
-        setError(data.error ?? "Could not switch plans.");
+      const mockData = await mockRes.json();
+      if (!mockRes.ok) {
+        setError(mockData.error ?? "Could not switch plans.");
         return;
       }
       onUpgraded?.(choice === "yearly" ? "pro-yearly" : "pro-monthly");
