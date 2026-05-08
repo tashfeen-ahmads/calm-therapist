@@ -21,7 +21,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Bad minute count" }, { status: 400 });
   }
 
-  recordVoiceMinutes(claims.sub, minutes);
-  const snap = getVoiceQuotaSnapshot(claims.sub, claims.plan);
+  await recordVoiceMinutes(claims.sub, minutes);
+  const snap = await getVoiceQuotaSnapshot(claims.sub, claims.plan);
   return NextResponse.json({ ok: true, quota: { plan: claims.plan, ...snap } });
 }

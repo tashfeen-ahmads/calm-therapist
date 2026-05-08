@@ -4,9 +4,9 @@ import { StatCard } from "@/components/admin/AdminShell";
 
 export const dynamic = "force-dynamic";
 
-export default function AdminUsagePage() {
-  const events = [...listUsage()].sort((a, b) => (a.at < b.at ? 1 : -1)).slice(0, 50);
-  const s = computeAdminStats();
+export default async function AdminUsagePage() {
+  const [rawEvents, s] = await Promise.all([listUsage(), computeAdminStats()]);
+  const sortedEvents = [...rawEvents].sort((a, b) => (a.at < b.at ? 1 : -1)).slice(0, 50);
   return (
     <div>
       <h2 style={{ marginBottom: 8 }}>API & revenue</h2>
@@ -30,9 +30,9 @@ export default function AdminUsagePage() {
         <StatCard label="Voice sessions" value={s.api.voiceRequests} />
       </div>
 
-      <h3 style={{ marginBottom: 16 }}>Recent API events</h3>
-      {events.length === 0 ? (
-        <p style={{ color: "var(--calm-ink-40)", fontSize: 14 }}>No events recorded yet.</p>
+      <h3 style={{ marginBottom: 16 }}>Recent API sortedEvents</h3>
+      {sortedEvents.length === 0 ? (
+        <p style={{ color: "var(--calm-ink-40)", fontSize: 14 }}>No sortedEvents recorded yet.</p>
       ) : (
         <div style={{ background: "var(--calm-white)", border: "1px solid var(--calm-ink-10)", borderRadius: 12, overflow: "hidden" }}>
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
@@ -47,7 +47,7 @@ export default function AdminUsagePage() {
               </tr>
             </thead>
             <tbody>
-              {events.map((e, i) => (
+              {sortedEvents.map((e, i) => (
                 <tr key={i} style={{ borderTop: "1px solid var(--calm-ink-10)" }}>
                   <Td>{new Date(e.at).toLocaleString()}</Td>
                   <Td>{e.service}</Td>

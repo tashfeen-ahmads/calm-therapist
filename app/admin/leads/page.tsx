@@ -2,8 +2,8 @@ import { recentLeads } from "@/lib/admin-stats";
 
 export const dynamic = "force-dynamic";
 
-export default function AdminLeadsPage() {
-  const leads = recentLeads();
+export default async function AdminLeadsPage() {
+  const leads = await recentLeads();
   return (
     <div>
       <h2 style={{ marginBottom: 8 }}>Leads</h2>

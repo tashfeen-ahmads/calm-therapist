@@ -15,6 +15,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Please enter a valid email." }, { status: 400 });
   }
   const source = (body.source ?? "landing-popup").trim();
-  const lead = captureLead(email, source);
+  const lead = await captureLead(email, source);
   return NextResponse.json({ ok: true, leadId: lead.id });
 }

@@ -8,25 +8,46 @@ datasource db {
 }
 
 model User {
-  id             String         @id @default(cuid())
-  email          String         @unique
-  name           String
-  ageGroup       String?
-  tone           String         @default("warm")
-  focusAreas     String[]
-  language       String         @default("en")
-  createdAt      DateTime       @default(now())
+  id                 String         @id @default(cuid())
+  email              String         @unique
+  name               String
+  passwordHash       String
+  ageGroup           String?
+  tone               String         @default("warm")
+  focusAreas         String[]
+  language           String         @default("en")
+  plan               String         @default("free") // "free" | "pro"
+  stripeCustomerId   String?        @unique
+  isAdmin            Boolean        @default(false)
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+
+  // Cultural profile
+  culturalContext    String?
+  familySystem       String?
+  countryOfResidence String?
+  diasporaStatus     String?
+  stigmaContext      String?
+  somaticExpression  String?
+
   sessions       Session[]
   memories       Memory[]
   goals          Goal[]
   journalEntries JournalEntry[]
   subscription   Subscription?
+  feedback       Feedback[]
+  emailQueue     EmailQueueRow[]
+  usageEvents    UsageEvent[]
+  voiceQuota     VoiceQuota?
+
+  @@index([createdAt])
+  @@index([plan])
 }
 
 model Session {
   id         String    @id @default(cuid())
   userId     String
-  user       User      @relation(fields: [userId], references: [id])
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   mode       String
   startedAt  DateTime  @default(now())
   endedAt    DateTime?
@@ -34,52 +55,140 @@ model Session {
   summary    String?
   moodBefore Int?
   moodAfter  Int?
+
+  @@index([userId, startedAt])
 }
 
 model Memory {
   id             String   @id @default(cuid())
   userId         String
-  user           User     @relation(fields: [userId], references: [id])
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   statement      String
   category       String
   mentions       Int      @default(1)
   firstMentioned DateTime @default(now())
   lastMentioned  DateTime @default(now())
+
+  @@index([userId, mentions])
 }
 
 model Goal {
   id          String           @id @default(cuid())
   userId      String
-  user        User             @relation(fields: [userId], references: [id])
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   title       String
   description String?
   frequency   String
   createdAt   DateTime         @default(now())
   completions GoalCompletion[]
+
+  @@index([userId])
 }
 
 model GoalCompletion {
   id     String   @id @default(cuid())
   goalId String
-  goal   Goal     @relation(fields: [goalId], references: [id])
+  goal   Goal     @relation(fields: [goalId], references: [id], onDelete: Cascade)
   date   DateTime @default(now())
+
+  @@index([goalId, date])
 }
 
 model JournalEntry {
   id         String   @id @default(cuid())
   userId     String
-  user       User     @relation(fields: [userId], references: [id])
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   weekStart  DateTime
   content    String
   aiAnalysis String?
   createdAt  DateTime @default(now())
+
+  @@index([userId, weekStart])
 }
 
 model Subscription {
-  id        String    @id @default(cuid())
-  userId    String    @unique
-  user      User      @relation(fields: [userId], references: [id])
-  tier      String
-  startDate DateTime  @default(now())
-  endDate   DateTime?
+  id                   String    @id @default(cuid())
+  userId               String    @unique
+  user                 User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tier                 String // "free" | "pro"
+  cadence              String? // "monthly" | "yearly"
+  stripeSubscriptionId String?   @unique
+  stripePriceId        String?
+  status               String    @default("active") // "active" | "paused" | "cancelled" | "past_due"
+  currentPeriodEnd     DateTime?
+  pausedAt             DateTime?
+  cancelledAt          DateTime?
+  startDate            DateTime  @default(now())
+}
+
+model Lead {
+  id         String   @id @default(cuid())
+  email      String
+  source     String
+  capturedAt DateTime @default(now())
+
+  @@index([capturedAt])
+}
+
+model Feedback {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userName      String
+  userEmail     String
+  rating        Int
+  comment       String
+  publicConsent Boolean   @default(false)
+  category      String // "positive" | "neutral" | "needs-attention"
+  status        String    @default("new") // "new" | "reviewed" | "responded"
+  adminResponse String?
+  respondedAt   DateTime?
+  createdAt     DateTime  @default(now())
+
+  @@index([category, createdAt])
+}
+
+model VoiceQuota {
+  userId          String   @id
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  weekKey         String
+  monthKey        String
+  weeklyUsedSec   Int      @default(0)
+  monthlyUsedSec  Int      @default(0)
+  weeklyBonusSec  Int      @default(0)
+  monthlyBonusSec Int      @default(0)
+  topupsThisMonth Int      @default(0)
+  updatedAt       DateTime @updatedAt
+}
+
+model UsageEvent {
+  id                String   @id @default(cuid())
+  service           String
+  userId            String?
+  user              User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  tokensIn          Int?
+  tokensOut         Int?
+  durationMs        Int?
+  estimatedCostUsd  Float?
+  at                DateTime @default(now())
+
+  @@index([at])
+  @@index([userId, at])
+}
+
+model EmailQueueRow {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  to          String
+  templateKey String
+  ctxJson     Json
+  scheduledAt DateTime
+  status      String    @default("pending") // "pending" | "sent" | "failed" | "cancelled"
+  sentAt      DateTime?
+  error       String?
+  createdAt   DateTime  @default(now())
+
+  @@index([status, scheduledAt])
+  @@index([userId, templateKey])
 }

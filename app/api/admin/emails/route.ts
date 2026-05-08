@@ -9,10 +9,8 @@ export const dynamic = "force-dynamic";
 export async function GET() {
   const claims = await verifySession(cookies().get(SESSION_COOKIE)?.value);
   if (!claims?.isAdmin) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  return NextResponse.json({
-    summary: summariseQueue(),
-    items: listQueue().slice(-200), // last 200 — keeps the response small
-  });
+  const [summary, items] = await Promise.all([summariseQueue(), listQueue()]);
+  return NextResponse.json({ summary, items: items.slice(-200) });
 }
 
 export async function POST(req: Request) {

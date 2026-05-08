@@ -8,6 +8,6 @@ export const runtime = "nodejs";
 export async function GET() {
   const claims = await verifySession(cookies().get(SESSION_COOKIE)?.value);
   if (!claims) return NextResponse.json({ error: "Sign in first" }, { status: 401 });
-  const snap = getVoiceQuotaSnapshot(claims.sub, claims.plan);
+  const snap = await getVoiceQuotaSnapshot(claims.sub, claims.plan);
   return NextResponse.json({ plan: claims.plan, ...snap });
 }

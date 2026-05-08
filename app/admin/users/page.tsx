@@ -2,8 +2,8 @@ import { listUsersForAdmin } from "@/lib/admin-stats";
 
 export const dynamic = "force-dynamic";
 
-export default function AdminUsersPage() {
-  const users = listUsersForAdmin();
+export default async function AdminUsersPage() {
+  const users = await listUsersForAdmin();
   return (
     <div>
       <h2 style={{ marginBottom: 8 }}>Users</h2>

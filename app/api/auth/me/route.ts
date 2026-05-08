@@ -11,7 +11,7 @@ export async function GET() {
   if (!claims) {
     return NextResponse.json({ user: null }, { status: 200 });
   }
-  const user = getUserById(claims.sub);
+  const user = await getUserById(claims.sub);
   if (!user) {
     return NextResponse.json({ user: null }, { status: 200 });
   }

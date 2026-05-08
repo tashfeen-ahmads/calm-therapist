@@ -4,8 +4,8 @@ import { computeAdminStats } from "@/lib/admin-stats";
 
 export const dynamic = "force-dynamic";
 
-export default function AdminOverview() {
-  const s = computeAdminStats();
+export default async function AdminOverview() {
+  const s = await computeAdminStats();
   return (
     <div>
       <h2 style={{ marginBottom: 8 }}>Overview</h2>

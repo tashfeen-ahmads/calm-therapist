@@ -20,7 +20,7 @@ export async function POST(req: Request) {
 
   if (!body.id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
   const status = body.status === "reviewed" || body.status === "responded" ? body.status : "reviewed";
-  const record = setFeedbackStatus(body.id, status, body.response);
+  const record = await setFeedbackStatus(body.id, status, body.response);
   if (!record) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   return NextResponse.json({ record });

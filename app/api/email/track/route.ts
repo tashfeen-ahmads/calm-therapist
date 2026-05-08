@@ -28,30 +28,28 @@ export async function POST(req: Request) {
 
   switch (body.kind) {
     case "session-ended": {
-      // Send a "thinking about you" follow-up an hour later.
-      scheduleEmail({
+      await scheduleEmail({
         userId: claims.sub,
         to: claims.email,
         templateKey: "after-first",
         ctx: { ...ctx, reflection: body.reflection },
       });
-      // The user is active — push back the inactivity ladder.
-      cancelPendingFor(claims.sub, "inactive-3d");
-      cancelPendingFor(claims.sub, "inactive-7d");
-      cancelPendingFor(claims.sub, "inactive-30d");
-      scheduleEmail({ userId: claims.sub, to: claims.email, templateKey: "inactive-3d", ctx, replaceExisting: true });
-      scheduleEmail({ userId: claims.sub, to: claims.email, templateKey: "inactive-7d", ctx, replaceExisting: true });
-      scheduleEmail({ userId: claims.sub, to: claims.email, templateKey: "inactive-30d", ctx, replaceExisting: true });
+      await cancelPendingFor(claims.sub, "inactive-3d");
+      await cancelPendingFor(claims.sub, "inactive-7d");
+      await cancelPendingFor(claims.sub, "inactive-30d");
+      await scheduleEmail({ userId: claims.sub, to: claims.email, templateKey: "inactive-3d", ctx, replaceExisting: true });
+      await scheduleEmail({ userId: claims.sub, to: claims.email, templateKey: "inactive-7d", ctx, replaceExisting: true });
+      await scheduleEmail({ userId: claims.sub, to: claims.email, templateKey: "inactive-30d", ctx, replaceExisting: true });
       break;
     }
     case "crisis-flagged": {
       if (body.tier >= 2) {
-        scheduleEmail({ userId: claims.sub, to: claims.email, templateKey: "crisis-followup-24h", ctx });
+        await scheduleEmail({ userId: claims.sub, to: claims.email, templateKey: "crisis-followup-24h", ctx });
       }
       break;
     }
     case "topup-completed": {
-      scheduleEmail({
+      await scheduleEmail({
         userId: claims.sub,
         to: claims.email,
         templateKey: "topup-receipt",
@@ -60,10 +58,9 @@ export async function POST(req: Request) {
       break;
     }
     case "user-active": {
-      // Quietly cancel inactivity emails — user came back.
-      cancelPendingFor(claims.sub, "inactive-3d");
-      cancelPendingFor(claims.sub, "inactive-7d");
-      cancelPendingFor(claims.sub, "inactive-30d");
+      await cancelPendingFor(claims.sub, "inactive-3d");
+      await cancelPendingFor(claims.sub, "inactive-7d");
+      await cancelPendingFor(claims.sub, "inactive-30d");
       break;
     }
   }

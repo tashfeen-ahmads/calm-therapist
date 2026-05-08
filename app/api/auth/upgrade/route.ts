@@ -18,10 +18,10 @@ export async function POST(req: Request) {
   }
   const plan = body.plan === "pro" ? "pro" : "free";
 
-  const user = getUserById(claims.sub);
+  const user = await getUserById(claims.sub);
   if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
 
-  const updated = setUserPlan(user.id, plan)!;
+  const updated = (await setUserPlan(user.id, plan))!;
   const newToken = await signSession({
     sub: updated.id,
     email: updated.email,

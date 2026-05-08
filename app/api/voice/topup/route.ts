@@ -22,14 +22,14 @@ export async function POST() {
       { status: 403 }
     );
   }
-  const result = applyTopup(claims.sub);
+  const result = await applyTopup(claims.sub);
   if (!result.ok) {
     return NextResponse.json({ error: result.error }, { status: 400 });
   }
-  const snap = getVoiceQuotaSnapshot(claims.sub, claims.plan);
+  const snap = await getVoiceQuotaSnapshot(claims.sub, claims.plan);
 
   // Receipt email goes out immediately.
-  scheduleEmail({
+  await scheduleEmail({
     userId: claims.sub,
     to: claims.email,
     templateKey: "topup-receipt",

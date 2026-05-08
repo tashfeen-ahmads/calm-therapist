@@ -1,29 +1,7 @@
 import { listLeads } from "@/lib/leads";
 import { feedbackStats, listFeedback } from "@/lib/feedback";
-import { usageSummary } from "@/lib/usage";
-
-// MVP: read in-memory user store directly via the same global handle.
-import "@/lib/users";
-
-interface UserSnapshot {
-  id: string;
-  email: string;
-  name: string;
-  plan: "free" | "pro";
-  createdAt: string;
-}
-
-function readUsers(): UserSnapshot[] {
-  const globalAny = globalThis as unknown as { __calmUsers?: Map<string, UserSnapshot> };
-  if (!globalAny.__calmUsers) return [];
-  return Array.from(globalAny.__calmUsers.values()).map((u) => ({
-    id: u.id,
-    email: u.email,
-    name: u.name,
-    plan: u.plan,
-    createdAt: u.createdAt,
-  }));
-}
+import { listUsage, usageSummary } from "@/lib/usage";
+import { listAllUsers, type UserRecord } from "@/lib/users";
 
 const PRO_MONTHLY_USD = 19;
 
@@ -34,17 +12,20 @@ export interface AdminStats {
   paid: { proCount: number; mrrUsd: number; arrUsd: number };
   api: { claudeRequests: number; voiceRequests: number; totalCostUsd: number; totalTokensIn: number; totalTokensOut: number };
   feedback: { total: number; positive: number; needsAttention: number; average: number };
-  liveUsers: number; // placeholder
-  recurringUsers: number; // signups that are >7 days old still active (placeholder)
+  liveUsers: number;
+  recurringUsers: number;
 }
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
-export function computeAdminStats(): AdminStats {
-  const users = readUsers();
-  const leads = listLeads();
-  const usage = usageSummary();
-  const fb = feedbackStats();
+export async function computeAdminStats(): Promise<AdminStats> {
+  const [users, leads, usage, fb, usageEvents] = await Promise.all([
+    listAllUsers(),
+    listLeads(),
+    usageSummary(),
+    feedbackStats(),
+    listUsage(),
+  ]);
 
   const now = Date.now();
   const since7 = now - 7 * DAY_MS;
@@ -63,18 +44,15 @@ export function computeAdminStats(): AdminStats {
   const leadsToSignups = leadsTotal === 0 ? 0 : signupsTotal / leadsTotal;
   const signupsToPro = signupsTotal === 0 ? 0 : proCount / signupsTotal;
 
-  // Live users = unique users with API events in the last 5 minutes.
-  const recentUsage = (globalThis as unknown as { __calmUsage?: Array<{ userId?: string; at: string }> }).__calmUsage ?? [];
   const liveSet = new Set(
-    recentUsage
+    usageEvents
       .filter((u) => Date.parse(u.at) >= now - 5 * 60 * 1000 && u.userId)
       .map((u) => u.userId)
   );
   const liveUsers = liveSet.size;
 
-  // Recurring = users older than 7 days who have any usage event.
-  const usersById = new Map(users.map((u) => [u.id, u]));
-  const usedIds = new Set(recentUsage.map((u) => u.userId).filter(Boolean) as string[]);
+  const usersById = new Map(users.map((u) => [u.id, u] as const));
+  const usedIds = new Set(usageEvents.map((u) => u.userId).filter(Boolean) as string[]);
   let recurring = 0;
   usedIds.forEach((id) => {
     const u = usersById.get(id);
@@ -96,14 +74,15 @@ export function computeAdminStats(): AdminStats {
   };
 }
 
-export function listUsersForAdmin(): UserSnapshot[] {
-  return readUsers().sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+export async function listUsersForAdmin(): Promise<UserRecord[]> {
+  return listAllUsers();
 }
 
-export function recentFeedback() {
+export async function recentFeedback() {
   return listFeedback();
 }
 
-export function recentLeads() {
-  return [...listLeads()].sort((a, b) => (a.capturedAt < b.capturedAt ? 1 : -1));
+export async function recentLeads() {
+  const list = await listLeads();
+  return list.sort((a, b) => (a.capturedAt < b.capturedAt ? 1 : -1));
 }

@@ -3,8 +3,8 @@ import { FeedbackList } from "@/components/admin/FeedbackList";
 
 export const dynamic = "force-dynamic";
 
-export default function AdminFeedbackPage() {
-  const items = recentFeedback();
+export default async function AdminFeedbackPage() {
+  const items = await recentFeedback();
   return (
     <div>
       <h2 style={{ marginBottom: 8 }}>Feedback</h2>

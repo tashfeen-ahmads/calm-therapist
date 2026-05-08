@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Rating must be 1-5." }, { status: 400 });
   }
 
-  const record = captureFeedback({
+  const record = await captureFeedback({
     userId: claims.sub,
     userName: claims.name,
     userEmail: claims.email,
