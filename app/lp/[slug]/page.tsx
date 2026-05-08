@@ -46,20 +46,20 @@ const CAMPAIGNS: Record<string, Campaign> = {
       { name: "James, 41", text: "It doesn't feel like therapy. It feels like finally having somewhere to think out loud." },
     ],
   },
-  "south-asia": {
-    slug: "south-asia",
-    headline: "آپ کے لیے بنایا گیا — Built for you.",
-    sub: "Calm Therapist works in Urdu, Hindi, English, Arabic, and more. Voice or chat. Backed by Implenix. Real privacy. Real help.",
+  "spanish-en": {
+    slug: "spanish-en",
+    headline: "A quiet place to think — in English, Spanish, or French.",
+    sub: "Calm Therapist works in English, Spanish, and French. Voice when typing's too much. Real privacy. Real help.",
     bullets: [
-      "Urdu, Hindi, Arabic, English — full conversational support.",
+      "English, Spanish, French — full conversational support.",
       "Voice mode for the moments words come slowly.",
       "No data sold, no models trained on your story.",
     ],
-    ctaLabel: "ابھی شروع کریں — Begin now",
+    ctaLabel: "Start free",
     testimonials: [
-      { name: "Imran, 33", text: "اپنی زبان میں بات کرنا بہت فرق ڈالتا ہے۔" },
-      { name: "Aisha, 27", text: "Calm Therapist remembered my mother's name. I didn't have to explain again." },
-      { name: "Kavin, 32", text: "Voice mode at 2am, walking, was the only thing that worked." },
+      { name: "Lucia, 33", text: "Switching between English and Spanish mid-sentence — it just worked." },
+      { name: "Aisha, 27", text: "It remembered my mother's name. I didn't have to explain again." },
+      { name: "Daniel, 29", text: "Voice mode at 2am, walking, was the only thing that worked." },
     ],
   },
 };

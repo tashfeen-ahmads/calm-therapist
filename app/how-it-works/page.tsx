@@ -74,7 +74,7 @@ export default function HowItWorksPage() {
             {[
               { q: "Is Calm Therapist a replacement for a human therapist?", a: "No. It is a companion alongside human care, not a substitute for it. If you have a clinician, you can export your record and bring it to sessions." },
               { q: "Does it train on my data?", a: "No. We do not train on your conversations. You can read the full architecture on the privacy page." },
-              { q: "What languages does it support?", a: "English, Arabic, Urdu, Hindi, French, and Spanish at launch — with more rolling out continually." },
+              { q: "What languages does it support?", a: "English, Spanish, and French at launch — with more rolling out as we get them right." },
               { q: "Will I lose my data if I take a break?", a: "No. Calm Therapist holds your record indefinitely until you ask us to delete it. There is no streak system to lose." },
             ].map((f) => (
               <details key={f.q} className="card" style={{ padding: 24 }}>

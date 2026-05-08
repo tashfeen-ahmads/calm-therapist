@@ -226,5 +226,5 @@ function capitalize(s: string) {
 }
 
 function languageLabel(code: string) {
-  return ({ en: "English", ar: "Arabic", ur: "Urdu", hi: "Hindi", fr: "French", es: "Spanish" } as Record<string, string>)[code] ?? code;
+  return ({ en: "English", es: "Spanish", fr: "French" } as Record<string, string>)[code] ?? code;
 }

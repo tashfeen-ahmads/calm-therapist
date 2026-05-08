@@ -40,7 +40,7 @@ export default function DepressionPage() {
         { q: "Is it safe if I'm having dark thoughts?", a: "Calm Therapist's Crisis Safe protocol activates automatically when language indicates suicidal ideation or self-harm. It will not minimise. It will surface verified resources for your region." },
         { q: "How is this different from a journaling app?", a: "Journaling apps are passive. Calm Therapist actively reads what you write across all modes and reflects patterns back to you in plain language." },
         { q: "Can I export my history if I want to share it with a therapist?", a: "Yes. You can export your full record as a structured PDF or JSON, anytime." },
-        { q: "Does it work in languages other than English?", a: "Yes. Calm Therapist supports English, Arabic, Urdu, Hindi, French, and Spanish, with more languages rolling out." },
+        { q: "Does it work in languages other than English?", a: "Yes. Calm Therapist works in English, Spanish, and French, with more languages rolling out as we get them right." },
       ]}
       related={[
         { href: "/for/anxiety", label: "For Anxiety" },

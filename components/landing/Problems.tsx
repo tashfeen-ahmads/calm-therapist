@@ -64,7 +64,7 @@ const PAIRS: Pair[] = [
       "English-first. Therapy-vocabulary-first. Western-frame-first. Most of the world is left out.",
     answerTitle: "Built across cultures and languages.",
     answerBody:
-      "English, Arabic, Urdu, Hindi, French, Spanish at launch. Tone presets so men don't have to translate themselves.",
+      "English, Spanish, and French at launch. Tone presets so men don't have to translate themselves.",
   },
   {
     number: "06",

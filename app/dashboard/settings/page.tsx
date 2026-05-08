@@ -149,11 +149,8 @@ export default function SettingsPage() {
         <Field label="Preferred language">
           <select className="input" value={language} onChange={(e) => setLanguage(e.target.value)}>
             <option value="en">English</option>
-            <option value="ar">Arabic</option>
-            <option value="ur">Urdu</option>
-            <option value="hi">Hindi</option>
-            <option value="fr">French</option>
             <option value="es">Spanish</option>
+            <option value="fr">French</option>
           </select>
         </Field>
         <Field label="Tone">
