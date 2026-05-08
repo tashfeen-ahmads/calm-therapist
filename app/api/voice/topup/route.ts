@@ -2,8 +2,11 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { SESSION_COOKIE, verifySession } from "@/lib/auth";
 import { applyTopup, getVoiceQuotaSnapshot, VOICE_TOPUP } from "@/lib/voice-quota";
+import { scheduleEmail } from "@/lib/email-queue";
 
 export const runtime = "nodejs";
+
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://calmtherapist.implenix.net";
 
 /**
  * MVP top-up. In production this will create a Stripe payment intent and only
@@ -24,6 +27,15 @@ export async function POST() {
     return NextResponse.json({ error: result.error }, { status: 400 });
   }
   const snap = getVoiceQuotaSnapshot(claims.sub, claims.plan);
+
+  // Receipt email goes out immediately.
+  scheduleEmail({
+    userId: claims.sub,
+    to: claims.email,
+    templateKey: "topup-receipt",
+    ctx: { name: claims.name, email: claims.email, appUrl: APP_URL, topupAmountUsd: VOICE_TOPUP.priceUsd },
+  });
+
   return NextResponse.json({
     ok: true,
     pack: VOICE_TOPUP,

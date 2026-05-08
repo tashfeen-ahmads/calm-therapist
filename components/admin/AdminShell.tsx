@@ -10,6 +10,7 @@ const ITEMS = [
   { href: "/admin/feedback", label: "Feedback" },
   { href: "/admin/users", label: "Users" },
   { href: "/admin/leads", label: "Leads" },
+  { href: "/admin/emails", label: "Emails" },
   { href: "/admin/usage", label: "API & revenue" },
 ];
 

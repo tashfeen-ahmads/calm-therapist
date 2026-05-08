@@ -2,31 +2,33 @@
 
 import { useEffect, useState } from "react";
 import { VoiceAgent } from "@/components/agents/VoiceAgent";
+import { ModeBar } from "@/components/agents/ModeBar";
 import { UpgradePopup } from "@/components/billing/UpgradePopup";
 import { readState } from "@/components/onboarding/OnboardingShell";
 import { loadMemories } from "@/lib/memory";
+import type { AgentModeKey } from "@/lib/claude";
 import { DEFAULT_PROFILE, UserProfile } from "@/lib/claude";
 import { Style } from "@/components/ui/Style";
 
 interface QuotaSnapshot {
   plan: "free" | "pro";
-  weeklyLimitSec: number;
-  weeklyUsedSec: number;
   weeklyRemainingSec: number;
-  monthlyLimitSec: number;
-  monthlyUsedSec: number;
   monthlyRemainingSec: number;
   canStart: boolean;
 }
 
 export default function VoicePage() {
   const [profile, setProfile] = useState<UserProfile>(DEFAULT_PROFILE);
+  const [memoryCount, setMemoryCount] = useState(0);
+  const [activeMode, setActiveMode] = useState<AgentModeKey | null>(null);
   const [quota, setQuota] = useState<QuotaSnapshot | null>(null);
   const [showUpgrade, setShowUpgrade] = useState(false);
+  const sessionNumber = 14;
 
   useEffect(() => {
     const s = readState() as Record<string, unknown>;
     const memories = loadMemories();
+    setMemoryCount(memories.length);
     setProfile({
       name: (s.name as string) || "friend",
       age: (s.age as string) || undefined,
@@ -36,7 +38,7 @@ export default function VoicePage() {
           : "warm",
       focusAreas: (s.focusAreas as string[]) ?? [],
       currentGoals: (s.goals as string[]) ?? [],
-      sessionCount: 14,
+      sessionCount: sessionNumber,
       memories: memories.map((m) => m.statement),
       language: (s.language as string) ?? "en",
       culture: (s.culture as UserProfile["culture"]) ?? {
@@ -45,8 +47,20 @@ export default function VoicePage() {
       },
       activeModes: [],
     });
+    try {
+      const raw = window.sessionStorage.getItem("calm-therapist:active-mode");
+      if (raw) setActiveMode(raw as AgentModeKey);
+    } catch {}
     refreshQuota();
   }, []);
+
+  const persistMode = (next: AgentModeKey | null) => {
+    setActiveMode(next);
+    try {
+      if (next) window.sessionStorage.setItem("calm-therapist:active-mode", next);
+      else window.sessionStorage.removeItem("calm-therapist:active-mode");
+    } catch {}
+  };
 
   const refreshQuota = async () => {
     try {
@@ -56,68 +70,51 @@ export default function VoicePage() {
     } catch {}
   };
 
-  const minLeftWeek = quota ? Math.floor(quota.weeklyRemainingSec / 60) : 0;
-  const minUsedWeek = quota ? Math.floor(quota.weeklyUsedSec / 60) : 0;
-  const minLimitWeek = quota ? Math.floor(quota.weeklyLimitSec / 60) : 0;
-
   const isFree = quota?.plan === "free";
   const dryWeek = quota && !isFree && quota.weeklyRemainingSec <= 0;
 
+  const profileWithMode: UserProfile = {
+    ...profile,
+    activeModes: activeMode ? [activeMode] : [],
+  };
+
   return (
     <div className="voice-page">
-      <header className="voice-header">
-        <div>
-          <p className="body-micro" style={{ color: "var(--calm-forest)" }}>Voice</p>
-          <h2 style={{ marginTop: 6 }}>Talk it out.</h2>
-          <p className="body-large" style={{ color: "var(--calm-ink-70)", marginTop: 8, maxWidth: 540 }}>
-            For the moments typing is too much. Aura listens, reflects, and responds. Sessions cap
-            at 20 minutes each — short and useful is the point.
-          </p>
+      <header className="voice-chrome">
+        <div style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
+          <span className="body-micro" style={{ color: "var(--calm-ink-40)" }}>
+            Voice · session {sessionNumber} · {new Date().toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" })}
+          </span>
+          <span style={{ fontSize: 13, color: "var(--calm-forest)", marginTop: 4, display: "inline-flex", alignItems: "center", gap: 6 }}>
+            <span aria-hidden style={{ width: 6, height: 6, borderRadius: 999, background: "var(--calm-forest)" }} />
+            Aura remembers {memoryCount} {memoryCount === 1 ? "thing" : "things"} about you
+          </span>
         </div>
-
-        {quota && !isFree && (
-          <div className="voice-quota-card">
-            <p className="body-micro" style={{ color: "var(--calm-ink-40)" }}>Voice this week</p>
-            <p style={{ fontFamily: "var(--font-heading)", fontSize: 28, lineHeight: 1, marginTop: 4 }}>
-              {minLeftWeek} <span style={{ fontSize: 14, color: "var(--calm-ink-40)" }}>min left</span>
-            </p>
-            <div className="voice-bar">
-              <div
-                className="voice-bar-fill"
-                style={{ width: `${Math.min(100, (minUsedWeek / Math.max(1, minLimitWeek)) * 100)}%` }}
-              />
-            </div>
-            <p style={{ fontSize: 12, color: "var(--calm-ink-40)", marginTop: 6 }}>
-              {minUsedWeek} of {minLimitWeek} min · resets Monday
-            </p>
-          </div>
-        )}
+        {!isFree && <ModeBar active={activeMode} onChange={persistMode} />}
       </header>
 
-      {isFree && (
-        <FreeBlock onUpgrade={() => setShowUpgrade(true)} />
-      )}
+      {isFree && <FreeBlock onUpgrade={() => setShowUpgrade(true)} />}
 
       {!isFree && dryWeek && (
-        <OutOfMinutes onTopup={async () => {
-          const ok = window.confirm("Top-up: $12 → 30 more minutes this week, 50 more this month. Continue?");
-          if (!ok) return;
-          const res = await fetch("/api/voice/topup", { method: "POST" });
-          const data = await res.json();
-          if (res.ok) {
-            setQuota({ plan: "pro", ...data.quota });
-          } else {
-            window.alert(data.error ?? "Could not apply top-up.");
-          }
-        }} />
+        <OutOfMinutes
+          onTopup={async () => {
+            const ok = window.confirm("Top-up: $12 → 30 more minutes this week, 50 more this month. Continue?");
+            if (!ok) return;
+            const res = await fetch("/api/voice/topup", { method: "POST" });
+            const data = await res.json();
+            if (res.ok) {
+              setQuota({ plan: "pro", ...data.quota });
+            } else {
+              window.alert(data.error ?? "Could not apply top-up.");
+            }
+          }}
+        />
       )}
 
       {!isFree && !dryWeek && quota && (
         <VoiceAgent
-          profile={profile}
+          profile={profileWithMode}
           onSessionEnd={(transcript) => {
-            // Approximate: 6 seconds per agent message; this is replaced by real
-            // voice-pipeline timing once we own the pipeline.
             const agentTurns = transcript.filter((t) => t.role === "agent").length;
             const minutes = (agentTurns * 6) / 60;
             fetch("/api/voice/record", {
@@ -143,35 +140,19 @@ export default function VoicePage() {
 
       <Style>{`
         .voice-page {
-          padding: 32px;
-          max-width: 880px;
-          margin: 0 auto;
+          padding: 0;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
         }
-        .voice-header {
+        .voice-chrome {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;
-          gap: 24px;
-          margin-bottom: 32px;
+          align-items: center;
+          gap: 16px;
+          padding: 16px 24px;
+          border-bottom: 1px solid var(--calm-ink-10);
           flex-wrap: wrap;
-        }
-        .voice-quota-card {
-          min-width: 200px;
-          background: var(--calm-mist);
-          border-radius: 12px;
-          padding: 16px 20px;
-        }
-        .voice-bar {
-          margin-top: 10px;
-          height: 4px;
-          background: var(--calm-ink-10);
-          border-radius: 999px;
-          overflow: hidden;
-        }
-        .voice-bar-fill {
-          height: 100%;
-          background: var(--calm-forest);
-          transition: width 0.4s ease;
         }
       `}</Style>
     </div>
@@ -182,6 +163,7 @@ function FreeBlock({ onUpgrade }: { onUpgrade: () => void }) {
   return (
     <div
       style={{
+        margin: "32px",
         background: "var(--calm-mist)",
         border: "1px solid var(--calm-forest-20)",
         borderLeft: "3px solid var(--calm-forest)",
@@ -190,13 +172,14 @@ function FreeBlock({ onUpgrade }: { onUpgrade: () => void }) {
         display: "flex",
         flexDirection: "column",
         gap: 12,
+        maxWidth: 720,
       }}
     >
       <p className="body-micro" style={{ color: "var(--calm-forest)" }}>Voice is part of keeping your space open</p>
       <h3>Voice unlocks when you upgrade.</h3>
       <p style={{ fontSize: 15, lineHeight: 1.7, color: "var(--calm-ink-70)" }}>
         Voice costs more to run than text, so it sits behind the paid plan. 20 minutes a week
-        included, more on demand if you ever need it.
+        included.
       </p>
       <div style={{ display: "flex", gap: 12, marginTop: 12, flexWrap: "wrap" }}>
         <button onClick={onUpgrade} className="btn-primary">See your options</button>
@@ -209,6 +192,7 @@ function OutOfMinutes({ onTopup }: { onTopup: () => void }) {
   return (
     <div
       style={{
+        margin: "32px",
         background: "var(--calm-white)",
         border: "1px solid var(--calm-ink-10)",
         borderRadius: 14,
@@ -216,13 +200,14 @@ function OutOfMinutes({ onTopup }: { onTopup: () => void }) {
         display: "flex",
         flexDirection: "column",
         gap: 12,
+        maxWidth: 720,
       }}
     >
       <p className="body-micro" style={{ color: "var(--calm-forest)" }}>You&apos;ve used your voice minutes for this week</p>
       <h3>We&apos;ve talked a lot. Let&apos;s rest the voice for a bit.</h3>
       <p style={{ fontSize: 15, lineHeight: 1.7, color: "var(--calm-ink-70)" }}>
-        Voice resets Monday. Until then text is open and waiting. If you need voice now, a one-time
-        top-up of $12 adds 30 more minutes this week and 50 more for the month.
+        Voice resets Monday. Until then text is open and waiting. If you need voice now, a
+        one-time top-up of $12 adds 30 more minutes this week and 50 more for the month.
       </p>
       <div style={{ display: "flex", gap: 12, marginTop: 12, flexWrap: "wrap" }}>
         <button onClick={onTopup} className="btn-primary">Top up · $12</button>

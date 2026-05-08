@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
 import { createUser } from "@/lib/users";
 import { buildSessionCookie, cookieDomainFor, isAdminEmail, signSession } from "@/lib/auth";
+import { scheduleEmail } from "@/lib/email-queue";
 
 export const runtime = "nodejs";
+
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://calmtherapist.implenix.net";
 
 export async function POST(req: Request) {
   let body: { email?: string; password?: string; name?: string };
@@ -35,6 +38,13 @@ export async function POST(req: Request) {
       plan: user.plan,
       isAdmin: isAdminEmail(user.email),
     });
+
+    // Schedule the welcome sequence. The same scheduler runs on session ends
+    // and inactivity ticks elsewhere — here we set the first three touches.
+    const ctx = { name: user.name, email: user.email, appUrl: APP_URL };
+    scheduleEmail({ userId: user.id, to: user.email, templateKey: "welcome", ctx });
+    scheduleEmail({ userId: user.id, to: user.email, templateKey: "day-2", ctx });
+    scheduleEmail({ userId: user.id, to: user.email, templateKey: "day-7", ctx });
 
     const host = req.headers.get("host");
     const cookie = buildSessionCookie(token, {

@@ -98,7 +98,15 @@ export function ChatAgent({
       });
       if (!res.body) throw new Error("No body");
       const tierHeader = Number(res.headers.get("X-Crisis-Tier") ?? "0");
-      if (tierHeader > 0) setCrisisTier(tierHeader);
+      if (tierHeader > 0) {
+        setCrisisTier(tierHeader);
+        // Fire-and-forget: schedule a 24h check-in email for tier 2+.
+        fetch("/api/email/track", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ kind: "crisis-flagged", tier: tierHeader }),
+        }).catch(() => {});
+      }
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
       let acc = "";
@@ -173,7 +181,20 @@ export function ChatAgent({
           <ModeBar active={activeMode} onChange={persistMode} />
           <button
             type="button"
-            onClick={() => setWrappingUp(true)}
+            onClick={() => {
+              setWrappingUp(true);
+              // Fire-and-forget: trigger the after-first email + reset
+              // inactivity ladder.
+              const reflection =
+                messages.length > 1
+                  ? messages.find((m) => m.role === "user")?.content?.slice(0, 80) ?? undefined
+                  : undefined;
+              fetch("/api/email/track", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ kind: "session-ended", reflection }),
+              }).catch(() => {});
+            }}
             className="btn-ghost"
             style={{ height: 36, fontSize: 13 }}
             disabled={messages.length < 2}
