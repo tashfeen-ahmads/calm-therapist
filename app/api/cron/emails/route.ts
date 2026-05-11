@@ -19,7 +19,14 @@ export const dynamic = "force-dynamic";
 export async function POST(req: Request) {
   const secret = process.env.CRON_SECRET;
   if (secret) {
-    const provided = req.headers.get("x-cron-secret") ?? new URL(req.url).searchParams.get("secret");
+    // Vercel Cron sends "Authorization: Bearer <CRON_SECRET>". Also accept
+    // x-cron-secret and ?secret= for external schedulers.
+    const auth = req.headers.get("authorization") ?? "";
+    const bearer = auth.toLowerCase().startsWith("bearer ") ? auth.slice(7) : null;
+    const provided =
+      bearer ??
+      req.headers.get("x-cron-secret") ??
+      new URL(req.url).searchParams.get("secret");
     if (provided !== secret) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }

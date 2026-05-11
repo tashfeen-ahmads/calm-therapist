@@ -30,6 +30,14 @@ export default function Step5Page() {
       .then((data: { reflection?: string }) => setReflection(data.reflection ?? FALLBACK(s)))
       .catch(() => setReflection(FALLBACK(s)))
       .finally(() => setLoading(false));
+
+    // Persist onboarding to the user row so it survives a fresh browser.
+    // No-ops in memory mode (no DATABASE_URL) and for signed-out users.
+    fetch("/api/users/me/profile", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(s),
+    }).catch(() => {});
   }, []);
 
   return (

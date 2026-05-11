@@ -1,7 +1,7 @@
 import { streamChatResponse, UserProfile, DEFAULT_PROFILE, AgentModeKey } from "@/lib/claude";
 import { MODES, ModeKey } from "@/lib/features";
 import { modeAddendaFor } from "@/lib/agent-modes";
-import { classifySafety } from "@/lib/safety-classifier";
+import { classifySafetyWithLLM } from "@/lib/safety-classifier";
 import { crisisScriptFor, regionalResources } from "@/lib/crisis-scripts";
 import { recordClaudeUsage } from "@/lib/usage";
 import { cookies } from "next/headers";
@@ -58,7 +58,7 @@ export async function POST(req: Request) {
   const featureAddendum = body.mode ? MODES[body.mode]?.systemAddendum : undefined;
 
   // Safety classifier on the latest user turn.
-  const safety = classifySafety(lastUserText(body.messages));
+  const safety = await classifySafetyWithLLM(lastUserText(body.messages));
   let crisisScript = crisisScriptFor(safety.route);
   if (crisisScript && profile.culture?.countryOfResidence) {
     const lines = regionalResources(profile.culture.countryOfResidence)

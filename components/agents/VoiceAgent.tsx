@@ -7,7 +7,7 @@ import { modeAddendaFor } from "@/lib/agent-modes";
 
 interface VoiceAgentProps {
   profile: UserProfile;
-  onSessionEnd?: (transcript: TranscriptEntry[]) => void;
+  onSessionEnd?: (info: { transcript: TranscriptEntry[]; durationMinutes: number }) => void;
   onSwitchToChat?: () => void;
 }
 
@@ -22,10 +22,19 @@ export function VoiceAgent({ profile, onSessionEnd, onSwitchToChat }: VoiceAgent
   const [isRequesting, setIsRequesting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const transcriptRef = useRef<HTMLDivElement>(null);
+  const sessionStartRef = useRef<number | null>(null);
 
   const conversation = useConversation({
-    onConnect: () => setError(null),
-    onDisconnect: () => onSessionEnd?.(transcript),
+    onConnect: () => {
+      setError(null);
+      sessionStartRef.current = Date.now();
+    },
+    onDisconnect: () => {
+      const start = sessionStartRef.current ?? Date.now();
+      const durationMinutes = Math.max(0, (Date.now() - start) / 60000);
+      sessionStartRef.current = null;
+      onSessionEnd?.({ transcript, durationMinutes });
+    },
     onMessage: ({ message, source }: { message: string; source: "user" | "ai" }) => {
       setTranscript((prev) => [
         ...prev,

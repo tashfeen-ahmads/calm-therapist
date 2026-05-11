@@ -1,8 +1,10 @@
 /**
  * Lightweight rule-based safety classifier. This is the first-pass tier.
- * For production, layer a fast LLM call (haiku) on top to catch metaphor
+ * For production, layer a fast LLM call (Haiku) on top to catch metaphor
  * and context. The pipeline always errs on the side of escalation.
  */
+
+import Anthropic from "@anthropic-ai/sdk";
 
 export type CrisisTier = 0 | 1 | 2 | 3;
 export type CrisisCategory =
@@ -191,5 +193,89 @@ export function classifySafety(message: string): SafetyResult {
     triggerPhrases: triggers,
     metaphorFlagged: false,
     route: "normal",
+  };
+}
+
+/* ------------------------------------------------------------------ */
+/* LLM second pass — catches metaphor + context the regex misses.     */
+/* Opt-in via CRISIS_LLM_PASS=on. Only runs when regex returns tier 0 */
+/* (we trust the regex to escalate; LLM only ever pulls UP, never DOWN).*/
+/* ------------------------------------------------------------------ */
+
+let _haiku: Anthropic | null = null;
+function haiku(): Anthropic {
+  if (!_haiku) _haiku = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  return _haiku;
+}
+
+const LLM_SAFETY_PROMPT = `You are a safety classifier for a mental-wellness app. Output JSON only.
+
+Given the user's message, return one of:
+- {"tier":0} — ordinary content, no concern
+- {"tier":1} — passive ideation, hopelessness, low-level self-harm hints (no clear intent)
+- {"tier":2} — active suicidal/self-harm ideation, abuse disclosure, ED behaviors, psychosis-like signals
+- {"tier":3} — imminent danger, stated plan, immediate harm to self or others
+
+Be conservative: when in doubt between two tiers, pick the higher. Catch metaphor: "I just want it all to stop forever" → tier 2 even if no method.
+
+Output JSON only. No commentary. No method names.`;
+
+interface LlmTierResult {
+  tier: CrisisTier;
+}
+
+async function llmTier(message: string): Promise<LlmTierResult | null> {
+  if (!process.env.ANTHROPIC_API_KEY) return null;
+  try {
+    const resp = await haiku().messages.create({
+      model: "claude-haiku-4-5-20251001",
+      max_tokens: 30,
+      temperature: 0,
+      system: LLM_SAFETY_PROMPT,
+      messages: [{ role: "user", content: message.slice(0, 2000) }],
+    });
+    const text = resp.content
+      .filter((b): b is Anthropic.TextBlock => b.type === "text")
+      .map((b) => b.text)
+      .join("")
+      .trim();
+    const match = text.match(/\{[^}]*"tier"\s*:\s*([0-3])[^}]*\}/);
+    if (!match) return null;
+    const tier = Number(match[1]) as CrisisTier;
+    return { tier };
+  } catch (err) {
+    console.warn("[safety/llm] pass failed, falling back to regex", (err as Error).message);
+    return null;
+  }
+}
+
+function routeFor(tier: CrisisTier): { category: CrisisCategory; route: Route } {
+  switch (tier) {
+    case 3: return { category: "plan_or_imminent", route: "tier3_script" };
+    case 2: return { category: "active_ideation", route: "tier2_script" };
+    case 1: return { category: "passive_ideation", route: "tier1_script" };
+    default: return { category: "none", route: "normal" };
+  }
+}
+
+/**
+ * Layered classifier: regex first (cheap, deterministic), then LLM second
+ * pass when enabled. Returns whichever tier is higher — we never lower a
+ * tier that the regex caught.
+ */
+export async function classifySafetyWithLLM(message: string): Promise<SafetyResult> {
+  const regex = classifySafety(message);
+  if (regex.tier > 0) return regex; // regex already escalated; trust it.
+  if (process.env.CRISIS_LLM_PASS !== "on") return regex;
+  const llm = await llmTier(message);
+  if (!llm || llm.tier === 0) return regex;
+  const { category, route } = routeFor(llm.tier);
+  return {
+    tier: llm.tier,
+    category,
+    confidence: 0.7,
+    triggerPhrases: ["(llm-detected)"],
+    metaphorFlagged: true,
+    route,
   };
 }

@@ -130,13 +130,14 @@ export default function VoicePage() {
       {!isFree && !dryWeek && quota && (
         <VoiceAgent
           profile={profileWithMode}
-          onSessionEnd={(transcript) => {
-            const agentTurns = transcript.filter((t) => t.role === "agent").length;
-            const minutes = (agentTurns * 6) / 60;
+          onSessionEnd={({ durationMinutes }) => {
+            // durationMinutes is the actual session length from connect to
+            // disconnect, captured by VoiceAgent — not a token-count guess.
+            if (durationMinutes <= 0) return;
             fetch("/api/voice/record", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ minutes }),
+              body: JSON.stringify({ minutes: Number(durationMinutes.toFixed(2)) }),
             })
               .then(refreshQuota)
               .catch(() => {});
