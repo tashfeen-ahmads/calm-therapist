@@ -13,7 +13,9 @@ export type EmailKey =
   | "inactive-30d"
   | "crisis-followup-24h"
   | "topup-receipt"
-  | "annual-anniversary";
+  | "annual-anniversary"
+  | "verify-email"
+  | "password-reset";
 
 export interface EmailTemplate {
   key: EmailKey;
@@ -30,6 +32,8 @@ export interface TemplateCtx {
   reflection?: string;
   /** Top-up specifics if applicable. */
   topupAmountUsd?: number;
+  /** Verify or reset link path with token already appended. */
+  actionUrl?: string;
 }
 
 const wrap = (title: string, body: string) => `
@@ -273,6 +277,56 @@ Your space: ${appUrl}/dashboard/voice
         `<p style="font-size:16px;line-height:1.7;margin:0 0 12px;">${name},</p>
          <p style="font-size:16px;line-height:1.7;margin:0 0 12px;">Top-up of $${topupAmountUsd ?? 12} applied. <strong>30 more voice minutes this week</strong>, <strong>50 more for the month</strong>.</p>
          <p style="margin:24px 0;"><a href="${appUrl}/dashboard/voice" style="display:inline-block;background:#4A7A6D;color:#FFFFFF;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:500;">Talk it out</a></p>
+         <p style="font-size:14px;color:#5C5C5C;margin:18px 0 0;">— Calm Therapist</p>`
+      ),
+    }),
+  },
+
+  "verify-email": {
+    key: "verify-email",
+    delayMinutes: 0,
+    build: ({ name, actionUrl }) => ({
+      subject: "Confirm your email — Calm Therapist",
+      text: `${name},
+
+One quick step before we can keep your space safe across devices: confirm this is your email.
+
+${actionUrl}
+
+The link is good for 24 hours. If you didn't sign up, you can ignore this.
+
+— Calm Therapist`,
+      html: wrap(
+        "Confirm your email.",
+        `<p style="font-size:16px;line-height:1.7;margin:0 0 12px;">${name},</p>
+         <p style="font-size:16px;line-height:1.7;margin:0 0 12px;">One quick step before we can keep your space safe across devices: confirm this is your email.</p>
+         <p style="margin:24px 0;"><a href="${actionUrl}" style="display:inline-block;background:#4A7A6D;color:#FFFFFF;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:500;">Confirm email</a></p>
+         <p style="font-size:14px;color:#5C5C5C;margin:18px 0 0;">The link is good for 24 hours. If you didn't sign up, you can ignore this.</p>
+         <p style="font-size:14px;color:#5C5C5C;margin:18px 0 0;">— Calm Therapist</p>`
+      ),
+    }),
+  },
+
+  "password-reset": {
+    key: "password-reset",
+    delayMinutes: 0,
+    build: ({ name, actionUrl }) => ({
+      subject: "Reset your Calm Therapist password",
+      text: `${name},
+
+Someone asked to reset the password for this account. If that was you, open this link to set a new one:
+
+${actionUrl}
+
+The link is good for one hour. If it wasn't you, you can ignore this — your account is still safe.
+
+— Calm Therapist`,
+      html: wrap(
+        "Reset your password.",
+        `<p style="font-size:16px;line-height:1.7;margin:0 0 12px;">${name},</p>
+         <p style="font-size:16px;line-height:1.7;margin:0 0 12px;">Someone asked to reset the password for this account. If that was you, open this link to set a new one.</p>
+         <p style="margin:24px 0;"><a href="${actionUrl}" style="display:inline-block;background:#4A7A6D;color:#FFFFFF;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:500;">Set a new password</a></p>
+         <p style="font-size:14px;color:#5C5C5C;margin:18px 0 0;">The link is good for one hour. If it wasn't you, you can ignore this — your account is still safe.</p>
          <p style="font-size:14px;color:#5C5C5C;margin:18px 0 0;">— Calm Therapist</p>`
       ),
     }),

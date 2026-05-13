@@ -130,7 +130,13 @@ function LoginInner() {
         </button>
       </form>
 
-      <p style={{ marginTop: 24, fontSize: 14, color: "var(--calm-ink-40)" }}>
+      <p style={{ marginTop: 16, fontSize: 14, color: "var(--calm-ink-40)" }}>
+        <Link href="/auth/forgot" style={{ color: "var(--calm-forest)" }}>
+          Forgot your password?
+        </Link>
+      </p>
+
+      <p style={{ marginTop: 16, fontSize: 14, color: "var(--calm-ink-40)" }}>
         New here?{" "}
         <Link href={`/auth/signup${next ? `?next=${encodeURIComponent(next)}` : ""}`} style={{ color: "var(--calm-forest)" }}>
           Create an account

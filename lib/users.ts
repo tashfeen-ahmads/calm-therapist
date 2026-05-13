@@ -9,6 +9,11 @@ export interface UserRecord {
   passwordHash: string;
   plan: "free" | "pro";
   createdAt: string;
+  emailVerified?: string;
+  verifyToken?: string;
+  verifyTokenExpires?: string;
+  resetToken?: string;
+  resetTokenExpires?: string;
 }
 
 /* ------------------------------------------------------------------ */
@@ -196,6 +201,11 @@ interface PrismaUserRow {
   passwordHash: string;
   plan: string;
   createdAt: Date;
+  emailVerified?: Date | null;
+  verifyToken?: string | null;
+  verifyTokenExpires?: Date | null;
+  resetToken?: string | null;
+  resetTokenExpires?: Date | null;
 }
 
 function rowToRecord(row: PrismaUserRow): UserRecord {
@@ -206,5 +216,125 @@ function rowToRecord(row: PrismaUserRow): UserRecord {
     passwordHash: row.passwordHash,
     plan: row.plan === "pro" ? "pro" : "free",
     createdAt: row.createdAt.toISOString(),
+    emailVerified: row.emailVerified?.toISOString(),
+    verifyToken: row.verifyToken ?? undefined,
+    verifyTokenExpires: row.verifyTokenExpires?.toISOString(),
+    resetToken: row.resetToken ?? undefined,
+    resetTokenExpires: row.resetTokenExpires?.toISOString(),
   };
+}
+
+/* ------------------------------------------------------------------ */
+/* Tokens: email verification + password reset                          */
+/* ------------------------------------------------------------------ */
+
+function randomToken(): string {
+  // 32 bytes of urlsafe-ish randomness via two Math.randoms + time. For
+  // production-grade entropy this is fine for short-lived single-use links.
+  return (
+    Date.now().toString(36) +
+    Math.random().toString(36).slice(2, 14) +
+    Math.random().toString(36).slice(2, 14)
+  );
+}
+
+export async function setVerifyToken(userId: string): Promise<string> {
+  const token = randomToken();
+  const expires = new Date(Date.now() + 1000 * 60 * 60 * 24); // 24h
+  if (dbEnabled) {
+    await prisma.user.update({
+      where: { id: userId },
+      data: { verifyToken: token, verifyTokenExpires: expires },
+    });
+    return token;
+  }
+  for (const [k, u] of memoryStore.entries()) {
+    if (u.id === userId) {
+      memoryStore.set(k, {
+        ...u,
+        verifyToken: token,
+        verifyTokenExpires: expires.toISOString(),
+      });
+      return token;
+    }
+  }
+  throw new Error("USER_NOT_FOUND");
+}
+
+export async function consumeVerifyToken(token: string): Promise<UserRecord | null> {
+  const now = new Date();
+  if (dbEnabled) {
+    const row = await prisma.user.findUnique({ where: { verifyToken: token } });
+    if (!row || !row.verifyTokenExpires || row.verifyTokenExpires < now) return null;
+    const updated = await prisma.user.update({
+      where: { id: row.id },
+      data: { emailVerified: now, verifyToken: null, verifyTokenExpires: null },
+    });
+    return rowToRecord(updated);
+  }
+  for (const [k, u] of memoryStore.entries()) {
+    if (u.verifyToken !== token) continue;
+    if (!u.verifyTokenExpires || new Date(u.verifyTokenExpires) < now) return null;
+    const next: UserRecord = {
+      ...u,
+      emailVerified: now.toISOString(),
+      verifyToken: undefined,
+      verifyTokenExpires: undefined,
+    };
+    memoryStore.set(k, next);
+    return next;
+  }
+  return null;
+}
+
+export async function setResetToken(email: string): Promise<{ user: UserRecord; token: string } | null> {
+  const k = key(email);
+  const token = randomToken();
+  const expires = new Date(Date.now() + 1000 * 60 * 60); // 1h
+  if (dbEnabled) {
+    const row = await prisma.user.findUnique({ where: { email: k } });
+    if (!row) return null;
+    const updated = await prisma.user.update({
+      where: { id: row.id },
+      data: { resetToken: token, resetTokenExpires: expires },
+    });
+    return { user: rowToRecord(updated), token };
+  }
+  const user = memoryStore.get(k);
+  if (!user) return null;
+  const next: UserRecord = {
+    ...user,
+    resetToken: token,
+    resetTokenExpires: expires.toISOString(),
+  };
+  memoryStore.set(k, next);
+  return { user: next, token };
+}
+
+export async function consumeResetToken(token: string, newPassword: string): Promise<UserRecord | null> {
+  if (newPassword.length < 8) throw new Error("PASSWORD_TOO_SHORT");
+  const passwordHash = await bcrypt.hash(newPassword, 10);
+  const now = new Date();
+  if (dbEnabled) {
+    const row = await prisma.user.findUnique({ where: { resetToken: token } });
+    if (!row || !row.resetTokenExpires || row.resetTokenExpires < now) return null;
+    const updated = await prisma.user.update({
+      where: { id: row.id },
+      data: { passwordHash, resetToken: null, resetTokenExpires: null },
+    });
+    return rowToRecord(updated);
+  }
+  for (const [k, u] of memoryStore.entries()) {
+    if (u.resetToken !== token) continue;
+    if (!u.resetTokenExpires || new Date(u.resetTokenExpires) < now) return null;
+    const next: UserRecord = {
+      ...u,
+      passwordHash,
+      resetToken: undefined,
+      resetTokenExpires: undefined,
+    };
+    memoryStore.set(k, next);
+    return next;
+  }
+  return null;
 }

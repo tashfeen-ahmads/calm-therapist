@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
-import { createUser } from "@/lib/users";
+import { createUser, setVerifyToken } from "@/lib/users";
 import { buildSessionCookie, cookieDomainFor, isAdminEmail, signSession } from "@/lib/auth";
 import { scheduleEmail } from "@/lib/email-queue";
+import { sendEmail } from "@/lib/email";
+import { getTemplate } from "@/lib/email-templates";
 
 export const runtime = "nodejs";
 
@@ -38,6 +40,22 @@ export async function POST(req: Request) {
       plan: user.plan,
       isAdmin: isAdminEmail(user.email),
     });
+
+    // Send verify email immediately (synchronous — user expects it now).
+    try {
+      const token = await setVerifyToken(user.id);
+      const actionUrl = `${APP_URL}/auth/verify?token=${encodeURIComponent(token)}`;
+      const built = getTemplate("verify-email").build({
+        name: user.name,
+        email: user.email,
+        appUrl: APP_URL,
+        actionUrl,
+      });
+      await sendEmail({ to: user.email, subject: built.subject, html: built.html, text: built.text });
+    } catch (err) {
+      // Don't fail signup if email is temporarily down — they can re-request.
+      console.warn("verify email send failed", (err as Error).message);
+    }
 
     // Schedule the welcome sequence. The same scheduler runs on session ends
     // and inactivity ticks elsewhere — here we set the first three touches.

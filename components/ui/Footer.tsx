@@ -21,6 +21,7 @@ const resourcesLinks = [
 const companyLinks = [
   { href: "/about", label: "About" },
   { href: "/privacy", label: "Privacy" },
+  { href: "/terms", label: "Terms" },
 ];
 
 const featureLinks = [
@@ -77,7 +78,7 @@ export function Footer() {
           <span>© {new Date().getFullYear()} Calm Therapist. Backed by Implenix.</span>
           <span style={{ display: "flex", gap: 24 }}>
             <Link href="/privacy">Privacy</Link>
-            <Link href="/privacy#terms">Terms</Link>
+            <Link href="/terms">Terms</Link>
           </span>
         </div>
       </div>

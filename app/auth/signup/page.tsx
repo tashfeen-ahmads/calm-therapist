@@ -124,12 +124,12 @@ function SignupInner() {
       </p>
 
       <p style={{ marginTop: 32, fontSize: 12, color: "var(--calm-ink-40)", lineHeight: 1.6 }}>
+        By opening your space you agree to our{" "}
+        <Link href="/terms" style={{ color: "var(--calm-forest)" }}>terms</Link>{" "}
+        and{" "}
+        <Link href="/privacy" style={{ color: "var(--calm-forest)" }}>privacy architecture</Link>.
         We don&apos;t train models on your conversations. We don&apos;t sell your data. You can delete
-        everything anytime — it&apos;s in our{" "}
-        <Link href="/privacy" style={{ color: "var(--calm-forest)" }}>
-          privacy architecture
-        </Link>
-        .
+        everything anytime.
       </p>
     </div>
   );

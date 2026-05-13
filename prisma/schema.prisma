@@ -30,6 +30,13 @@ model User {
   stigmaContext      String?
   somaticExpression  String?
 
+  // Email verification + password reset (single-use tokens, expiring).
+  emailVerified      DateTime?
+  verifyToken        String?        @unique
+  verifyTokenExpires DateTime?
+  resetToken         String?        @unique
+  resetTokenExpires  DateTime?
+
   sessions       Session[]
   memories       Memory[]
   goals          Goal[]
