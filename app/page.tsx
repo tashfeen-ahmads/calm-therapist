@@ -8,8 +8,9 @@ import { AgentModesSection } from "@/components/landing/AgentModesSection";
 import { DeepDive } from "@/components/landing/DeepDive";
 import { ConditionPaths } from "@/components/landing/ConditionPaths";
 import { PrivacyBlock } from "@/components/landing/Privacy";
-import { Testimonials } from "@/components/landing/Testimonials";
 import { Pricing } from "@/components/landing/Pricing";
+import { FoundingStrip } from "@/components/landing/FoundingStrip";
+import { CirclesSection } from "@/components/landing/CirclesSection";
 import { FinalCTA } from "@/components/landing/FinalCTA";
 import { LeadPopup } from "@/components/landing/LeadPopup";
 import { JsonLd, organizationSchema } from "@/lib/seo";
@@ -21,14 +22,15 @@ export default function HomePage() {
       <Navbar />
       <main>
         <FeelItFirst />
+        <FoundingStrip />
         <Problems />
         <AgentModesSection />
         <AgentDemo />
+        <CirclesSection />
         <ModeCards />
         <DeepDive />
         <ConditionPaths />
         <PrivacyBlock />
-        <Testimonials />
         <Pricing />
         <FinalCTA />
       </main>

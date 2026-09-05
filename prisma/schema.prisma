@@ -58,6 +58,7 @@ model User {
   usageEvents    UsageEvent[]
   voiceQuota     VoiceQuota?
   crisisEvents   CrisisEvent[]
+  circleInterests CircleInterest[]
   voiceSessions  VoiceSession[]
 
   @@index([createdAt])
@@ -256,4 +257,17 @@ model EmailQueueRow {
 
   @@index([status, scheduledAt])
   @@index([userId, templateKey])
+}
+
+/// A member's answer to "which circles would you join?". Read by the
+/// nightly planner once circles open; until then it is the waitlist.
+model CircleInterest {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  theme     String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, theme])
+  @@index([theme])
 }

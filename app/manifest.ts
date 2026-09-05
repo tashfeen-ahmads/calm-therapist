@@ -1,10 +1,11 @@
 import type { MetadataRoute } from "next";
+import { BRAND } from "@/lib/brand";
 
 /** Installable web app: a home-screen icon and full-screen mode, no store needed. */
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Calm Therapist",
-    short_name: "Calm",
+    name: BRAND.name,
+    short_name: BRAND.shortName,
     description: "A place to think out loud with Aura. Chat, voice, and circles.",
     start_url: "/dashboard",
     scope: "/",

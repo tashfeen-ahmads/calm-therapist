@@ -73,7 +73,7 @@ export function FeelItFirst() {
           className="micro-label micro-label-bordered"
           style={{ display: "inline-block", marginBottom: 28 }}
         >
-          Backed by Implenix
+          Free AI therapist · Voice · Circles
         </motion.span>
 
         <motion.h1
@@ -82,7 +82,7 @@ export function FeelItFirst() {
           transition={{ duration: 0.55, delay: 0.05 }}
           style={{ fontSize: 68, lineHeight: 1.05, marginBottom: 24 }}
         >
-          A quiet place to think out loud.
+          A free AI therapist that remembers you.
         </motion.h1>
 
         <motion.p
@@ -92,8 +92,8 @@ export function FeelItFirst() {
           className="body-large"
           style={{ color: "var(--calm-ink-70)", maxWidth: 640, marginBottom: 40 }}
         >
-          One sentence is enough. Try it before anything else — no email, no name, no signup
-          screen first. See how it feels to be heard.
+          Aura listens, remembers, and pushes back when it matters. Chat is free, always. One
+          sentence is enough to start — no email, no name, no signup screen first.
         </motion.p>
 
         <motion.form
