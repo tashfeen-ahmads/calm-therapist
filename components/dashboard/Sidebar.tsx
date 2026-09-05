@@ -10,6 +10,7 @@ const ITEMS = [
   { href: "/dashboard", label: "Today", icon: HomeIcon },
   { href: "/dashboard/session", label: "Text", icon: ChatIcon },
   { href: "/dashboard/voice", label: "Voice", icon: VoiceIcon },
+  { href: "/dashboard/circles", label: "Circles", icon: CirclesIcon },
   { href: "/dashboard/journal", label: "This week", icon: JournalIcon },
   { href: "/dashboard/reflect", label: "Looking back", icon: ReflectIcon },
   { href: "/dashboard/goals", label: "What you're after", icon: GoalsIcon },
@@ -390,6 +391,17 @@ function ChevronRight() {
   return (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
       <path d="M9 18l6-6-6-6" />
+    </svg>
+  );
+}
+
+function CirclesIcon({ active }: { active?: boolean }) {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 2 : 1.6} aria-hidden="true">
+      <circle cx="12" cy="12" r="8.5" />
+      <circle cx="12" cy="7.5" r="1.4" fill="currentColor" stroke="none" />
+      <circle cx="16" cy="14.5" r="1.4" fill="currentColor" stroke="none" />
+      <circle cx="8" cy="14.5" r="1.4" fill="currentColor" stroke="none" />
     </svg>
   );
 }

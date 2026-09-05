@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { readState } from "@/components/onboarding/OnboardingShell";
 import { FeedbackPrompt } from "@/components/dashboard/FeedbackPrompt";
 import type { Access } from "@/lib/access";
+import { CIRCLES_OPEN_AT } from "@/lib/circle-themes";
 
 const MOOD_LABELS = ["Struggling", "Low", "Okay", "Good", "Settled"];
 
@@ -17,6 +18,8 @@ export default function DashboardHome() {
   const [mood, setMood] = useState<number | null>(null);
   const [access, setAccess] = useState<Access | null>(null);
   const [dateLine, setDateLine] = useState("");
+  const [accessLine, setAccessLine] = useState<string | null>(null);
+  const [members, setMembers] = useState<number | null>(null);
 
   useEffect(() => {
     const s = readState() as Record<string, string>;
@@ -24,9 +27,16 @@ export default function DashboardHome() {
     setDateLine(new Date().toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" }));
     fetch("/api/auth/me")
       .then((r) => r.json())
-      .then((d: { user?: { name?: string; access?: Access } }) => {
+      .then((d: { user?: { name?: string; access?: Access; accessLine?: string } }) => {
         if (d.user?.access) setAccess(d.user.access);
+        if (d.user?.accessLine) setAccessLine(d.user.accessLine);
         if (d.user?.name && !s.name) setName(d.user.name);
+      })
+      .catch(() => {});
+    fetch("/api/founding")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d: { members?: number } | null) => {
+        if (d && typeof d.members === "number") setMembers(d.members);
       })
       .catch(() => {});
   }, []);
@@ -43,9 +53,16 @@ export default function DashboardHome() {
       <h2 style={{ marginBottom: 8 }}>
         {greeting}, {name}.
       </h2>
-      <p className="body-large" style={{ color: "var(--calm-ink-40)", marginBottom: 32 }}>
+      <p className="body-large" style={{ color: "var(--calm-ink-40)", marginBottom: 20 }}>
         {dateLine}{dateLine ? "." : ""}
       </p>
+
+      {accessLine && (
+        <p className="founding-line">
+          <span className="founding-dot" aria-hidden />
+          {accessLine}
+        </p>
+      )}
 
       <div className="start-grid" style={{ marginBottom: 40 }}>
         <Link href="/dashboard/session" className="start-card">
@@ -127,12 +144,19 @@ export default function DashboardHome() {
       </section>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 32 }} className="dash-grid">
-        <Card title="Weekly goals">
-          <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 14 }}>
-            <GoalRow label="Sleep before midnight 3 nights" progress={2 / 3} />
-            <GoalRow label="One conversation without anxiety" progress={1} />
-            <GoalRow label="Walk after dinner 4 times" progress={1 / 4} />
-          </ul>
+        <Card title="Circles">
+          <p style={{ fontSize: 15, lineHeight: 1.7, color: "var(--calm-ink-70)" }}>
+            Small anonymous rooms for the same thing, hosted by Aura.{" "}
+            {members !== null && members >= CIRCLES_OPEN_AT
+              ? "Circles are open. Pick your themes and Aura will invite you."
+              : `They open at ${CIRCLES_OPEN_AT} members${members !== null ? `; ${members} so far` : ""}. Pick the themes you would sit in.`}
+          </p>
+          <div className="circle-mini-bar" aria-hidden>
+            <span style={{ width: `${members !== null ? Math.min(100, Math.round((members / CIRCLES_OPEN_AT) * 100)) : 0}%` }} />
+          </div>
+          <Link href="/dashboard/circles" style={{ display: "inline-block", marginTop: 12, fontSize: 14, color: "var(--calm-forest)" }}>
+            Choose your circles →
+          </Link>
         </Card>
         <Card title="Your space">
           <p style={{ fontSize: 15, lineHeight: 1.7, color: "var(--calm-ink-70)" }}>
@@ -146,12 +170,14 @@ export default function DashboardHome() {
         </Card>
       </div>
 
-      <Card title="Recent sessions">
-        <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column" }}>
-          <SessionRow date="Apr 26" mode="Voice" summary="The same argument with your wife came up. You stayed, this time." />
-          <SessionRow date="Apr 24" mode="Chat" summary="Sleep is improving on the nights you walk." />
-          <SessionRow date="Apr 22" mode="Voice" summary="Tuesdays again. You named the trigger more directly." />
-        </ul>
+      <Card title="Your record">
+        <p style={{ fontSize: 15, lineHeight: 1.7, color: "var(--calm-ink-70)" }}>
+          What you tell Aura is kept for you, and only you. Memories from each conversation show up in
+          your space, and Aura carries them into the next one.
+        </p>
+        <Link href="/dashboard/profile" style={{ display: "inline-block", marginTop: 12, fontSize: 14, color: "var(--calm-forest)" }}>
+          See what Aura remembers →
+        </Link>
       </Card>
 
       <div style={{ marginTop: 32 }}>
@@ -160,6 +186,10 @@ export default function DashboardHome() {
 
 
       <Style>{`
+        .founding-line { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; color: var(--calm-forest); background: var(--calm-forest-10); border-radius: 999px; padding: 8px 14px; margin-bottom: 32px; }
+        .founding-dot { width: 8px; height: 8px; border-radius: 999px; background: var(--calm-forest); }
+        .circle-mini-bar { height: 6px; background: var(--calm-forest-10); border-radius: 999px; overflow: hidden; margin-top: 14px; }
+        .circle-mini-bar span { display: block; height: 100%; background: var(--calm-forest); border-radius: 999px; transition: width 0.6s ease; }
         @media (max-width: 760px) { .dash-grid { grid-template-columns: 1fr !important; } }
         .start-grid {
           display: grid;
@@ -242,47 +272,6 @@ function Card({ title, children }: { title: string; children: React.ReactNode })
       <p className="body-micro" style={{ color: "var(--calm-forest)", marginBottom: 16 }}>{title}</p>
       {children}
     </div>
-  );
-}
-
-function GoalRow({ label, progress }: { label: string; progress: number }) {
-  const filled = progress >= 1;
-  return (
-    <li style={{ display: "flex", alignItems: "center", gap: 12 }}>
-      <span
-        style={{
-          width: 18,
-          height: 18,
-          borderRadius: 999,
-          border: "2px solid var(--calm-forest)",
-          background: filled ? "var(--calm-forest)" : "transparent",
-          display: "inline-flex",
-          flexShrink: 0,
-        }}
-        aria-label={`${Math.round(progress * 100)}% complete`}
-      />
-      <span style={{ fontSize: 14 }}>{label}</span>
-    </li>
-  );
-}
-
-function SessionRow({ date, mode, summary }: { date: string; mode: string; summary: string }) {
-  return (
-    <li
-      style={{
-        padding: "16px 0",
-        borderBottom: "1px solid var(--calm-ink-10)",
-        display: "flex",
-        gap: 16,
-        flexWrap: "wrap",
-      }}
-    >
-      <div style={{ minWidth: 80 }}>
-        <p style={{ fontSize: 13, color: "var(--calm-ink-40)" }}>{date}</p>
-        <p className="body-micro" style={{ color: "var(--calm-forest)" }}>{mode}</p>
-      </div>
-      <p style={{ fontSize: 15, color: "var(--calm-ink)", flex: 1, minWidth: 240 }}>{summary}</p>
-    </li>
   );
 }
 

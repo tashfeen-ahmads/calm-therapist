@@ -2,10 +2,12 @@ import { Style } from "@/components/ui/Style";
 import Link from "next/link";
 import { Logo } from "./Logo";
 import { SupportLink } from "./SupportLink";
+import { BRAND } from "@/lib/brand";
 
 const productLinks = [
   { href: "/how-it-works", label: "How it works" },
   { href: "/features", label: "Features" },
+  { href: "/circles", label: "Circles" },
   { href: "/#pricing", label: "Early access" },
 ];
 
@@ -77,7 +79,7 @@ export function Footer() {
             gap: 16,
           }}
         >
-          <span>© {new Date().getFullYear()} Calm Therapist. Backed by Implenix.</span>
+          <span>© {new Date().getFullYear()} {BRAND.name}. Backed by {BRAND.parent.name}.</span>
           <span style={{ display: "flex", gap: 24 }}>
             <Link href="/privacy">Privacy</Link>
             <Link href="/terms">Terms</Link>

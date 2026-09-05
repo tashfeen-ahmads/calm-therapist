@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { BRAND } from "@/lib/brand";
 
 interface LogoProps {
   size?: number;
@@ -49,14 +50,14 @@ export function Logo({ size = 36, showWordmark = true, href = "/", animated = tr
             lineHeight: 1,
           }}
         >
-          Calm Therapist
+          {BRAND.name}
         </span>
       )}
     </span>
   );
 
   if (href) {
-    return <Link href={href} aria-label="Calm Therapist home">{content}</Link>;
+    return <Link href={href} aria-label={`${BRAND.name} home`}>{content}</Link>;
   }
   return content;
 }
