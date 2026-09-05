@@ -75,7 +75,7 @@ export const PAGES: Record<string, SeoPage> = {
       { q: "Do I need to sign up to try it?", a: "No. The landing page lets you type one message and get one response with no account. After that, opening a space takes 30 seconds." },
       { q: "Is it private?", a: "Yes. We do not train on your messages. You can export or delete everything anytime." },
       { q: "How is it different from journaling apps?", a: "Calm Therapist actively reflects what you wrote and noticed across sessions. Journaling apps store; Calm Therapist responds." },
-      { q: "Is it free?", a: "Yes, to start. Three conversations a week on the free space. Keeping your space open after that is $19 a month or $159 a year. You can pause anytime." },
+      { q: "Is it free?", a: "Yes. Chat with Aura is free for everyone. The first 150 members also get voice and circles free for four months. Prices for voice and circles appear inside your dashboard when early access ends, never on this site." },
     ],
     related: COMMON_RELATED,
     ctaLine: "Try one sentence on the landing page. No signup screen first.",
@@ -130,7 +130,7 @@ export const PAGES: Record<string, SeoPage> = {
       {
         heading: "The model: trained for stance, not just chat",
         paragraphs: [
-          "The underlying model in Calm Therapist (Claude Sonnet) is prompted into a specific therapeutic stance — validate-and-change, not yes-person. Anti-sycophancy rules. Anti-reassurance in anxiety contexts. Cultural humility. The model is the tool; the prompt is the training. Both matter.",
+          "The underlying model in Calm Therapist is prompted into a specific therapeutic stance — validate-and-change, not yes-person. Anti-sycophancy rules. Anti-reassurance in anxiety contexts. Cultural humility. The model is the tool; the prompt is the training. Both matter.",
         ],
       },
       {
@@ -147,7 +147,7 @@ export const PAGES: Record<string, SeoPage> = {
       },
     ],
     faqs: [
-      { q: "Does AI therapy use ChatGPT?", a: "Calm Therapist uses Anthropic's Claude — and the difference is the prompt and memory architecture wrapped around it. The model is one input; the system is the product." },
+      { q: "Does AI therapy use ChatGPT?", a: "Calm Therapist runs on OpenAI's GPT-5.4 mini — and the difference is the prompt, memory, and safety architecture wrapped around it. The model is one input; the system is the product." },
       { q: "Is the memory accurate?", a: "It's only as accurate as what you've shared. If you contradict something, the system updates — you're always the source of truth." },
       { q: "Does AI therapy follow CBT or DBT?", a: "Calm Therapist draws from CBT, DBT, ACT and IFS, and adapts to the user — it doesn't impose one framework." },
     ],
@@ -221,7 +221,7 @@ export const PAGES: Record<string, SeoPage> = {
       },
     ],
     faqs: [
-      { q: "Is an AI therapist cheaper than a human therapist?", a: "Yes — meaningfully. $19/month for an unlimited AI space; a single human session is typically $100–$300. The math doesn't make AI a replacement; it makes both possible." },
+      { q: "Is an AI therapist cheaper than a human therapist?", a: "Yes — meaningfully. Chat with Calm Therapist is free, while a single human session is typically $100–$300. The math doesn't make AI a replacement; it makes both possible." },
       { q: "Can my therapist see what I told the AI?", a: "Only if you choose to share it. Calm Therapist exports cleanly to PDF or CSV." },
       { q: "Will my human therapist be offended?", a: "A good clinician welcomes anything that helps you between sessions, including this." },
     ],
@@ -253,7 +253,7 @@ export const PAGES: Record<string, SeoPage> = {
       {
         heading: "Honest cost comparison",
         paragraphs: [
-          "BetterHelp is roughly $260–$400 a month for weekly sessions. Calm Therapist Pro is $19 a month for unlimited AI sessions. They are different products. Use whichever fits your situation, or use both — many people do.",
+          "BetterHelp is roughly $260–$400 a month for weekly sessions. Calm Therapist chat is free, with no session cap. They are different products. Use whichever fits your situation, or use both — many people do.",
         ],
       },
     ],
@@ -296,7 +296,7 @@ export const PAGES: Record<string, SeoPage> = {
     ],
     faqs: [
       { q: "Can I just use ChatGPT instead?", a: "You can, and many people do. We'd suggest reading our piece on what makes that risky for therapeutic conversation specifically." },
-      { q: "Is Calm Therapist using ChatGPT under the hood?", a: "No. We use Anthropic's Claude. The difference is the system around it: prompt, memory, and safety classifier." },
+      { q: "Is Calm Therapist using ChatGPT under the hood?", a: "We run on the same family of OpenAI models, but not the ChatGPT product. The difference is the system around it: prompt, memory, and safety classifier." },
       { q: "Why not use Claude directly?", a: "Same reason — without memory, prompt, and safety, the model is a model. The product is everything around it." },
     ],
     related: COMMON_RELATED,
@@ -334,7 +334,7 @@ export const PAGES: Record<string, SeoPage> = {
     faqs: [
       { q: "Will Calm Therapist wake me up with notifications?", a: "Only if you've asked us to. Default is silent." },
       { q: "Can it help me actually fall asleep?", a: "Indirectly — by helping you put the thought down. We don't pretend to be a sleep app." },
-      { q: "Is it free at night?", a: "Free to start, three conversations a week. Pro is $19 a month if you find it useful." },
+      { q: "Is it free at night?", a: "Yes. Chat is free at any hour, and founding members get voice and circles included too. Pricing for anything beyond that lives inside the app, never here." },
     ],
     related: COMMON_RELATED,
     ctaLine: "If it's late and the thought won't stop — try one sentence.",

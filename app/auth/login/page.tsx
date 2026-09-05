@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { safeNext } from "@/lib/safe-next";
 import { Suspense, useState } from "react";
 import { AuthDivider, GoogleButton } from "@/components/auth/GoogleButton";
 
@@ -16,7 +17,7 @@ export default function LoginPage() {
 function LoginInner() {
   const router = useRouter();
   const params = useSearchParams();
-  const next = params.get("next") || "/dashboard";
+  const next = safeNext(params.get("next"), "/dashboard");
 
   const [email, setEmail] = useState(params.get("email") ?? "");
   const [password, setPassword] = useState("");
@@ -54,36 +55,24 @@ function LoginInner() {
         Pick up where we left off.
       </p>
 
-      <div
-        style={{
-          marginBottom: 24,
-          padding: "12px 16px",
-          background: "var(--calm-mist)",
-          borderRadius: 10,
-          fontSize: 13,
-          lineHeight: 1.6,
-          color: "var(--calm-ink)",
-          display: "flex",
-          flexDirection: "column",
-          gap: 8,
-        }}
-      >
-        <span style={{ fontWeight: 500 }}>Demo admin (development)</span>
-        <span style={{ color: "var(--calm-ink-70)" }}>
-          email <code>admin@calmtherapist.local</code> · password <code>admin1234</code>
-        </span>
-        <button
-          type="button"
-          onClick={() => {
-            setEmail("admin@calmtherapist.local");
-            setPassword("admin1234");
+      {process.env.NEXT_PUBLIC_DEMO_LOGIN === "1" && process.env.NODE_ENV !== "production" && (
+        <div
+          style={{
+            marginBottom: 24,
+            padding: "12px 16px",
+            background: "var(--calm-mist)",
+            borderRadius: 10,
+            fontSize: 13,
+            lineHeight: 1.6,
+            color: "var(--calm-ink)",
           }}
-          className="btn-ghost"
-          style={{ alignSelf: "flex-start", height: 32, fontSize: 12 }}
         >
-          Fill demo admin
-        </button>
-      </div>
+          <span style={{ fontWeight: 500 }}>Development sign-in</span>
+          <span style={{ display: "block", color: "var(--calm-ink-70)" }}>
+            Use the ADMIN_EMAIL and ADMIN_INITIAL_PASSWORD from your local .env.
+          </span>
+        </div>
+      )}
 
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
         <GoogleButton next={next} label="Sign in with Google" />

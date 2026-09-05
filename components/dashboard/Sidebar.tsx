@@ -17,7 +17,9 @@ const ITEMS = [
   { href: "/dashboard/settings", label: "Preferences", icon: SettingsIcon },
 ];
 
-const STORAGE_KEY = "calm-therapist:sidebar-collapsed";
+export const SIDEBAR_COLLAPSED_KEY = "calm-therapist:sidebar-collapsed";
+export const SIDEBAR_EVENT = "calm:sidebar";
+const STORAGE_KEY = SIDEBAR_COLLAPSED_KEY;
 
 export function Sidebar() {
   const pathname = usePathname();
@@ -28,14 +30,18 @@ export function Sidebar() {
 
   useEffect(() => {
     setMounted(true);
-    const saved = window.localStorage.getItem(STORAGE_KEY);
-    if (saved === "1") setCollapsed(true);
+    try {
+      if (window.localStorage.getItem(STORAGE_KEY) === "1") setCollapsed(true);
+    } catch {}
   }, []);
 
   const toggle = () => {
     setCollapsed((prev) => {
       const next = !prev;
-      window.localStorage.setItem(STORAGE_KEY, next ? "1" : "0");
+      try {
+        window.localStorage.setItem(STORAGE_KEY, next ? "1" : "0");
+      } catch {}
+      window.dispatchEvent(new Event(SIDEBAR_EVENT));
       return next;
     });
   };

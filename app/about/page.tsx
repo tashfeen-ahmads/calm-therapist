@@ -36,7 +36,7 @@ export default function AboutPage() {
 
           <h2 style={{ marginTop: 48, marginBottom: 16 }}>About Implenix</h2>
           <Para>
-            <a href="http://Implenix.net" target="_blank" rel="noopener noreferrer">
+            <a href="https://implenix.net" target="_blank" rel="noopener noreferrer">
               Implenix.net
             </a>{" "}
             is the parent organisation that backs Calm Therapist. Implenix builds technology

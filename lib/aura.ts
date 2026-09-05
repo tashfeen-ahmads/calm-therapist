@@ -1,4 +1,5 @@
-import Anthropic from "@anthropic-ai/sdk";
+import OpenAI from "openai";
+import { STANCE_LIBRARY, TALKING_RULES } from "./aura-prompt";
 
 /* ------------------------------------------------------------------ */
 /* User & cultural profile                                             */
@@ -48,12 +49,70 @@ export const DEFAULT_PROFILE: UserProfile = {
   activeModes: [],
 };
 
-let _client: Anthropic | null = null;
+let _client: OpenAI | null = null;
 function client() {
   if (!_client) {
-    _client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+    _client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY, maxRetries: 1, timeout: 60_000 });
   }
   return _client;
+}
+
+/** True when a real model key is present. Without it every route falls back to a mock stream. */
+export function llmConfigured(): boolean {
+  return !!process.env.OPENAI_API_KEY;
+}
+
+/** Aura's model. Env-configurable so cost and quality can be tuned without a deploy. */
+export const AURA_MODEL = process.env.AURA_MODEL ?? "gpt-5.4-mini";
+/** Reasoning effort for the GPT-5 family. "low" keeps replies fast and cheap; raise for harder turns. */
+const AURA_REASONING = (process.env.AURA_REASONING ?? "low") as "minimal" | "low" | "medium" | "high";
+
+/** One turn of conversation. Text only: the app never sends images or tool calls. */
+export interface ChatTurn {
+  role: "user" | "assistant";
+  content: string;
+}
+
+/** What a streaming call yields: text as it arrives, then one usage event at the end. */
+export type AuraEvent =
+  | { type: "text"; text: string }
+  | { type: "usage"; tokensIn?: number; tokensOut?: number; cacheRead?: number };
+
+export interface AuraStream extends AsyncIterable<AuraEvent> {
+  abort(): void;
+}
+
+/** Rough token budget for the conversation history sent each turn. */
+const HISTORY_TOKEN_BUDGET = Number(process.env.AURA_HISTORY_TOKENS ?? 6000);
+const MAX_HISTORY_TURNS = 40;
+
+function approxTokens(text: string): number {
+  return Math.ceil(text.length / 4);
+}
+
+function textOf(m: ChatTurn): string {
+  return m.content;
+}
+
+/**
+ * Keeps the most recent turns within a token budget, always starting on a
+ * user turn and always ending on the latest user turn. A leading assistant
+ * greeting from the client is dropped because the API requires the first
+ * message to be from the user.
+ */
+export function trimHistory(messages: ChatTurn[]): ChatTurn[] {
+  let out = messages.slice(-MAX_HISTORY_TURNS);
+  while (out.length && out[0].role !== "user") out = out.slice(1);
+  let budget = HISTORY_TOKEN_BUDGET;
+  const kept: ChatTurn[] = [];
+  for (let i = out.length - 1; i >= 0; i--) {
+    const cost = approxTokens(textOf(out[i]));
+    if (kept.length && budget - cost < 0) break;
+    budget -= cost;
+    kept.unshift(out[i]);
+  }
+  while (kept.length && kept[0].role !== "user") kept.shift();
+  return kept;
 }
 
 /* ------------------------------------------------------------------ */
@@ -247,17 +306,23 @@ interface ComposeArgs {
   legacyAddendum?: string;
 }
 
+/**
+ * Two parts: a STATIC prefix that is identical for every member using the
+ * same modes and channel (cached by the API), and a DYNAMIC suffix with the
+ * person's profile, memory, and any crisis script.
+ */
+export function composeSystemBlocks(args: ComposeArgs): { stable: string; dynamic: string } {
+  const stable = [MASTER_PROMPT, TALKING_RULES, STANCE_LIBRARY, ...(args.modeAddenda ?? [])];
+  if (args.legacyAddendum) stable.push(`# FEATURE-SPECIFIC INSTRUCTIONS\n${args.legacyAddendum}`);
+  if (args.voice) stable.push(VOICE_OVERLAY);
+  const dynamic = [buildCulturalBlock(args.profile), buildMemoryBlock(args.profile)];
+  if (args.crisisScript) dynamic.push(args.crisisScript);
+  return { stable: stable.join("\n\n"), dynamic: dynamic.join("\n\n") };
+}
+
 export function composeSystemPrompt(args: ComposeArgs): string {
-  const parts: string[] = [
-    MASTER_PROMPT,
-    buildCulturalBlock(args.profile),
-    buildMemoryBlock(args.profile),
-  ];
-  (args.modeAddenda ?? []).forEach((m) => parts.push(m));
-  if (args.legacyAddendum) parts.push(`# FEATURE-SPECIFIC INSTRUCTIONS\n${args.legacyAddendum}`);
-  if (args.voice) parts.push(VOICE_OVERLAY);
-  if (args.crisisScript) parts.push(args.crisisScript);
-  return parts.join("\n\n");
+  const { stable, dynamic } = composeSystemBlocks(args);
+  return `${stable}\n\n${dynamic}`;
 }
 
 // Backwards-compat for older callers (api/onboarding etc.).
@@ -270,12 +335,12 @@ export function buildSystemPrompt(profile: UserProfile, addendum?: string): stri
 /* ------------------------------------------------------------------ */
 
 export function streamChatResponse(
-  messages: Anthropic.MessageParam[],
+  messages: ChatTurn[],
   profile: UserProfile,
   systemAddendum?: string,
-  opts?: { voice?: boolean; modeAddenda?: string[]; crisisScript?: string }
-) {
-  const system = composeSystemPrompt({
+  opts?: { voice?: boolean; modeAddenda?: string[]; crisisScript?: string; maxTokens?: number }
+): AuraStream {
+  const { stable, dynamic } = composeSystemBlocks({
     profile,
     modeAddenda: opts?.modeAddenda,
     crisisScript: opts?.crisisScript,
@@ -283,31 +348,59 @@ export function streamChatResponse(
     legacyAddendum: systemAddendum,
   });
 
-  return client().messages.stream({
-    model: "claude-sonnet-4-20250514",
-    max_tokens: 400,
-    temperature: 0.6,
-    system,
-    messages,
-  });
+  // The stable prefix goes first so OpenAI's automatic prefix caching covers
+  // it; the per-person block follows. Cached tokens come back in usage.
+  const controller = new AbortController();
+  const request = client().chat.completions.create(
+    {
+      model: AURA_MODEL,
+      max_completion_tokens: opts?.maxTokens ?? (opts?.crisisScript ? 900 : 500),
+      reasoning_effort: AURA_REASONING,
+      stream: true,
+      stream_options: { include_usage: true },
+      messages: [{ role: "system", content: `${stable}\n\n${dynamic}` }, ...trimHistory(messages)],
+    },
+    { signal: controller.signal }
+  );
+
+  async function* iterate(): AsyncGenerator<AuraEvent> {
+    const stream = await request;
+    for await (const chunk of stream) {
+      const delta = chunk.choices?.[0]?.delta?.content;
+      if (delta) yield { type: "text", text: delta };
+      if (chunk.usage) {
+        yield {
+          type: "usage",
+          tokensIn: chunk.usage.prompt_tokens,
+          tokensOut: chunk.usage.completion_tokens,
+          cacheRead: chunk.usage.prompt_tokens_details?.cached_tokens ?? undefined,
+        };
+      }
+    }
+  }
+
+  return {
+    [Symbol.asyncIterator]: iterate,
+    abort: () => controller.abort(),
+  };
 }
 
 export async function generateOnboardingReflection(profile: UserProfile): Promise<string> {
-  const msg = await client().messages.create({
-    model: "claude-sonnet-4-20250514",
-    max_tokens: 220,
-    system:
-      "You are Aura inside the Calm Therapist app. The user just finished onboarding. In 2-3 sentences, reflect back what you heard in warm, human language. Do not say 'I understand'. Be specific. Match their chosen tone. Show empathy through specificity, not performance.",
+  const res = await client().chat.completions.create({
+    model: AURA_MODEL,
+    max_completion_tokens: 400,
+    reasoning_effort: AURA_REASONING,
     messages: [
+      {
+        role: "system",
+        content:
+          "You are Aura inside the Calm Therapist app. The user just finished onboarding. In 2-3 sentences, reflect back what you heard in warm, human language. Do not say 'I understand'. Be specific. Match their chosen tone. Show empathy through specificity, not performance.",
+      },
       {
         role: "user",
         content: `Name: ${profile.name}. Tone preference: ${profile.tone}. Focus areas: ${profile.focusAreas.join(", ")}. Goals: ${profile.currentGoals.join("; ")}. Reflect back what brought them here.`,
       },
     ],
   });
-  const text = msg.content
-    .filter((b): b is Anthropic.TextBlock => b.type === "text")
-    .map((b) => b.text)
-    .join("");
-  return text;
+  return res.choices[0]?.message?.content?.trim() ?? "";
 }

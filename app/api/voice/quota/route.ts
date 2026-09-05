@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { SESSION_COOKIE, verifySession } from "@/lib/auth";
+import { getUserById } from "@/lib/users";
+import { accessFor } from "@/lib/access";
 import { getVoiceQuotaSnapshot } from "@/lib/voice-quota";
 
 export const runtime = "nodejs";
@@ -8,6 +10,9 @@ export const runtime = "nodejs";
 export async function GET() {
   const claims = await verifySession(cookies().get(SESSION_COOKIE)?.value);
   if (!claims) return NextResponse.json({ error: "Sign in first" }, { status: 401 });
-  const snap = await getVoiceQuotaSnapshot(claims.sub, claims.plan);
-  return NextResponse.json({ plan: claims.plan, ...snap });
+  const user = await getUserById(claims.sub);
+  if (!user) return NextResponse.json({ error: "Account not found" }, { status: 404 });
+  const access = accessFor(user);
+  const snap = await getVoiceQuotaSnapshot(user.id, access);
+  return NextResponse.json({ plan: user.plan, access, ...snap });
 }

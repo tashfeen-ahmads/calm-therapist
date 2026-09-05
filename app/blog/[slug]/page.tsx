@@ -51,7 +51,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
               day: "numeric",
             })}{" "}
             · Backed by{" "}
-            <a href="http://Implenix.net" target="_blank" rel="noopener noreferrer">
+            <a href="https://implenix.net" target="_blank" rel="noopener noreferrer">
               Implenix.net
             </a>
           </p>

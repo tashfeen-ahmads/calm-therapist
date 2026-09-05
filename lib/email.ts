@@ -1,7 +1,8 @@
 /**
  * Email send wrapper. If RESEND_API_KEY is set, real emails go through Resend.
- * If not, we just log — useful for dev. Swappable for SendGrid/Postmark later
- * by replacing this single function.
+ * If not, we log, and report ok:false in production so nothing is marked
+ * "sent" that never left. Swappable for another provider by replacing this
+ * one function.
  */
 
 interface SendOpts {
@@ -10,6 +11,7 @@ interface SendOpts {
   html: string;
   text?: string;
   from?: string;
+  headers?: Record<string, string>;
 }
 
 const FROM_DEFAULT = process.env.EMAIL_FROM ?? "Aura at Calm Therapist <hello@calmtherapist.implenix.net>";
@@ -19,16 +21,14 @@ export async function sendEmail(opts: SendOpts): Promise<{ ok: boolean; error?: 
   const key = process.env.RESEND_API_KEY;
   if (!key) {
     console.log(`[email-mock] → ${opts.to}\n  subject: ${opts.subject}\n  preview: ${opts.text?.slice(0, 200) ?? opts.html.slice(0, 200)}`);
-    return { ok: true };
+    // In production a missing key is a configuration error, not a send.
+    return process.env.NODE_ENV === "production" ? { ok: false, error: "RESEND_API_KEY not set" } : { ok: true };
   }
 
   try {
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${key}`,
-        "Content-Type": "application/json",
-      },
+      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
       body: JSON.stringify({
         from: opts.from ?? FROM_DEFAULT,
         to: opts.to,
@@ -36,11 +36,12 @@ export async function sendEmail(opts: SendOpts): Promise<{ ok: boolean; error?: 
         html: opts.html,
         text: opts.text,
         reply_to: REPLY_TO,
+        headers: opts.headers,
       }),
     });
     if (!res.ok) {
       const detail = await res.text();
-      console.error("Resend error", res.status, detail);
+      console.error("Resend error", res.status, detail.slice(0, 300));
       return { ok: false, error: `Resend ${res.status}` };
     }
     return { ok: true };

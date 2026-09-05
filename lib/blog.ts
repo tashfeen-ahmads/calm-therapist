@@ -22,7 +22,7 @@ export const POSTS: BlogPost[] = [
       { slug: "ai-therapy-privacy", title: "Who Owns Your Mental Health Data? What Every AI Therapy App Does With Your Pain" },
     ],
     internalLinks: [
-      { href: "/modes/chat", label: "Chat Agent" },
+      { href: "/features/chat", label: "Chat Agent" },
       { href: "/how-it-works", label: "How Calm Therapist works" },
       { href: "/for/anxiety", label: "AI therapy for anxiety" },
     ],
@@ -49,7 +49,7 @@ export const POSTS: BlogPost[] = [
       { slug: "ai-therapy-privacy", title: "Who Owns Your Mental Health Data?" },
     ],
     internalLinks: [
-      { href: "/modes/voice", label: "Voice Agent" },
+      { href: "/features/voice", label: "Voice Agent" },
       { href: "/for/burnout", label: "AI therapy for burnout" },
       { href: "/for/relationships", label: "AI therapy for relationships" },
     ],
@@ -76,7 +76,7 @@ export const POSTS: BlogPost[] = [
     ],
     internalLinks: [
       { href: "/privacy", label: "Our full privacy architecture" },
-      { href: "/modes/chat", label: "Chat Agent" },
+      { href: "/features/chat", label: "Chat Agent" },
       { href: "/for/depression", label: "AI therapy for depression" },
     ],
     body: [

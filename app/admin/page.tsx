@@ -28,7 +28,7 @@ export default async function AdminOverview() {
         <Grid>
           <StatCard label="Live users (5 min)" value={s.liveUsers} hint="Active API events in the last 5 minutes" />
           <StatCard label="Recurring users" value={s.recurringUsers} hint="Older than 7d, still active" />
-          <StatCard label="Claude requests" value={s.api.claudeRequests} hint={`${s.api.totalTokensIn.toLocaleString()} in / ${s.api.totalTokensOut.toLocaleString()} out`} />
+          <StatCard label="Model requests" value={s.api.llmRequests} hint={`${s.api.totalTokensIn.toLocaleString()} in / ${s.api.totalTokensOut.toLocaleString()} out`} />
           <StatCard label="Voice sessions" value={s.api.voiceRequests} />
         </Grid>
       </Section>
@@ -38,7 +38,7 @@ export default async function AdminOverview() {
           <StatCard label="Pro accounts" value={s.paid.proCount} />
           <StatCard label="MRR (USD)" value={`$${s.paid.mrrUsd.toLocaleString()}`} hint="At $19/mo per Pro" />
           <StatCard label="ARR (USD)" value={`$${s.paid.arrUsd.toLocaleString()}`} />
-          <StatCard label="Estimated API spend" value={`$${s.api.totalCostUsd.toFixed(2)}`} hint="Claude + voice estimate" />
+          <StatCard label="Estimated API spend" value={`$${s.api.totalCostUsd.toFixed(2)}`} hint="Model + voice estimate" />
         </Grid>
       </Section>
 

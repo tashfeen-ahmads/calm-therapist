@@ -13,16 +13,19 @@ export function loadMemories(): MemoryNode[] {
   if (typeof window === "undefined") return [];
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (!raw) return SEED_MEMORIES;
-    return JSON.parse(raw) as MemoryNode[];
+    if (!raw) return [];
+    const parsed = JSON.parse(raw) as MemoryNode[];
+    return Array.isArray(parsed) ? parsed : [];
   } catch {
-    return SEED_MEMORIES;
+    return [];
   }
 }
 
 export function saveMemories(memories: MemoryNode[]) {
   if (typeof window === "undefined") return;
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(memories));
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(memories));
+  } catch {}
 }
 
 export function buildMemoryContext(memories: MemoryNode[], limit = 20): string {
@@ -48,45 +51,8 @@ export function appendMemory(memories: MemoryNode[], statement: string, category
   ];
 }
 
-export const SEED_MEMORIES: MemoryNode[] = [
-  {
-    id: "seed_1",
-    statement: "You mentioned your father passed away in March.",
-    category: "family",
-    firstMentioned: "2026-03-12T10:00:00.000Z",
-    lastMentioned: "2026-04-20T14:30:00.000Z",
-    mentions: 6,
-  },
-  {
-    id: "seed_2",
-    statement: "You work in tech and find the pace overwhelming.",
-    category: "work",
-    firstMentioned: "2026-02-04T19:00:00.000Z",
-    lastMentioned: "2026-04-22T09:15:00.000Z",
-    mentions: 11,
-  },
-  {
-    id: "seed_3",
-    statement: "You've described Tuesdays as consistently your worst day.",
-    category: "pattern",
-    firstMentioned: "2026-02-25T07:30:00.000Z",
-    lastMentioned: "2026-04-15T08:00:00.000Z",
-    mentions: 4,
-  },
-  {
-    id: "seed_4",
-    statement: "Your sister is going through a divorce and you feel responsible for holding her together.",
-    category: "relationship",
-    firstMentioned: "2026-03-02T20:00:00.000Z",
-    lastMentioned: "2026-04-26T21:00:00.000Z",
-    mentions: 7,
-  },
-  {
-    id: "seed_5",
-    statement: "You sleep best on the nights you walk after dinner.",
-    category: "pattern",
-    firstMentioned: "2026-03-14T22:00:00.000Z",
-    lastMentioned: "2026-04-23T22:00:00.000Z",
-    mentions: 5,
-  },
-];
+/**
+ * Demo memories are gone. A new member starts with none; Aura earns them.
+ * Kept as an empty export so older imports keep compiling.
+ */
+export const SEED_MEMORIES: MemoryNode[] = [];

@@ -1,27 +1,57 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { SESSION_COOKIE, verifySession } from "@/lib/auth";
-import { recordVoiceMinutes, getVoiceQuotaSnapshot } from "@/lib/voice-quota";
+import { getUserById } from "@/lib/users";
+import { accessFor } from "@/lib/access";
+import { closeVoiceSession, getVoiceQuotaSnapshot } from "@/lib/voice-quota";
+import { agentId, getConversation } from "@/lib/elevenlabs";
 
 export const runtime = "nodejs";
 
+/**
+ * Closes a voice session. The browser tells us which session and which
+ * ElevenLabs conversation; the duration comes from ElevenLabs, not the
+ * browser. Replays and other members' conversations are rejected.
+ */
 export async function POST(req: Request) {
   const claims = await verifySession(cookies().get(SESSION_COOKIE)?.value);
   if (!claims) return NextResponse.json({ error: "Sign in first" }, { status: 401 });
+  const user = await getUserById(claims.sub);
+  if (!user) return NextResponse.json({ error: "Account not found" }, { status: 404 });
 
-  let body: { minutes?: number };
+  let body: { sessionId?: string; conversationId?: string };
   try {
     body = await req.json();
   } catch {
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
+  const sessionId = typeof body.sessionId === "string" ? body.sessionId.slice(0, 64) : "";
+  const conversationId = typeof body.conversationId === "string" ? body.conversationId.slice(0, 128) : "";
+  if (!sessionId || !conversationId) return NextResponse.json({ error: "Missing ids" }, { status: 400 });
 
-  const minutes = Number(body.minutes);
-  if (!Number.isFinite(minutes) || minutes <= 0 || minutes > 60) {
-    return NextResponse.json({ error: "Bad minute count" }, { status: 400 });
+  // ElevenLabs finalises the record shortly after disconnect; retry briefly.
+  let durationSec: number | undefined;
+  let convAgent: string | undefined;
+  for (let attempt = 0; attempt < 4; attempt++) {
+    const conv = await getConversation(conversationId);
+    if (conv) {
+      convAgent = conv.agentId;
+      if (typeof conv.durationSec === "number" && conv.durationSec > 0) {
+        durationSec = conv.durationSec;
+        break;
+      }
+    }
+    await new Promise((r) => setTimeout(r, 1500));
+  }
+  if (durationSec == null) {
+    return NextResponse.json({ ok: false, error: "Duration not available yet" }, { status: 202 });
+  }
+  if (convAgent && agentId() && convAgent !== agentId()) {
+    return NextResponse.json({ error: "Conversation does not belong to this agent" }, { status: 400 });
   }
 
-  await recordVoiceMinutes(claims.sub, minutes);
-  const snap = await getVoiceQuotaSnapshot(claims.sub, claims.plan);
-  return NextResponse.json({ ok: true, quota: { plan: claims.plan, ...snap } });
+  const recorded = await closeVoiceSession({ sessionId, userId: user.id, conversationId, durationSec });
+  const access = accessFor(user);
+  const snap = await getVoiceQuotaSnapshot(user.id, access);
+  return NextResponse.json({ ok: recorded, durationSec, quota: { plan: user.plan, access, ...snap } });
 }

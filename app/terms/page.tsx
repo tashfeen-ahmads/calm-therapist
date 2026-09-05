@@ -153,7 +153,7 @@ export default function TermsPage() {
 
           <p style={{ marginTop: 64, fontSize: 13, color: "var(--calm-ink-40)" }}>
             Calm Therapist is a product of{" "}
-            <a href="http://Implenix.net" target="_blank" rel="noopener noreferrer" style={{ color: "var(--calm-forest)" }}>
+            <a href="https://implenix.net" target="_blank" rel="noopener noreferrer" style={{ color: "var(--calm-forest)" }}>
               Implenix.net
             </a>
             .

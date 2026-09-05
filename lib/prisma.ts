@@ -10,11 +10,18 @@
  */
 
 import { PrismaClient } from "@prisma/client";
+import { assertEnv } from "./env";
+import { resolveDatabaseUrl } from "./db-url";
 
 declare global {
   // eslint-disable-next-line no-var
   var _calmPrisma: PrismaClient | undefined;
 }
+
+// Fill DATABASE_URL from the host's own variable, then enforce it.
+resolveDatabaseUrl();
+// Throws in production when DATABASE_URL is missing (unless ALLOW_MEMORY_STORE=1).
+assertEnv();
 
 export const dbEnabled = !!process.env.DATABASE_URL;
 

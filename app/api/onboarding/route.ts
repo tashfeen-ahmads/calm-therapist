@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { generateOnboardingReflection, UserProfile, DEFAULT_PROFILE } from "@/lib/claude";
+import { generateOnboardingReflection, llmConfigured, UserProfile, DEFAULT_PROFILE } from "@/lib/aura";
 
 export const runtime = "nodejs";
 
@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     language: typeof data.language === "string" ? data.language : "en",
   };
 
-  if (!process.env.ANTHROPIC_API_KEY) {
+  if (!llmConfigured()) {
     return NextResponse.json({
       reflection: fallback(profile),
     });

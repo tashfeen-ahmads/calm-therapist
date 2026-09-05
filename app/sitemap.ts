@@ -14,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/features", priority: 0.85, freq: "monthly" },
     { path: "/about", priority: 0.7, freq: "monthly" },
     { path: "/privacy", priority: 0.6, freq: "monthly" },
+    { path: "/terms", priority: 0.5, freq: "monthly" },
   ];
 
   const modes = MODE_LIST.map((m) => ({

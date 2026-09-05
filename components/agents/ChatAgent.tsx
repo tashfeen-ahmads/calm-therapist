@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import type { AgentModeKey, UserProfile } from "@/lib/claude";
+import type { AgentModeKey, UserProfile } from "@/lib/aura";
 import type { ModeKey } from "@/lib/features";
 import { ModeBar } from "./ModeBar";
 import { CrisisBanner } from "./CrisisBanner";
@@ -45,8 +45,16 @@ export function ChatAgent({
   const [activeMode, setActiveMode] = useState<AgentModeKey | null>(null);
   const [crisisTier, setCrisisTier] = useState(0);
   const [wrappingUp, setWrappingUp] = useState(false);
+  const [notice, setNotice] = useState<string | null>(null);
   const threadRef = useRef<HTMLDivElement>(null);
   const taRef = useRef<HTMLTextAreaElement>(null);
+  const abortRef = useRef<AbortController | null>(null);
+  const [dateLine, setDateLine] = useState("");
+
+  useEffect(() => {
+    setDateLine(new Date().toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" }));
+    return () => abortRef.current?.abort();
+  }, []);
 
   useEffect(() => {
     // Mode resets to None each new browser tab/session — but persists while
@@ -85,17 +93,28 @@ export function ChatAgent({
     setMessages([...next, { role: "assistant", content: "", timestamp: new Date().toISOString() }]);
     setInput("");
     setStreaming(true);
+    const controller = new AbortController();
+    abortRef.current = controller;
 
     try {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        signal: controller.signal,
         body: JSON.stringify({
-          messages: next.map((m) => ({ role: m.role, content: m.content })),
+          // The greeting is shown, not sent: the conversation starts with the person.
+          messages: next.filter((m, i) => !(i === 0 && m.role === "assistant")).map((m) => ({ role: m.role, content: m.content })),
           profile: { ...profile, activeModes: activeMode ? [activeMode] : [] },
           mode,
         }),
       });
+      if (!res.ok) {
+        const text = (await res.text().catch(() => "")) || "Something went wrong on our side.";
+        // Not Aura's words: drop the empty assistant turn and show a notice.
+        setMessages((msgs) => msgs.slice(0, -1));
+        setNotice(res.status === 429 ? text : res.status === 401 ? "Your session expired. Sign in again to keep talking." : text);
+        return;
+      }
       if (!res.body) throw new Error("No body");
       const tierHeader = Number(res.headers.get("X-Crisis-Tier") ?? "0");
       if (tierHeader > 0) {
@@ -115,6 +134,11 @@ export function ChatAgent({
         if (done) break;
         acc += decoder.decode(value, { stream: true });
         // Strip the optional [crisis_tier:N] header chunk emitted by the server.
+        const errIdx = acc.indexOf("\n[error]");
+        if (errIdx !== -1) {
+          setNotice(acc.slice(errIdx + 9).trim());
+          acc = acc.slice(0, errIdx);
+        }
         const cleaned = acc.replace(/\n?\[crisis_tier:\d+\]\n?/g, "");
         setMessages((msgs) => {
           const copy = [...msgs];
@@ -123,17 +147,13 @@ export function ChatAgent({
         });
       }
     } catch (err) {
+      if ((err as { name?: string }).name === "AbortError") return;
       console.error(err);
-      setMessages((msgs) => {
-        const copy = [...msgs];
-        copy[copy.length - 1] = {
-          ...copy[copy.length - 1],
-          content: "Something went wrong on our side. Try again in a moment.",
-        };
-        return copy;
-      });
+      setMessages((msgs) => msgs.slice(0, -1));
+      setNotice("Something went wrong on our side. Try again in a moment.");
     } finally {
       setStreaming(false);
+      abortRef.current = null;
     }
   };
 
@@ -167,14 +187,14 @@ export function ChatAgent({
       >
         <div style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
           <span className="body-micro" style={{ color: "var(--calm-ink-40)" }}>
-            Session {sessionNumber} · {new Date().toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" })}
+            Session {sessionNumber}{dateLine ? ` · ${dateLine}` : ""}
           </span>
           <span style={{ fontSize: 13, color: "var(--calm-forest)", marginTop: 4, display: "inline-flex", alignItems: "center", gap: 6 }}>
             <span
               aria-hidden
               style={{ width: 6, height: 6, borderRadius: 999, background: "var(--calm-forest)", display: "inline-block" }}
             />
-            Aura remembers {memoryCount} {memoryCount === 1 ? "thing" : "things"} about you
+            {memoryCount === 0 ? "Aura is getting to know you" : `Aura remembers ${memoryCount} ${memoryCount === 1 ? "thing" : "things"} about you`}
           </span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -183,16 +203,12 @@ export function ChatAgent({
             type="button"
             onClick={() => {
               setWrappingUp(true);
-              // Fire-and-forget: trigger the after-first email + reset
-              // inactivity ladder.
-              const reflection =
-                messages.length > 1
-                  ? messages.find((m) => m.role === "user")?.content?.slice(0, 80) ?? undefined
-                  : undefined;
+              // Fire-and-forget: reset the inactivity ladder. No session
+              // content ever leaves the conversation.
               fetch("/api/email/track", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ kind: "session-ended", reflection }),
+                body: JSON.stringify({ kind: "session-ended" }),
               }).catch(() => {});
             }}
             className="btn-ghost"
@@ -208,6 +224,13 @@ export function ChatAgent({
 
       {crisisTier > 0 && (
         <CrisisBanner tier={crisisTier} country={profile.culture?.countryOfResidence} onDismiss={() => setCrisisTier(0)} />
+      )}
+
+      {notice && (
+        <div role="status" style={{ margin: "12px 24px 0", padding: "10px 14px", borderRadius: 10, background: "var(--calm-mist)", fontSize: 13, color: "var(--calm-ink-70)", display: "flex", justifyContent: "space-between", gap: 12 }}>
+          <span>{notice}</span>
+          <button type="button" onClick={() => setNotice(null)} className="btn-ghost" style={{ height: 24, fontSize: 12, padding: "0 8px" }}>Dismiss</button>
+        </div>
       )}
 
       <div ref={threadRef} className="subtle-scroll" style={{ flex: 1, overflowY: "auto", padding: 24, display: "flex", flexDirection: "column", gap: 14 }}>

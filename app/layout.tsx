@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import "./globals.css";
+import { RegisterServiceWorker } from "@/components/ui/RegisterServiceWorker";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -16,8 +17,12 @@ const dmSans = DM_Sans({
   display: "swap",
 });
 
+const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://calmtherapist.implenix.net";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://calmtherapist.implenix.net"),
+  metadataBase: new URL(BASE_URL),
+  manifest: "/manifest.webmanifest",
+  appleWebApp: { capable: true, statusBarStyle: "default", title: "Calm Therapist" },
   title: {
     default: "Calm Therapist — AI Therapy That Actually Remembers You",
     template: "%s | Calm Therapist",
@@ -27,7 +32,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://calmtherapist.implenix.net",
+    url: BASE_URL,
     siteName: "Calm Therapist",
     title: "Calm Therapist — AI Therapy That Actually Remembers You",
     description:
@@ -42,13 +47,16 @@ export const metadata: Metadata = {
     images: ["/og-image.png"],
   },
   robots: { index: true, follow: true },
-  icons: { icon: "/favicon.svg" },
+  icons: { icon: "/favicon.svg", apple: "/icons/icon-192.png" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${cormorant.variable} ${dmSans.variable}`}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <RegisterServiceWorker />
+      </body>
     </html>
   );
 }

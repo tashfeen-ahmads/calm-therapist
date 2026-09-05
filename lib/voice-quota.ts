@@ -1,11 +1,16 @@
 import { dbEnabled, prisma } from "./prisma";
+import type { Access } from "./access";
 
 /**
- * Voice quota tracking — per-user weekly + monthly buckets.
+ * Voice quota — one monthly bucket per member.
  *
- * Pro base allowance: 20 min / week (~80 min / month).
- * Top-up pack ($12): +30 min this week, +50 min this month.
- * Free users: no voice access at all.
+ * The monthly allowance comes from lib/access.ts (founding fair-use, pro, or
+ * none). Minutes are recorded from ElevenLabs conversation records, never
+ * from the browser. Updates use atomic increments so concurrent sessions
+ * cannot lose an update.
+ *
+ * The weekly bucket is kept in the schema for compatibility but no longer
+ * gates anything.
  */
 
 export interface VoiceQuotaState {
@@ -22,9 +27,6 @@ export interface VoiceQuotaState {
 const globalAny = globalThis as unknown as { __calmVoiceQuota?: Map<string, VoiceQuotaState> };
 const memoryStore: Map<string, VoiceQuotaState> = globalAny.__calmVoiceQuota ?? new Map();
 globalAny.__calmVoiceQuota = memoryStore;
-
-const PRO_WEEKLY_BASE_SEC = 20 * 60;
-const PRO_MONTHLY_BASE_SEC = 80 * 60;
 
 const TOPUP_PRICE_USD = 12;
 const TOPUP_WEEKLY_BONUS_SEC = 30 * 60;
@@ -51,75 +53,15 @@ function rolledOver(state: VoiceQuotaState, now: Date): VoiceQuotaState {
   const wk = isoWeek(now);
   const mk = monthKey(now);
   let next = state;
-  if (state.weekKey !== wk) {
-    next = { ...next, weekKey: wk, weeklyUsedSec: 0, weeklyBonusSec: 0 };
-  }
+  if (state.weekKey !== wk) next = { ...next, weekKey: wk, weeklyUsedSec: 0, weeklyBonusSec: 0 };
   if (state.monthKey !== mk) {
     next = { ...next, monthKey: mk, monthlyUsedSec: 0, monthlyBonusSec: 0, topupsThisMonth: 0 };
   }
   return next;
 }
 
-async function ensure(userId: string): Promise<VoiceQuotaState> {
-  const now = new Date();
-
-  if (dbEnabled) {
-    const row = await prisma.voiceQuota.findUnique({ where: { userId } });
-    if (row) {
-      const cur: VoiceQuotaState = {
-        userId,
-        weekKey: row.weekKey,
-        monthKey: row.monthKey,
-        weeklyUsedSec: row.weeklyUsedSec,
-        monthlyUsedSec: row.monthlyUsedSec,
-        weeklyBonusSec: row.weeklyBonusSec,
-        monthlyBonusSec: row.monthlyBonusSec,
-        topupsThisMonth: row.topupsThisMonth,
-      };
-      const rolled = rolledOver(cur, now);
-      if (rolled !== cur) {
-        await prisma.voiceQuota.update({
-          where: { userId },
-          data: {
-            weekKey: rolled.weekKey,
-            monthKey: rolled.monthKey,
-            weeklyUsedSec: rolled.weeklyUsedSec,
-            monthlyUsedSec: rolled.monthlyUsedSec,
-            weeklyBonusSec: rolled.weeklyBonusSec,
-            monthlyBonusSec: rolled.monthlyBonusSec,
-            topupsThisMonth: rolled.topupsThisMonth,
-          },
-        });
-      }
-      return rolled;
-    }
-    const fresh: VoiceQuotaState = {
-      userId,
-      weekKey: isoWeek(now),
-      monthKey: monthKey(now),
-      weeklyUsedSec: 0,
-      monthlyUsedSec: 0,
-      weeklyBonusSec: 0,
-      monthlyBonusSec: 0,
-      topupsThisMonth: 0,
-    };
-    await prisma.voiceQuota.create({
-      data: {
-        userId,
-        weekKey: fresh.weekKey,
-        monthKey: fresh.monthKey,
-      },
-    });
-    return fresh;
-  }
-
-  const cur = memoryStore.get(userId);
-  if (cur) {
-    const rolled = rolledOver(cur, now);
-    if (rolled !== cur) memoryStore.set(userId, rolled);
-    return rolled;
-  }
-  const fresh: VoiceQuotaState = {
+function fresh(userId: string, now: Date): VoiceQuotaState {
+  return {
     userId,
     weekKey: isoWeek(now),
     monthKey: monthKey(now),
@@ -129,83 +71,126 @@ async function ensure(userId: string): Promise<VoiceQuotaState> {
     monthlyBonusSec: 0,
     topupsThisMonth: 0,
   };
-  memoryStore.set(userId, fresh);
-  return fresh;
+}
+
+async function ensure(userId: string): Promise<VoiceQuotaState> {
+  const now = new Date();
+
+  if (dbEnabled) {
+    const f = fresh(userId, now);
+    // upsert so two first-time calls cannot race on create.
+    const row = await prisma.voiceQuota.upsert({
+      where: { userId },
+      create: { userId, weekKey: f.weekKey, monthKey: f.monthKey },
+      update: {},
+    });
+    const cur: VoiceQuotaState = {
+      userId,
+      weekKey: row.weekKey,
+      monthKey: row.monthKey,
+      weeklyUsedSec: row.weeklyUsedSec,
+      monthlyUsedSec: row.monthlyUsedSec,
+      weeklyBonusSec: row.weeklyBonusSec,
+      monthlyBonusSec: row.monthlyBonusSec,
+      topupsThisMonth: row.topupsThisMonth,
+    };
+    const rolled = rolledOver(cur, now);
+    if (rolled !== cur) {
+      await prisma.voiceQuota.update({
+        where: { userId },
+        data: {
+          weekKey: rolled.weekKey,
+          monthKey: rolled.monthKey,
+          weeklyUsedSec: rolled.weeklyUsedSec,
+          monthlyUsedSec: rolled.monthlyUsedSec,
+          weeklyBonusSec: rolled.weeklyBonusSec,
+          monthlyBonusSec: rolled.monthlyBonusSec,
+          topupsThisMonth: rolled.topupsThisMonth,
+        },
+      });
+    }
+    return rolled;
+  }
+
+  const cur = memoryStore.get(userId);
+  if (cur) {
+    const rolled = rolledOver(cur, now);
+    if (rolled !== cur) memoryStore.set(userId, rolled);
+    return rolled;
+  }
+  const f = fresh(userId, now);
+  memoryStore.set(userId, f);
+  return f;
 }
 
 export interface VoiceQuotaSnapshot {
-  weeklyLimitSec: number;
-  weeklyUsedSec: number;
-  weeklyRemainingSec: number;
   monthlyLimitSec: number;
   monthlyUsedSec: number;
   monthlyRemainingSec: number;
-  weeklyBonusSec: number;
   monthlyBonusSec: number;
   topupsThisMonth: number;
   canStart: boolean;
+  /** Kept for older clients; equal to the monthly figures. */
+  weeklyLimitSec: number;
+  weeklyUsedSec: number;
+  weeklyRemainingSec: number;
 }
 
-export async function getVoiceQuotaSnapshot(userId: string, plan: "free" | "pro"): Promise<VoiceQuotaSnapshot> {
+export async function getVoiceQuotaSnapshot(userId: string, access: Access): Promise<VoiceQuotaSnapshot> {
   const s = await ensure(userId);
-  const baseW = plan === "pro" ? PRO_WEEKLY_BASE_SEC : 0;
-  const baseM = plan === "pro" ? PRO_MONTHLY_BASE_SEC : 0;
-  const weeklyLimit = baseW + s.weeklyBonusSec;
-  const monthlyLimit = baseM + s.monthlyBonusSec;
-  const weeklyRemaining = Math.max(0, weeklyLimit - s.weeklyUsedSec);
+  const monthlyLimit = access.voice ? access.voiceMinutesPerMonth * 60 + s.monthlyBonusSec : 0;
   const monthlyRemaining = Math.max(0, monthlyLimit - s.monthlyUsedSec);
   return {
-    weeklyLimitSec: weeklyLimit,
-    weeklyUsedSec: s.weeklyUsedSec,
-    weeklyRemainingSec: weeklyRemaining,
     monthlyLimitSec: monthlyLimit,
     monthlyUsedSec: s.monthlyUsedSec,
     monthlyRemainingSec: monthlyRemaining,
-    weeklyBonusSec: s.weeklyBonusSec,
     monthlyBonusSec: s.monthlyBonusSec,
     topupsThisMonth: s.topupsThisMonth,
-    canStart: weeklyRemaining > 0 && monthlyRemaining > 0,
+    canStart: access.voice && monthlyRemaining > 30,
+    weeklyLimitSec: monthlyLimit,
+    weeklyUsedSec: s.monthlyUsedSec,
+    weeklyRemainingSec: monthlyRemaining,
   };
 }
 
-export async function recordVoiceMinutes(userId: string, minutes: number): Promise<void> {
-  if (!Number.isFinite(minutes) || minutes <= 0) return;
+/** Atomic add of used seconds. */
+export async function recordVoiceSeconds(userId: string, seconds: number): Promise<void> {
+  const sec = Math.round(seconds);
+  if (!Number.isFinite(sec) || sec <= 0) return;
   const s = await ensure(userId);
-  const seconds = Math.round(minutes * 60);
-
   if (dbEnabled) {
     await prisma.voiceQuota.update({
       where: { userId },
-      data: {
-        weeklyUsedSec: s.weeklyUsedSec + seconds,
-        monthlyUsedSec: s.monthlyUsedSec + seconds,
-      },
+      data: { weeklyUsedSec: { increment: sec }, monthlyUsedSec: { increment: sec } },
     });
     return;
   }
-  memoryStore.set(userId, {
-    ...s,
-    weeklyUsedSec: s.weeklyUsedSec + seconds,
-    monthlyUsedSec: s.monthlyUsedSec + seconds,
-  });
+  memoryStore.set(userId, { ...s, weeklyUsedSec: s.weeklyUsedSec + sec, monthlyUsedSec: s.monthlyUsedSec + sec });
 }
 
+export async function recordVoiceMinutes(userId: string, minutes: number): Promise<void> {
+  return recordVoiceSeconds(userId, minutes * 60);
+}
+
+/**
+ * Applies a paid top-up. Only the Stripe webhook may call this once paid
+ * plans are on. Cap of four per month, enforced atomically in DB mode.
+ */
 export async function applyTopup(userId: string): Promise<{ ok: true } | { ok: false; error: string }> {
   const s = await ensure(userId);
-  if (s.topupsThisMonth >= 4) {
-    return { ok: false, error: "You've reached the top-up cap for this month." };
-  }
   if (dbEnabled) {
-    await prisma.voiceQuota.update({
-      where: { userId },
+    const res = await prisma.voiceQuota.updateMany({
+      where: { userId, topupsThisMonth: { lt: 4 } },
       data: {
-        weeklyBonusSec: s.weeklyBonusSec + TOPUP_WEEKLY_BONUS_SEC,
-        monthlyBonusSec: s.monthlyBonusSec + TOPUP_MONTHLY_BONUS_SEC,
-        topupsThisMonth: s.topupsThisMonth + 1,
+        weeklyBonusSec: { increment: TOPUP_WEEKLY_BONUS_SEC },
+        monthlyBonusSec: { increment: TOPUP_MONTHLY_BONUS_SEC },
+        topupsThisMonth: { increment: 1 },
       },
     });
+    if (res.count === 0) return { ok: false, error: "You've reached the top-up cap for this month." };
     return { ok: true };
   }
+  if (s.topupsThisMonth >= 4) return { ok: false, error: "You've reached the top-up cap for this month." };
   memoryStore.set(userId, {
     ...s,
     weeklyBonusSec: s.weeklyBonusSec + TOPUP_WEEKLY_BONUS_SEC,
@@ -220,3 +205,59 @@ export const VOICE_TOPUP = {
   weekMinutes: 30,
   monthMinutes: 50,
 };
+
+/* ------------------------------------------------------------------ */
+/* Voice sessions (minted server-side; duration from ElevenLabs)        */
+/* ------------------------------------------------------------------ */
+
+interface MemorySession {
+  id: string;
+  userId: string;
+  conversationId?: string;
+  startedAt: string;
+  durationSec?: number;
+}
+const sessionsAny = globalThis as unknown as { __calmVoiceSessions?: Map<string, MemorySession> };
+const sessionStore: Map<string, MemorySession> = sessionsAny.__calmVoiceSessions ?? new Map();
+sessionsAny.__calmVoiceSessions = sessionStore;
+
+export async function openVoiceSession(userId: string): Promise<string> {
+  if (dbEnabled) {
+    const row = await prisma.voiceSession.create({ data: { userId } });
+    return row.id;
+  }
+  const id = `vs_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  sessionStore.set(id, { id, userId, startedAt: new Date().toISOString() });
+  return id;
+}
+
+/**
+ * Closes a session with the duration reported by ElevenLabs. Returns false
+ * when the conversation was already recorded (replay) or does not belong to
+ * this member.
+ */
+export async function closeVoiceSession(input: {
+  sessionId: string;
+  userId: string;
+  conversationId: string;
+  durationSec: number;
+}): Promise<boolean> {
+  if (dbEnabled) {
+    const row = await prisma.voiceSession.findUnique({ where: { id: input.sessionId } });
+    if (!row || row.userId !== input.userId || row.conversationId) return false;
+    const dup = await prisma.voiceSession.findUnique({ where: { conversationId: input.conversationId } });
+    if (dup) return false;
+    await prisma.voiceSession.update({
+      where: { id: input.sessionId },
+      data: { conversationId: input.conversationId, durationSec: input.durationSec, endedAt: new Date() },
+    });
+    await recordVoiceSeconds(input.userId, input.durationSec);
+    return true;
+  }
+  const s = sessionStore.get(input.sessionId);
+  if (!s || s.userId !== input.userId || s.conversationId) return false;
+  for (const other of sessionStore.values()) if (other.conversationId === input.conversationId) return false;
+  sessionStore.set(input.sessionId, { ...s, conversationId: input.conversationId, durationSec: input.durationSec });
+  await recordVoiceSeconds(input.userId, input.durationSec);
+  return true;
+}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { AgentModeKey } from "@/lib/claude";
+import type { AgentModeKey } from "@/lib/aura";
 import { AGENT_MODE_LIST } from "@/lib/agent-modes";
 import { Style } from "@/components/ui/Style";
 

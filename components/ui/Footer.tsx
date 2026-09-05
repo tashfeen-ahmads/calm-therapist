@@ -1,11 +1,12 @@
 import { Style } from "@/components/ui/Style";
 import Link from "next/link";
 import { Logo } from "./Logo";
+import { SupportLink } from "./SupportLink";
 
 const productLinks = [
   { href: "/how-it-works", label: "How it works" },
   { href: "/features", label: "Features" },
-  { href: "/#pricing", label: "Pricing" },
+  { href: "/#pricing", label: "Early access" },
 ];
 
 const resourcesLinks = [
@@ -49,13 +50,14 @@ export function Footer() {
             <Logo animated={false} />
             <p style={{ marginTop: 16, color: "rgba(255,255,255,0.6)", fontSize: 14, lineHeight: 1.7 }}>
               Backed by{" "}
-              <a href="http://Implenix.net" style={{ color: "white", textDecoration: "underline" }} target="_blank" rel="noopener noreferrer">
+              <a href="https://implenix.net" style={{ color: "white", textDecoration: "underline" }} target="_blank" rel="noopener noreferrer">
                 Implenix.net
               </a>
             </p>
             <p style={{ marginTop: 24, color: "rgba(255,255,255,0.85)", fontSize: 14, fontStyle: "italic", maxWidth: 280 }}>
               Your data belongs to you. Always.
             </p>
+            <SupportLink variant="footer" style={{ marginTop: 20, maxWidth: 300 }} />
           </div>
 
           <FooterColumn title="Product" links={productLinks.concat(featureLinks)} />

@@ -1,56 +1,35 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { VoiceAgent } from "@/components/agents/VoiceAgent";
 import { ModeBar } from "@/components/agents/ModeBar";
-import { UpgradePopup } from "@/components/billing/UpgradePopup";
-import { readState } from "@/components/onboarding/OnboardingShell";
-import { loadMemories } from "@/lib/memory";
-import type { AgentModeKey } from "@/lib/claude";
-import { DEFAULT_PROFILE, UserProfile } from "@/lib/claude";
+import { useServerProfile } from "@/components/dashboard/useServerProfile";
+import type { AgentModeKey, UserProfile } from "@/lib/aura";
 import { Style } from "@/components/ui/Style";
+import type { Access } from "@/lib/access";
 
 interface QuotaSnapshot {
   plan: "free" | "pro";
-  weeklyRemainingSec: number;
+  access: Access;
+  monthlyLimitSec: number;
+  monthlyUsedSec: number;
   monthlyRemainingSec: number;
   canStart: boolean;
 }
 
 export default function VoicePage() {
-  const [profile, setProfile] = useState<UserProfile>(DEFAULT_PROFILE);
-  const [memoryCount, setMemoryCount] = useState(0);
+  const { profile, memoryCount } = useServerProfile();
   const [activeMode, setActiveMode] = useState<AgentModeKey | null>(null);
   const [quota, setQuota] = useState<QuotaSnapshot | null>(null);
-  const [showUpgrade, setShowUpgrade] = useState(false);
-  const sessionNumber = 14;
+  const [dateLine, setDateLine] = useState("");
 
   useEffect(() => {
-    const s = readState() as Record<string, unknown>;
-    const memories = loadMemories();
-    setMemoryCount(memories.length);
-    setProfile({
-      name: (s.name as string) || "friend",
-      age: (s.age as string) || undefined,
-      tone:
-        s.tone === "direct" || s.tone === "clinical" || s.tone === "warm"
-          ? (s.tone as UserProfile["tone"])
-          : "warm",
-      focusAreas: (s.focusAreas as string[]) ?? [],
-      currentGoals: (s.goals as string[]) ?? [],
-      sessionCount: sessionNumber,
-      memories: memories.map((m) => m.statement),
-      language: (s.language as string) ?? "en",
-      culture: (s.culture as UserProfile["culture"]) ?? {
-        primaryLanguage: ((s.language as string) ?? "en"),
-        countryOfResidence: (s.country as string) ?? undefined,
-      },
-      activeModes: [],
-    });
     try {
       const raw = window.sessionStorage.getItem("calm-therapist:active-mode");
       if (raw) setActiveMode(raw as AgentModeKey);
     } catch {}
+    setDateLine(new Date().toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" }));
     refreshQuota();
   }, []);
 
@@ -70,117 +49,59 @@ export default function VoicePage() {
     } catch {}
   };
 
-  const isFree = quota?.plan === "free";
-  const dryWeek = quota && !isFree && quota.weeklyRemainingSec <= 0;
+  const hasVoice = quota?.access.voice === true;
+  const outOfMinutes = quota ? hasVoice && !quota.canStart : false;
 
-  const profileWithMode: UserProfile = {
-    ...profile,
-    activeModes: activeMode ? [activeMode] : [],
-  };
+  const profileWithMode: UserProfile = { ...profile, activeModes: activeMode ? [activeMode] : [] };
 
   return (
     <div className="voice-page">
       <header className="voice-chrome">
         <div style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
           <span className="body-micro" style={{ color: "var(--calm-ink-40)" }}>
-            Voice · session {sessionNumber} · {new Date().toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" })}
+            Voice{dateLine ? ` · ${dateLine}` : ""}
           </span>
           <span style={{ fontSize: 13, color: "var(--calm-forest)", marginTop: 4, display: "inline-flex", alignItems: "center", gap: 6 }}>
             <span aria-hidden style={{ width: 6, height: 6, borderRadius: 999, background: "var(--calm-forest)" }} />
-            Aura remembers {memoryCount} {memoryCount === 1 ? "thing" : "things"} about you
+            {memoryCount === 0
+              ? "Aura is getting to know you"
+              : `Aura remembers ${memoryCount} ${memoryCount === 1 ? "thing" : "things"} about you`}
           </span>
         </div>
-        {!isFree && <ModeBar active={activeMode} onChange={persistMode} />}
+        {hasVoice && <ModeBar active={activeMode} onChange={persistMode} />}
       </header>
 
-      {isFree && <FreeBlock onUpgrade={() => setShowUpgrade(true)} />}
+      {quota && !hasVoice && <NoVoice />}
 
-      {!isFree && dryWeek && (
-        <OutOfMinutes
-          onTopup={async () => {
-            const ok = window.confirm("Top-up: $12 → 30 more minutes this week, 50 more this month. Continue?");
-            if (!ok) return;
-            // Try Stripe-hosted Checkout first.
-            try {
-              const stripeRes = await fetch("/api/billing/topup-checkout", { method: "POST" });
-              const stripeData = await stripeRes.json();
-              if (stripeRes.ok && stripeData?.url) {
-                window.location.href = stripeData.url as string;
-                return;
-              }
-              // Mock fallback for dev (Stripe not configured).
-              if (stripeData?.mock) {
-                const res = await fetch("/api/voice/topup", { method: "POST" });
-                const data = await res.json();
-                if (res.ok) {
-                  setQuota({ plan: "pro", ...data.quota });
-                } else {
-                  window.alert(data.error ?? "Could not apply top-up.");
-                }
-                return;
-              }
-              window.alert(stripeData.error ?? "Could not start checkout.");
-            } catch {
-              window.alert("Network error.");
-            }
-          }}
-        />
+      {outOfMinutes && quota && <OutOfMinutes limitMin={Math.floor(quota.monthlyLimitSec / 60)} />}
+
+      {hasVoice && !outOfMinutes && quota && (
+        <VoiceAgent profile={profileWithMode} onSessionRecorded={refreshQuota} />
       )}
 
-      {!isFree && !dryWeek && quota && (
-        <VoiceAgent
-          profile={profileWithMode}
-          onSessionEnd={({ durationMinutes }) => {
-            // durationMinutes is the actual session length from connect to
-            // disconnect, captured by VoiceAgent — not a token-count guess.
-            if (durationMinutes <= 0) return;
-            fetch("/api/voice/record", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ minutes: Number(durationMinutes.toFixed(2)) }),
-            })
-              .then(refreshQuota)
-              .catch(() => {});
-          }}
-        />
+      {hasVoice && quota && (
+        <p style={{ textAlign: "center", fontSize: 12, color: "var(--calm-ink-40)", padding: "0 24px 24px" }}>
+          {Math.floor(quota.monthlyUsedSec / 60)} of {Math.floor(quota.monthlyLimitSec / 60)} voice minutes used this month.
+          Minutes are counted from the call itself, after it ends.
+        </p>
       )}
-
-      <UpgradePopup
-        open={showUpgrade}
-        reason="Voice is part of keeping your space open."
-        onClose={() => setShowUpgrade(false)}
-        onUpgraded={() => {
-          setShowUpgrade(false);
-          refreshQuota();
-        }}
-      />
 
       <Style>{`
-        .voice-page {
-          padding: 0;
-          height: 100%;
-          display: flex;
-          flex-direction: column;
-        }
+        .voice-page { padding: 0; height: 100%; display: flex; flex-direction: column; }
         .voice-chrome {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          gap: 16px;
-          padding: 16px 24px;
-          border-bottom: 1px solid var(--calm-ink-10);
-          flex-wrap: wrap;
+          display: flex; justify-content: space-between; align-items: center; gap: 16px;
+          padding: 16px 24px; border-bottom: 1px solid var(--calm-ink-10); flex-wrap: wrap;
         }
       `}</Style>
     </div>
   );
 }
 
-function FreeBlock({ onUpgrade }: { onUpgrade: () => void }) {
+function NoVoice() {
   return (
     <div
       style={{
-        margin: "32px",
+        margin: 32,
         background: "var(--calm-mist)",
         border: "1px solid var(--calm-forest-20)",
         borderLeft: "3px solid var(--calm-forest)",
@@ -192,24 +113,25 @@ function FreeBlock({ onUpgrade }: { onUpgrade: () => void }) {
         maxWidth: 720,
       }}
     >
-      <p className="body-micro" style={{ color: "var(--calm-forest)" }}>Voice is part of keeping your space open</p>
-      <h3>Voice unlocks when you upgrade.</h3>
+      <p className="body-micro" style={{ color: "var(--calm-forest)" }}>Voice is part of an open space</p>
+      <h3>Chat is always open. Voice comes with an open space.</h3>
       <p style={{ fontSize: 15, lineHeight: 1.7, color: "var(--calm-ink-70)" }}>
-        Voice costs more to run than text, so it sits behind the paid plan. 20 minutes a week
-        included.
+        Voice costs more to run than text, so it sits with the paid space once early access ends.
+        Your chat with Aura stays free. You can see what is included in Settings.
       </p>
       <div style={{ display: "flex", gap: 12, marginTop: 12, flexWrap: "wrap" }}>
-        <button onClick={onUpgrade} className="btn-primary">See your options</button>
+        <Link href="/dashboard/settings" className="btn-primary">See membership</Link>
+        <Link href="/dashboard/session" className="btn-ghost">Talk by text</Link>
       </div>
     </div>
   );
 }
 
-function OutOfMinutes({ onTopup }: { onTopup: () => void }) {
+function OutOfMinutes({ limitMin }: { limitMin: number }) {
   return (
     <div
       style={{
-        margin: "32px",
+        margin: 32,
         background: "var(--calm-white)",
         border: "1px solid var(--calm-ink-10)",
         borderRadius: 14,
@@ -220,15 +142,14 @@ function OutOfMinutes({ onTopup }: { onTopup: () => void }) {
         maxWidth: 720,
       }}
     >
-      <p className="body-micro" style={{ color: "var(--calm-forest)" }}>You&apos;ve used your voice minutes for this week</p>
-      <h3>We&apos;ve talked a lot. Let&apos;s rest the voice for a bit.</h3>
+      <p className="body-micro" style={{ color: "var(--calm-forest)" }}>You have used your voice minutes for this month</p>
+      <h3>We have talked a lot. Let us rest the voice for a bit.</h3>
       <p style={{ fontSize: 15, lineHeight: 1.7, color: "var(--calm-ink-70)" }}>
-        Voice resets Monday. Until then text is open and waiting. If you need voice now, a
-        one-time top-up of $12 adds 30 more minutes this week and 50 more for the month.
+        Voice has a fair-use limit of {limitMin} minutes a month during early access and resets on the 1st.
+        Text is open and waiting.
       </p>
       <div style={{ display: "flex", gap: 12, marginTop: 12, flexWrap: "wrap" }}>
-        <button onClick={onTopup} className="btn-primary">Top up · $12</button>
-        <a href="/dashboard/session" className="btn-ghost">Switch to text</a>
+        <Link href="/dashboard/session" className="btn-primary">Switch to text</Link>
       </div>
     </div>
   );

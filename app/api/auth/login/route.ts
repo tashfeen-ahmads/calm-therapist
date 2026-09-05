@@ -32,7 +32,7 @@ export async function POST(req: Request) {
     email: user.email,
     name: user.name,
     plan: user.plan,
-    isAdmin: isAdminEmail(user.email),
+    isAdmin: user.isAdmin || isAdminEmail(user.email),
   });
   const host = req.headers.get("host");
   const cookie = buildSessionCookie(token, {

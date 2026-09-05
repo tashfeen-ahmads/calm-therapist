@@ -38,7 +38,7 @@ export async function POST(req: Request) {
       email: user.email,
       name: user.name,
       plan: user.plan,
-      isAdmin: isAdminEmail(user.email),
+      isAdmin: user.isAdmin || isAdminEmail(user.email),
     });
 
     // Send verify email immediately (synchronous — user expects it now).
