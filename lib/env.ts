@@ -12,7 +12,8 @@
  * - The check is skipped during `next build` (NEXT_PHASE), because build
  *   machines often do not carry runtime secrets. It runs on the first request.
  *
- * Import this module from lib/auth.ts and lib/prisma.ts.
+ * assertEnv() is called from lib/prisma.ts (Node runtime only). Edge code
+ * must never call it at module load; use authSecret() lazily instead.
  */
 
 const isProd = process.env.NODE_ENV === "production";

@@ -1,8 +1,14 @@
 import { SignJWT, jwtVerify } from "jose";
-import { assertEnv, authSecret } from "./env";
+import { authSecret } from "./env";
 
-assertEnv();
-const SECRET = new TextEncoder().encode(authSecret());
+// Resolved on first use, never at import time: this module is bundled into
+// the edge middleware, and hosts load that bundle at build time without
+// runtime secrets. The production check lives in authSecret() itself.
+let _secret: Uint8Array | null = null;
+function secret(): Uint8Array {
+  if (!_secret) _secret = new TextEncoder().encode(authSecret());
+  return _secret;
+}
 const ISSUER = "calm-therapist";
 const COOKIE_NAME = "calm_session";
 const SESSION_DAYS = 7;
@@ -21,13 +27,13 @@ export async function signSession(claims: SessionClaims): Promise<string> {
     .setIssuer(ISSUER)
     .setIssuedAt()
     .setExpirationTime(`${SESSION_DAYS}d`)
-    .sign(SECRET);
+    .sign(secret());
 }
 
 export async function verifySession(token: string | undefined): Promise<SessionClaims | null> {
   if (!token) return null;
   try {
-    const { payload } = await jwtVerify(token, SECRET, { issuer: ISSUER, algorithms: ["HS256"] });
+    const { payload } = await jwtVerify(token, secret(), { issuer: ISSUER, algorithms: ["HS256"] });
     if (
       typeof payload.sub === "string" &&
       typeof payload.email === "string" &&
