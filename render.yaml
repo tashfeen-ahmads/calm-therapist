@@ -1,0 +1,81 @@
+# Render blueprint: the whole app in one place.
+# Web service (Next.js, pages + API routes), Postgres, and the email cron.
+# Import at dashboard.render.com > Blueprints > New Blueprint Instance.
+services:
+  - type: web
+    name: calm-therapist
+    runtime: node
+    plan: starter
+    region: frankfurt
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: calm-therapist-db
+          property: connectionString
+      - key: AUTH_SECRET
+        generateValue: true
+      - key: CRON_SECRET
+        generateValue: true
+      # Fill these in the dashboard after the first deploy.
+      - key: NEXT_PUBLIC_APP_URL
+        sync: false
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_INITIAL_PASSWORD
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: AURA_MODEL
+        value: gpt-5.4-mini
+      - key: ELEVENLABS_API_KEY
+        sync: false
+      - key: NEXT_PUBLIC_ELEVENLABS_AGENT_ID
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: EMAIL_FROM
+        sync: false
+      - key: EMAIL_REPLY_TO
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: NEXT_PUBLIC_KOFI_URL
+        sync: false
+
+  # Sends queued lifecycle emails every five minutes.
+  - type: cron
+    name: calm-therapist-emails
+    runtime: node
+    plan: starter
+    region: frankfurt
+    schedule: "*/5 * * * *"
+    buildCommand: "true"
+    startCommand: >-
+      curl -fsS -X POST
+      -H "x-cron-secret: $CRON_SECRET"
+      "$NEXT_PUBLIC_APP_URL/api/cron/emails"
+    envVars:
+      - key: CRON_SECRET
+        fromService:
+          type: web
+          name: calm-therapist
+          envVarKey: CRON_SECRET
+      - key: NEXT_PUBLIC_APP_URL
+        fromService:
+          type: web
+          name: calm-therapist
+          envVarKey: NEXT_PUBLIC_APP_URL
+
+databases:
+  - name: calm-therapist-db
+    plan: basic-256mb
+    region: frankfurt
+    postgresMajorVersion: "16"

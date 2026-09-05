@@ -1,5 +1,5 @@
 import { dbEnabled, prisma } from "./prisma";
-import type { UserProfile } from "./claude";
+import type { UserProfile } from "./aura";
 import { cultureFromFields } from "./profile-input";
 
 /**
@@ -212,7 +212,7 @@ export async function deleteMemory(userId: string, id: string): Promise<void> {
 export async function sessionCount(userId: string): Promise<number> {
   if (!dbEnabled) return 1;
   const rows = await prisma.usageEvent.findMany({
-    where: { userId, service: "claude" },
+    where: { userId, service: "llm" },
     select: { at: true },
     orderBy: { at: "desc" },
     take: 2000,

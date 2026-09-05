@@ -47,7 +47,7 @@ const REQUIRED: Rule[] = [
 ];
 
 const RECOMMENDED: Rule[] = [
-  { name: "ANTHROPIC_API_KEY", why: "Aura runs on a mock stream without it", value: () => process.env.ANTHROPIC_API_KEY },
+  { name: "OPENAI_API_KEY", why: "Aura runs on a mock stream without it", value: () => process.env.OPENAI_API_KEY },
   { name: "RESEND_API_KEY", why: "emails are logged instead of sent", value: () => process.env.RESEND_API_KEY },
   { name: "CRON_SECRET", why: "the email processor endpoint is public without it", value: () => process.env.CRON_SECRET },
 ];

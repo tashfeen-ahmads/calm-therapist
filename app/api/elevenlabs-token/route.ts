@@ -5,7 +5,7 @@ import { getUserById } from "@/lib/users";
 import { accessFor } from "@/lib/access";
 import { getVoiceQuotaSnapshot, openVoiceSession } from "@/lib/voice-quota";
 import { elevenLabsConfigured, mintSignedUrl } from "@/lib/elevenlabs";
-import { composeSystemPrompt, DEFAULT_PROFILE, UserProfile, AgentModeKey } from "@/lib/claude";
+import { composeSystemPrompt, DEFAULT_PROFILE, UserProfile, AgentModeKey } from "@/lib/aura";
 import { modeAddendaFor } from "@/lib/agent-modes";
 import { sanitizeProfile } from "@/lib/profile-input";
 

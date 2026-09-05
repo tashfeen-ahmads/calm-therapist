@@ -1,4 +1,4 @@
-import type { CulturalProfile, UserProfile } from "./claude";
+import type { CulturalProfile, UserProfile } from "./aura";
 
 /**
  * Caps and cleans profile fields that come from the client before they are

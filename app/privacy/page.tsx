@@ -36,8 +36,8 @@ export default function PrivacyPage() {
           <Section title="What we do">
             <p>
               We store your sessions in encrypted form, scoped to your account, with strict access
-              control. We use Anthropic&apos;s Claude API to generate responses. Anthropic does not
-              train on data sent through their API. We use ElevenLabs for voice mode. Voice
+              control. We use OpenAI&apos;s API to generate responses. OpenAI does not train on data
+              sent through its API. We use ElevenLabs for voice mode. Voice
               transcripts are routed through their conversational AI agent and stored in your
               account.
             </p>

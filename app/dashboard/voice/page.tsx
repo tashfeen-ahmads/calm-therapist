@@ -5,7 +5,7 @@ import Link from "next/link";
 import { VoiceAgent } from "@/components/agents/VoiceAgent";
 import { ModeBar } from "@/components/agents/ModeBar";
 import { useServerProfile } from "@/components/dashboard/useServerProfile";
-import type { AgentModeKey, UserProfile } from "@/lib/claude";
+import type { AgentModeKey, UserProfile } from "@/lib/aura";
 import { Style } from "@/components/ui/Style";
 import type { Access } from "@/lib/access";
 

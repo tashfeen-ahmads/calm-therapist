@@ -130,7 +130,7 @@ export const PAGES: Record<string, SeoPage> = {
       {
         heading: "The model: trained for stance, not just chat",
         paragraphs: [
-          "The underlying model in Calm Therapist (Claude Sonnet) is prompted into a specific therapeutic stance — validate-and-change, not yes-person. Anti-sycophancy rules. Anti-reassurance in anxiety contexts. Cultural humility. The model is the tool; the prompt is the training. Both matter.",
+          "The underlying model in Calm Therapist is prompted into a specific therapeutic stance — validate-and-change, not yes-person. Anti-sycophancy rules. Anti-reassurance in anxiety contexts. Cultural humility. The model is the tool; the prompt is the training. Both matter.",
         ],
       },
       {
@@ -147,7 +147,7 @@ export const PAGES: Record<string, SeoPage> = {
       },
     ],
     faqs: [
-      { q: "Does AI therapy use ChatGPT?", a: "Calm Therapist uses Anthropic's Claude — and the difference is the prompt and memory architecture wrapped around it. The model is one input; the system is the product." },
+      { q: "Does AI therapy use ChatGPT?", a: "Calm Therapist runs on OpenAI's GPT-5.4 mini — and the difference is the prompt, memory, and safety architecture wrapped around it. The model is one input; the system is the product." },
       { q: "Is the memory accurate?", a: "It's only as accurate as what you've shared. If you contradict something, the system updates — you're always the source of truth." },
       { q: "Does AI therapy follow CBT or DBT?", a: "Calm Therapist draws from CBT, DBT, ACT and IFS, and adapts to the user — it doesn't impose one framework." },
     ],
@@ -296,7 +296,7 @@ export const PAGES: Record<string, SeoPage> = {
     ],
     faqs: [
       { q: "Can I just use ChatGPT instead?", a: "You can, and many people do. We'd suggest reading our piece on what makes that risky for therapeutic conversation specifically." },
-      { q: "Is Calm Therapist using ChatGPT under the hood?", a: "No. We use Anthropic's Claude. The difference is the system around it: prompt, memory, and safety classifier." },
+      { q: "Is Calm Therapist using ChatGPT under the hood?", a: "We run on the same family of OpenAI models, but not the ChatGPT product. The difference is the system around it: prompt, memory, and safety classifier." },
       { q: "Why not use Claude directly?", a: "Same reason — without memory, prompt, and safety, the model is a model. The product is everything around it." },
     ],
     related: COMMON_RELATED,

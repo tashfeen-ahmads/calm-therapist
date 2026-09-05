@@ -1,7 +1,7 @@
 import { dbEnabled, prisma } from "./prisma";
 
 export interface UsageEvent {
-  service: "claude" | "elevenlabs";
+  service: "llm" | "elevenlabs";
   userId?: string;
   tokensIn?: number;
   tokensOut?: number;
@@ -16,21 +16,20 @@ const globalAny = globalThis as unknown as { __calmUsage?: UsageEvent[] };
 const memoryStore: UsageEvent[] = globalAny.__calmUsage ?? [];
 globalAny.__calmUsage = memoryStore;
 
-/** $ per million tokens: [input, cache read, output]. Unknown models fall back to Sonnet pricing. */
+/** $ per million tokens: [input, cached input, output]. Unknown models fall back to gpt-5.4-mini pricing. */
 const PRICES: Record<string, [number, number, number]> = {
-  "claude-sonnet-5": [2.0, 0.2, 10.0],
-  "claude-sonnet-4-6": [3.0, 0.3, 15.0],
-  "claude-haiku-4-5": [1.0, 0.1, 5.0],
-  "claude-opus-5": [5.0, 0.5, 25.0],
+  "gpt-5.4-mini": [0.75, 0.075, 4.5],
+  "gpt-5.4": [2.5, 0.25, 15.0],
 };
+const DEFAULT_PRICE_MODEL = "gpt-5.4-mini";
 
-export function estimateClaudeCost(model: string | undefined, tokensIn = 0, cacheRead = 0, tokensOut = 0): number {
-  const [pin, pcache, pout] = PRICES[model ?? ""] ?? PRICES["claude-sonnet-5"];
+export function estimateLlmCost(model: string | undefined, tokensIn = 0, cacheRead = 0, tokensOut = 0): number {
+  const [pin, pcache, pout] = PRICES[model ?? ""] ?? PRICES[DEFAULT_PRICE_MODEL];
   const uncached = Math.max(0, tokensIn - cacheRead);
   return (uncached / 1e6) * pin + (cacheRead / 1e6) * pcache + (tokensOut / 1e6) * pout;
 }
 
-export async function recordClaudeUsage(input: {
+export async function recordLlmUsage(input: {
   userId?: string;
   tokensIn?: number;
   tokensOut?: number;
@@ -40,9 +39,9 @@ export async function recordClaudeUsage(input: {
   stance?: string;
   ruleViolations?: string;
 }): Promise<void> {
-  const cost = estimateClaudeCost(input.model, input.tokensIn, input.cacheReadTokens, input.tokensOut);
+  const cost = estimateLlmCost(input.model, input.tokensIn, input.cacheReadTokens, input.tokensOut);
   const event: UsageEvent = {
-    service: "claude",
+    service: "llm",
     userId: input.userId,
     tokensIn: input.tokensIn,
     tokensOut: input.tokensOut,
@@ -55,7 +54,7 @@ export async function recordClaudeUsage(input: {
   if (dbEnabled) {
     await prisma.usageEvent.create({
       data: {
-        service: "claude",
+        service: "llm",
         userId: input.userId ?? null,
         tokensIn: input.tokensIn,
         tokensOut: input.tokensOut,
@@ -103,7 +102,7 @@ export async function listUsage(): Promise<UsageEvent[]> {
       take: 500,
     });
     return rows.map((r) => ({
-      service: (r.service as "claude" | "elevenlabs") ?? "claude",
+      service: r.service === "elevenlabs" ? "elevenlabs" : "llm",
       userId: r.userId ?? undefined,
       tokensIn: r.tokensIn ?? undefined,
       tokensOut: r.tokensOut ?? undefined,
@@ -117,13 +116,13 @@ export async function listUsage(): Promise<UsageEvent[]> {
 
 export async function usageSummary() {
   const events = await listUsage();
-  const claude = events.filter((e) => e.service === "claude");
+  const claude = events.filter((e) => e.service === "llm");
   const voice = events.filter((e) => e.service === "elevenlabs");
   const totalCost = events.reduce((s, e) => s + (e.estimatedCostUsd ?? 0), 0);
   const totalTokensIn = claude.reduce((s, e) => s + (e.tokensIn ?? 0), 0);
   const totalTokensOut = claude.reduce((s, e) => s + (e.tokensOut ?? 0), 0);
   return {
-    claudeRequests: claude.length,
+    llmRequests: claude.length,
     voiceRequests: voice.length,
     totalTokensIn,
     totalTokensOut,

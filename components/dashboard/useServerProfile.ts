@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { readState } from "@/components/onboarding/OnboardingShell";
-import { DEFAULT_PROFILE, type UserProfile } from "@/lib/claude";
+import { DEFAULT_PROFILE, type UserProfile } from "@/lib/aura";
 import { loadMemories } from "@/lib/memory";
 import { cultureFromFields } from "@/lib/profile-input";
 

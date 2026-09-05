@@ -10,7 +10,7 @@ export interface AdminStats {
   leads: { total: number; last7d: number };
   conversion: { leadsToSignups: number; signupsToPro: number };
   paid: { proCount: number; mrrUsd: number; arrUsd: number };
-  api: { claudeRequests: number; voiceRequests: number; totalCostUsd: number; totalTokensIn: number; totalTokensOut: number };
+  api: { llmRequests: number; voiceRequests: number; totalCostUsd: number; totalTokensIn: number; totalTokensOut: number };
   feedback: { total: number; positive: number; needsAttention: number; average: number };
   liveUsers: number;
   recurringUsers: number;

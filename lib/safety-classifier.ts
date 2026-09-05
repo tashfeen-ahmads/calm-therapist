@@ -11,7 +11,7 @@
  * file is ever shown to a user. Crisis scripts never name methods.
  */
 
-import Anthropic from "@anthropic-ai/sdk";
+import OpenAI from "openai";
 
 export type CrisisTier = 0 | 1 | 2 | 3;
 export type CrisisCategory =
@@ -203,13 +203,14 @@ export function classifySafety(message: string): SafetyResult {
 /* Model second pass — on by default, short timeout, only raises.       */
 /* ------------------------------------------------------------------ */
 
-let _haiku: Anthropic | null = null;
-function haiku(): Anthropic {
-  if (!_haiku) _haiku = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY, timeout: 3000, maxRetries: 0 });
-  return _haiku;
+let _safety: OpenAI | null = null;
+function safetyClient(): OpenAI {
+  if (!_safety) _safety = new OpenAI({ apiKey: process.env.OPENAI_API_KEY, timeout: 3000, maxRetries: 0 });
+  return _safety;
 }
 
-export const SAFETY_MODEL = process.env.SAFETY_MODEL ?? "claude-haiku-4-5";
+/** Small, fast model for the second pass. Same family as Aura unless overridden. */
+export const SAFETY_MODEL = process.env.SAFETY_MODEL ?? "gpt-5.4-mini";
 
 const LLM_SAFETY_PROMPT = `You are a safety classifier for a mental-wellness app. The message may be in any language, including Urdu, Hindi, Arabic, Spanish, or French, and may mix languages. Output JSON only.
 
@@ -224,20 +225,20 @@ When in doubt between two tiers, pick the higher. Metaphor counts: "I just want 
 Output JSON only. No commentary. No method names.`;
 
 async function llmTier(message: string): Promise<CrisisTier | null> {
-  if (!process.env.ANTHROPIC_API_KEY) return null;
+  if (!process.env.OPENAI_API_KEY) return null;
   try {
-    const resp = await haiku().messages.create({
+    const resp = await safetyClient().chat.completions.create({
       model: SAFETY_MODEL,
-      max_tokens: 20,
-      temperature: 0,
-      system: LLM_SAFETY_PROMPT,
-      messages: [{ role: "user", content: message.slice(0, 2000) }],
+      // Reasoning tokens count against this budget, so leave headroom for a tiny JSON answer.
+      max_completion_tokens: 200,
+      reasoning_effort: "low",
+      response_format: { type: "json_object" },
+      messages: [
+        { role: "system", content: LLM_SAFETY_PROMPT },
+        { role: "user", content: message.slice(0, 2000) },
+      ],
     });
-    const text = resp.content
-      .filter((b): b is Anthropic.TextBlock => b.type === "text")
-      .map((b) => b.text)
-      .join("")
-      .trim();
+    const text = (resp.choices[0]?.message?.content ?? "").trim();
     const match = text.match(/"tier"\s*:\s*([0-3])/);
     return match ? (Number(match[1]) as CrisisTier) : null;
   } catch (err) {

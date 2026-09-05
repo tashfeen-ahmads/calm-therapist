@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import type { AgentModeKey, UserProfile } from "@/lib/claude";
+import type { AgentModeKey, UserProfile } from "@/lib/aura";
 import type { ModeKey } from "@/lib/features";
 import { ModeBar } from "./ModeBar";
 import { CrisisBanner } from "./CrisisBanner";

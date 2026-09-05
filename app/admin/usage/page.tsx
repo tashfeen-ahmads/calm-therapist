@@ -26,7 +26,7 @@ export default async function AdminUsagePage() {
         <StatCard label="MRR (USD)" value={`$${s.paid.mrrUsd.toLocaleString()}`} />
         <StatCard label="ARR (USD)" value={`$${s.paid.arrUsd.toLocaleString()}`} />
         <StatCard label="Estimated API spend" value={`$${s.api.totalCostUsd.toFixed(2)}`} hint="Net margin tracker (Stripe coming)" />
-        <StatCard label="Claude requests" value={s.api.claudeRequests} />
+        <StatCard label="Model requests" value={s.api.llmRequests} />
         <StatCard label="Voice sessions" value={s.api.voiceRequests} />
       </div>
 

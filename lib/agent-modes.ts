@@ -1,4 +1,4 @@
-import type { AgentModeKey } from "./claude";
+import type { AgentModeKey } from "./aura";
 
 export interface AgentMode {
   key: AgentModeKey;

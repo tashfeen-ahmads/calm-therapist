@@ -2,7 +2,7 @@
 
 import { useConversation } from "@11labs/react";
 import { useEffect, useRef, useState } from "react";
-import type { UserProfile } from "@/lib/claude";
+import type { UserProfile } from "@/lib/aura";
 
 interface VoiceAgentProps {
   profile: UserProfile;

@@ -1,9 +1,9 @@
-import { streamChatResponse, DEFAULT_PROFILE, UserProfile } from "@/lib/claude";
+import { streamChatResponse, llmConfigured, DEFAULT_PROFILE, UserProfile } from "@/lib/aura";
 import { classifySafetyWithLLM } from "@/lib/safety-classifier";
 import { crisisScriptFor, regionalResources } from "@/lib/crisis-scripts";
 import { logCrisisEvent } from "@/lib/crisis";
 import { splitStanceTag } from "@/lib/aura-prompt";
-import { recordClaudeUsage } from "@/lib/usage";
+import { recordLlmUsage } from "@/lib/usage";
 import { identifierFor, rateLimit } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
@@ -73,7 +73,7 @@ export async function POST(req: Request) {
   if (safety.tier >= 2) void logCrisisEvent({ tier: safety.tier, category: safety.category, source: "feel-it" });
 
   const start = Date.now();
-  if (!process.env.ANTHROPIC_API_KEY) {
+  if (!llmConfigured()) {
     return mockStream(message, safety.tier);
   }
 
@@ -88,15 +88,20 @@ export async function POST(req: Request) {
       let head = "";
       let headDone = false;
       try {
-        const claudeStream = streamChatResponse(
+        const auraStream = streamChatResponse(
           [{ role: "user", content: message }],
           profile,
           NAUGHTY_BOT_HEADER,
           { crisisScript: crisisScript ?? undefined, maxTokens: 300 }
         );
-        for await (const event of claudeStream) {
-          if (event.type === "content_block_delta" && event.delta.type === "text_delta") {
-            const t = event.delta.text;
+        for await (const event of auraStream) {
+          if (event.type === "usage") {
+            tokensIn = event.tokensIn;
+            tokensOut = event.tokensOut;
+            continue;
+          }
+          if (event.type === "text") {
+            const t = event.text;
             if (headDone) {
               controller.enqueue(encoder.encode(t));
               continue;
@@ -107,14 +112,6 @@ export async function POST(req: Request) {
               const { body: rest } = splitStanceTag(head);
               if (rest) controller.enqueue(encoder.encode(rest));
             }
-          }
-          if (event.type === "message_start" && "message" in event) {
-            const msg = (event as unknown as { message: { usage?: { input_tokens?: number } } }).message;
-            tokensIn = msg.usage?.input_tokens;
-          }
-          if (event.type === "message_delta" && "usage" in event) {
-            const usage = (event as unknown as { usage?: { output_tokens?: number } }).usage;
-            tokensOut = usage?.output_tokens;
           }
         }
         if (!headDone && head) {
@@ -128,7 +125,7 @@ export async function POST(req: Request) {
         } catch {}
       } finally {
         try {
-          await recordClaudeUsage({ tokensIn, tokensOut, durationMs: Date.now() - start });
+          await recordLlmUsage({ tokensIn, tokensOut, durationMs: Date.now() - start });
         } catch {}
         try {
           controller.close();
