@@ -19,6 +19,8 @@
   },
   "dependencies": {
     "@11labs/react": "^0.0.7",
+    "@netlify/database": "^2.0.1",
+    "@netlify/functions": "^6.0.0",
     "@prisma/client": "^5.20.0",
     "bcryptjs": "^2.4.3",
     "framer-motion": "^11.5.4",
@@ -31,6 +33,7 @@
     "stripe": "^17.3.1"
   },
   "devDependencies": {
+    "@netlify/plugin-nextjs": "^5.15.13",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20.16.10",
     "@types/react": "^18.3.11",

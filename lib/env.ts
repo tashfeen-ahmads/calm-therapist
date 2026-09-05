@@ -35,7 +35,7 @@ const REQUIRED: Rule[] = [
   {
     name: "DATABASE_URL",
     why: "persists users and quotas; without it data lives per serverless instance and is lost",
-    value: () => process.env.DATABASE_URL,
+    value: () => process.env.DATABASE_URL || process.env.NETLIFY_DATABASE_URL,
     waived: () => process.env.ALLOW_MEMORY_STORE === "1",
   },
   { name: "ADMIN_EMAIL", why: "the one account allowed into /admin", value: () => process.env.ADMIN_EMAIL },

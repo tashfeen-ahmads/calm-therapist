@@ -1,0 +1,15 @@
+# Netlify: the whole app in one place. Pages and API routes run on the
+# Next.js runtime, the database is Netlify DB, and the email queue is
+# drained by the scheduled function in netlify/functions.
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[functions]
+  directory = "netlify/functions"

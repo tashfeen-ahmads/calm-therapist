@@ -7,10 +7,18 @@
  */
 const { spawnSync } = require("child_process");
 
-if (!process.env.DATABASE_URL) {
-  console.log("[migrate] DATABASE_URL not set; skipping prisma migrate deploy.");
+// Prefer a direct (unpooled) connection for migrations when the host provides one.
+const url =
+  process.env.NETLIFY_DATABASE_URL_UNPOOLED || process.env.DATABASE_URL || process.env.NETLIFY_DATABASE_URL;
+
+if (!url) {
+  console.log("[migrate] no database URL set; skipping prisma migrate deploy.");
   process.exit(0);
 }
 
-const result = spawnSync("npx", ["prisma", "migrate", "deploy"], { stdio: "inherit", shell: true });
+const result = spawnSync("npx", ["prisma", "migrate", "deploy"], {
+  stdio: "inherit",
+  shell: true,
+  env: { ...process.env, DATABASE_URL: url },
+});
 process.exit(result.status ?? 1);
