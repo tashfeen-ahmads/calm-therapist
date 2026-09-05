@@ -65,11 +65,20 @@ export function rateLimit(identifier: string, cfg: RateLimitConfig): RateLimitRe
  * deployment platform doesn't forward x-forwarded-for.
  */
 export function identifierFor(req: Request): string {
+  // Platform-set headers first: these cannot be spoofed by the client.
+  const platform =
+    req.headers.get("x-vercel-forwarded-for") ??
+    req.headers.get("cf-connecting-ip") ??
+    req.headers.get("fly-client-ip");
+  if (platform) return platform.split(",")[0].trim();
+  // Behind a generic proxy the LAST hop is the one the proxy appended.
   const xff = req.headers.get("x-forwarded-for");
-  if (xff) return xff.split(",")[0].trim();
+  if (xff) {
+    const hops = xff.split(",").map((s) => s.trim()).filter(Boolean);
+    if (hops.length) return hops[hops.length - 1];
+  }
   const realIp = req.headers.get("x-real-ip");
   if (realIp) return realIp;
-  // Fallback: weak fingerprint. Better than nothing.
   const ua = req.headers.get("user-agent") ?? "";
   const al = req.headers.get("accept-language") ?? "";
   return `fp:${hashString(ua + "|" + al)}`;

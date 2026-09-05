@@ -19,6 +19,15 @@ model User {
   plan               String         @default("free") // "free" | "pro"
   stripeCustomerId   String?        @unique
   isAdmin            Boolean        @default(false)
+  // Founding access: member number assigned at signup; the first 150 get full
+  // access for four months from foundingUntil computation (see lib/access.ts).
+  memberNumber       Int?           @unique
+  // Email preferences
+  emailOptOut        Boolean        @default(false)
+  unsubscribeToken   String?        @unique
+  // Safety: last crisis tier and when it was set (sticky for a window).
+  crisisTier         Int            @default(0)
+  crisisTierAt       DateTime?
   createdAt          DateTime       @default(now())
   updatedAt          DateTime       @updatedAt
 
@@ -46,9 +55,49 @@ model User {
   emailQueue     EmailQueueRow[]
   usageEvents    UsageEvent[]
   voiceQuota     VoiceQuota?
+  crisisEvents   CrisisEvent[]
+  voiceSessions  VoiceSession[]
 
   @@index([createdAt])
   @@index([plan])
+}
+
+/// One row per safety escalation (tier >= 2). Never deleted; the audit trail.
+model CrisisEvent {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  tier      Int
+  category  String
+  source    String // "chat" | "voice" | "feel-it" | "circle"
+  country   String?
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([createdAt])
+}
+
+/// Stripe webhook idempotency: an event id is recorded once, inside the same
+/// transaction as its side effects.
+model StripeEvent {
+  id        String   @id
+  type      String
+  createdAt DateTime @default(now())
+}
+
+/// A voice session minted server-side. Duration is filled from ElevenLabs,
+/// never from the browser.
+model VoiceSession {
+  id             String    @id @default(cuid())
+  userId         String
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  conversationId String?   @unique
+  startedAt      DateTime  @default(now())
+  endedAt        DateTime?
+  durationSec    Int?
+  source         String    @default("elevenlabs")
+
+  @@index([userId, startedAt])
 }
 
 model Session {
@@ -134,6 +183,7 @@ model Lead {
   source     String
   capturedAt DateTime @default(now())
 
+  @@unique([email, source])
   @@index([capturedAt])
 }
 
@@ -153,6 +203,7 @@ model Feedback {
   createdAt     DateTime  @default(now())
 
   @@index([category, createdAt])
+  @@index([userId])
 }
 
 model VoiceQuota {
@@ -177,6 +228,8 @@ model UsageEvent {
   tokensOut         Int?
   durationMs        Int?
   estimatedCostUsd  Float?
+  stance            String?
+  ruleViolations    String?
   at                DateTime @default(now())
 
   @@index([at])
@@ -191,10 +244,13 @@ model EmailQueueRow {
   templateKey String
   ctxJson     Json
   scheduledAt DateTime
-  status      String    @default("pending") // "pending" | "sent" | "failed" | "cancelled"
-  sentAt      DateTime?
-  error       String?
-  createdAt   DateTime  @default(now())
+  status        String    @default("pending") // "pending" | "sending" | "sent" | "failed" | "cancelled"
+  sentAt        DateTime?
+  error         String?
+  attempts      Int       @default(0)
+  nextAttemptAt DateTime?
+  lockedAt      DateTime?
+  createdAt     DateTime  @default(now())
 
   @@index([status, scheduledAt])
   @@index([userId, templateKey])

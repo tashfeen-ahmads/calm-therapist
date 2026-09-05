@@ -1,8 +1,8 @@
 import { SignJWT, jwtVerify } from "jose";
+import { assertEnv, authSecret } from "./env";
 
-const SECRET = new TextEncoder().encode(
-  process.env.AUTH_SECRET ?? "calm-therapist-development-secret-change-me"
-);
+assertEnv();
+const SECRET = new TextEncoder().encode(authSecret());
 const ISSUER = "calm-therapist";
 const COOKIE_NAME = "calm_session";
 const SESSION_DAYS = 7;
@@ -27,7 +27,7 @@ export async function signSession(claims: SessionClaims): Promise<string> {
 export async function verifySession(token: string | undefined): Promise<SessionClaims | null> {
   if (!token) return null;
   try {
-    const { payload } = await jwtVerify(token, SECRET, { issuer: ISSUER });
+    const { payload } = await jwtVerify(token, SECRET, { issuer: ISSUER, algorithms: ["HS256"] });
     if (
       typeof payload.sub === "string" &&
       typeof payload.email === "string" &&
@@ -48,11 +48,12 @@ export async function verifySession(token: string | undefined): Promise<SessionC
   }
 }
 
-export const DEMO_ADMIN_EMAIL = "admin@calmtherapist.local";
-export const DEMO_ADMIN_PASSWORD = "admin1234";
-
+/**
+ * Admin is decided by ADMIN_EMAIL only. With no ADMIN_EMAIL there is no admin,
+ * which is the safe default. There is no demo admin account.
+ */
 export function isAdminEmail(email: string): boolean {
-  const adminEmail = (process.env.ADMIN_EMAIL ?? DEMO_ADMIN_EMAIL).trim().toLowerCase();
+  const adminEmail = (process.env.ADMIN_EMAIL ?? "").trim().toLowerCase();
   if (!adminEmail) return false;
   return email.trim().toLowerCase() === adminEmail;
 }
@@ -90,14 +91,20 @@ export function clearSessionCookie(opts: CookieOpts = {}): string {
 
 export const SESSION_COOKIE = COOKIE_NAME;
 
+export { safeNext } from "./safe-next";
+
 /**
  * Cookie-domain helper for cross-subdomain sessions (e.g. main + relax.).
  * Returns ".example.com" so a single login works on both hosts.
  * In dev (localhost), returns undefined.
  */
 export function cookieDomainFor(host: string | null | undefined): string | undefined {
+  // Explicit override wins. Set COOKIE_DOMAIN=.yourdomain.com in production.
+  if (process.env.COOKIE_DOMAIN) return process.env.COOKIE_DOMAIN;
   if (!host) return undefined;
   const hostname = host.split(":")[0];
+  // Public-suffix hosts (preview deployments) must not set a shared Domain.
+  if (/\.(vercel\.app|netlify\.app|pages\.dev)$/.test(hostname)) return undefined;
   if (hostname === "localhost" || /^\d{1,3}(\.\d{1,3}){3}$/.test(hostname)) return undefined;
   const parts = hostname.split(".");
   if (parts.length < 2) return undefined;

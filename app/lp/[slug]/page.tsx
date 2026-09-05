@@ -159,7 +159,7 @@ export default function LpPage({ params }: { params: { slug: string } }) {
           </Link>
           <p style={{ marginTop: 16, fontSize: 13, color: "var(--calm-ink-40)" }}>
             Backed by{" "}
-            <a href="http://Implenix.net" target="_blank" rel="noopener noreferrer">
+            <a href="https://implenix.net" target="_blank" rel="noopener noreferrer">
               Implenix.net
             </a>
             . Your data belongs to you.

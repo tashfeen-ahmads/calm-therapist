@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { safeNext } from "@/lib/safe-next";
 import { Suspense, useEffect, useState } from "react";
 import { AuthDivider, GoogleButton } from "@/components/auth/GoogleButton";
 
@@ -16,7 +17,7 @@ export default function SignupPage() {
 function SignupInner() {
   const router = useRouter();
   const params = useSearchParams();
-  const next = params.get("next") || "/onboarding/step-1";
+  const next = safeNext(params.get("next"), "/onboarding/step-1");
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState(params.get("email") ?? "");

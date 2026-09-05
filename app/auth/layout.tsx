@@ -13,7 +13,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
       </main>
       <footer style={{ padding: 24, textAlign: "center", fontSize: 13, color: "var(--calm-ink-40)" }}>
         Backed by{" "}
-        <Link href="http://Implenix.net" target="_blank" rel="noopener noreferrer" style={{ color: "var(--calm-forest)" }}>
+        <Link href="https://implenix.net" target="_blank" rel="noopener noreferrer" style={{ color: "var(--calm-forest)" }}>
           Implenix.net
         </Link>
         . Your data belongs to you.

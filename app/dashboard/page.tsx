@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { readState } from "@/components/onboarding/OnboardingShell";
 import { FeedbackPrompt } from "@/components/dashboard/FeedbackPrompt";
-import { UpgradePopup } from "@/components/billing/UpgradePopup";
+import type { Access } from "@/lib/access";
 
 const MOOD_LABELS = ["Struggling", "Low", "Okay", "Good", "Settled"];
 
@@ -15,25 +15,27 @@ export default function DashboardHome() {
   const router = useRouter();
   const [name, setName] = useState("friend");
   const [mood, setMood] = useState<number | null>(null);
-  const [plan, setPlan] = useState<"free" | "pro">("free");
-  const [showUpgrade, setShowUpgrade] = useState(false);
+  const [access, setAccess] = useState<Access | null>(null);
+  const [dateLine, setDateLine] = useState("");
 
   useEffect(() => {
     const s = readState() as Record<string, string>;
     if (s.name) setName(s.name);
+    setDateLine(new Date().toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" }));
     fetch("/api/auth/me")
       .then((r) => r.json())
-      .then((d: { user?: { plan?: "free" | "pro" } }) => {
-        if (d.user?.plan === "pro") setPlan("pro");
+      .then((d: { user?: { name?: string; access?: Access } }) => {
+        if (d.user?.access) setAccess(d.user.access);
+        if (d.user?.name && !s.name) setName(d.user.name);
       })
       .catch(() => {});
   }, []);
 
   const greeting = useGreeting();
+  const hasVoice = access?.voice === true;
 
   const onVoiceClick = () => {
-    if (plan === "pro") router.push("/dashboard/voice");
-    else setShowUpgrade(true);
+    router.push(hasVoice ? "/dashboard/voice" : "/dashboard/settings");
   };
 
   return (
@@ -42,7 +44,7 @@ export default function DashboardHome() {
         {greeting}, {name}.
       </h2>
       <p className="body-large" style={{ color: "var(--calm-ink-40)", marginBottom: 32 }}>
-        {new Date().toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" })}.
+        {dateLine}{dateLine ? "." : ""}
       </p>
 
       <div className="start-grid" style={{ marginBottom: 40 }}>
@@ -59,7 +61,7 @@ export default function DashboardHome() {
           <span className="start-card-arrow">→</span>
         </Link>
 
-        <button type="button" onClick={onVoiceClick} className="start-card start-card-voice" data-locked={plan === "free" ? "true" : "false"}>
+        <button type="button" onClick={onVoiceClick} className="start-card start-card-voice" data-locked={access && !hasVoice ? "true" : "false"}>
           <div className="start-card-icon">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
               <path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z" />
@@ -70,15 +72,15 @@ export default function DashboardHome() {
           <div className="start-card-body">
             <h3>
               Talk it out — voice
-              {plan === "free" && <span className="start-card-badge">Pro</span>}
+              {access && !hasVoice && <span className="start-card-badge">Open space</span>}
             </h3>
             <p>
-              {plan === "free"
-                ? "Unlock voice with a paid space — 20 min/week included."
-                : "Speak when typing's too much. 20 min a week, included."}
+              {access && !hasVoice
+                ? "Voice is part of an open space. See what is included in Settings."
+                : "Speak when typing's too much. Fair-use minutes, counted after each call."}
             </p>
           </div>
-          <span className="start-card-arrow">{plan === "free" ? "🔒" : "→"}</span>
+          <span className="start-card-arrow">{access && !hasVoice ? "🔒" : "→"}</span>
         </button>
       </div>
 
@@ -132,11 +134,15 @@ export default function DashboardHome() {
             <GoalRow label="Walk after dinner 4 times" progress={1 / 4} />
           </ul>
         </Card>
-        <Card title="Your streak">
-          <p style={{ fontFamily: "var(--font-heading)", fontSize: 56, color: "var(--calm-forest)", lineHeight: 1 }}>
-            7
+        <Card title="Your space">
+          <p style={{ fontSize: 15, lineHeight: 1.7, color: "var(--calm-ink-70)" }}>
+            {access?.tier === "founding"
+              ? "Founding member. Everything is open, and your record is yours."
+              : "Chat with Aura is always open and always free."}
           </p>
-          <p style={{ marginTop: 12, color: "var(--calm-ink-40)" }}>days of showing up.</p>
+          <Link href="/dashboard/settings" style={{ display: "inline-block", marginTop: 12, fontSize: 14, color: "var(--calm-forest)" }}>
+            Membership details →
+          </Link>
         </Card>
       </div>
 
@@ -152,15 +158,6 @@ export default function DashboardHome() {
         <FeedbackPrompt />
       </div>
 
-      <UpgradePopup
-        open={showUpgrade}
-        reason="Voice is part of keeping your space open."
-        onClose={() => setShowUpgrade(false)}
-        onUpgraded={() => {
-          setShowUpgrade(false);
-          setPlan("pro");
-        }}
-      />
 
       <Style>{`
         @media (max-width: 760px) { .dash-grid { grid-template-columns: 1fr !important; } }
