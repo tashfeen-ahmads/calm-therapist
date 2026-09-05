@@ -7,6 +7,8 @@ export interface UsageEvent {
   tokensOut?: number;
   durationMs?: number;
   estimatedCostUsd?: number;
+  stance?: string;
+  ruleViolations?: string;
   at: string;
 }
 
@@ -14,18 +16,31 @@ const globalAny = globalThis as unknown as { __calmUsage?: UsageEvent[] };
 const memoryStore: UsageEvent[] = globalAny.__calmUsage ?? [];
 globalAny.__calmUsage = memoryStore;
 
-const CLAUDE_INPUT_PER_MTOK = 3.0;
-const CLAUDE_OUTPUT_PER_MTOK = 15.0;
+/** $ per million tokens: [input, cache read, output]. Unknown models fall back to Sonnet pricing. */
+const PRICES: Record<string, [number, number, number]> = {
+  "claude-sonnet-5": [2.0, 0.2, 10.0],
+  "claude-sonnet-4-6": [3.0, 0.3, 15.0],
+  "claude-haiku-4-5": [1.0, 0.1, 5.0],
+  "claude-opus-5": [5.0, 0.5, 25.0],
+};
+
+export function estimateClaudeCost(model: string | undefined, tokensIn = 0, cacheRead = 0, tokensOut = 0): number {
+  const [pin, pcache, pout] = PRICES[model ?? ""] ?? PRICES["claude-sonnet-5"];
+  const uncached = Math.max(0, tokensIn - cacheRead);
+  return (uncached / 1e6) * pin + (cacheRead / 1e6) * pcache + (tokensOut / 1e6) * pout;
+}
 
 export async function recordClaudeUsage(input: {
   userId?: string;
   tokensIn?: number;
   tokensOut?: number;
+  cacheReadTokens?: number;
   durationMs?: number;
+  model?: string;
+  stance?: string;
+  ruleViolations?: string;
 }): Promise<void> {
-  const cost =
-    ((input.tokensIn ?? 0) / 1_000_000) * CLAUDE_INPUT_PER_MTOK +
-    ((input.tokensOut ?? 0) / 1_000_000) * CLAUDE_OUTPUT_PER_MTOK;
+  const cost = estimateClaudeCost(input.model, input.tokensIn, input.cacheReadTokens, input.tokensOut);
   const event: UsageEvent = {
     service: "claude",
     userId: input.userId,
@@ -33,6 +48,8 @@ export async function recordClaudeUsage(input: {
     tokensOut: input.tokensOut,
     durationMs: input.durationMs,
     estimatedCostUsd: Number(cost.toFixed(6)),
+    stance: input.stance,
+    ruleViolations: input.ruleViolations,
     at: new Date().toISOString(),
   };
   if (dbEnabled) {
@@ -44,6 +61,8 @@ export async function recordClaudeUsage(input: {
         tokensOut: input.tokensOut,
         durationMs: input.durationMs,
         estimatedCostUsd: event.estimatedCostUsd,
+        stance: input.stance ?? null,
+        ruleViolations: input.ruleViolations ?? null,
       },
     });
     return;

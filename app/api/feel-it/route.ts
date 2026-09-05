@@ -1,6 +1,8 @@
 import { streamChatResponse, DEFAULT_PROFILE, UserProfile } from "@/lib/claude";
 import { classifySafetyWithLLM } from "@/lib/safety-classifier";
-import { crisisScriptFor } from "@/lib/crisis-scripts";
+import { crisisScriptFor, regionalResources } from "@/lib/crisis-scripts";
+import { logCrisisEvent } from "@/lib/crisis";
+import { splitStanceTag } from "@/lib/aura-prompt";
 import { recordClaudeUsage } from "@/lib/usage";
 import { identifierFor, rateLimit } from "@/lib/rate-limit";
 
@@ -40,7 +42,15 @@ export async function POST(req: Request) {
     });
   }
 
-  const body = (await req.json()) as FeelRequest;
+  if (Number(req.headers.get("content-length") ?? "0") > 8000) {
+    return new Response("That's a lot at once. Try a shorter message.", { status: 413 });
+  }
+  let body: FeelRequest;
+  try {
+    body = (await req.json()) as FeelRequest;
+  } catch {
+    return new Response("Tell me what's on your mind.", { status: 400 });
+  }
   const message = (body.message ?? "").trim().slice(0, 1500);
   if (!message) {
     return new Response("Tell me what's on your mind.", { status: 400 });
@@ -54,7 +64,13 @@ export async function POST(req: Request) {
   };
 
   const safety = await classifySafetyWithLLM(message);
-  const crisisScript = crisisScriptFor(safety.route);
+  let crisisScript = crisisScriptFor(safety.route);
+  if (safety.tier > 0) {
+    // No country is known for an anonymous visitor: attach the international line.
+    const lines = regionalResources(undefined).map((r) => `- ${r.name}: ${r.line}`).join("\n");
+    crisisScript = `${crisisScript ?? ""}\n\n# CRISIS RESOURCES (offer these; the visitor's country is unknown)\n${lines}`;
+  }
+  if (safety.tier >= 2) void logCrisisEvent({ tier: safety.tier, category: safety.category, source: "feel-it" });
 
   const start = Date.now();
   if (!process.env.ANTHROPIC_API_KEY) {
@@ -69,16 +85,28 @@ export async function POST(req: Request) {
       }
       let tokensIn: number | undefined;
       let tokensOut: number | undefined;
+      let head = "";
+      let headDone = false;
       try {
         const claudeStream = streamChatResponse(
           [{ role: "user", content: message }],
           profile,
           NAUGHTY_BOT_HEADER,
-          { crisisScript }
+          { crisisScript: crisisScript ?? undefined, maxTokens: 300 }
         );
         for await (const event of claudeStream) {
           if (event.type === "content_block_delta" && event.delta.type === "text_delta") {
-            controller.enqueue(encoder.encode(event.delta.text));
+            const t = event.delta.text;
+            if (headDone) {
+              controller.enqueue(encoder.encode(t));
+              continue;
+            }
+            head += t;
+            if (head.includes("]") || head.length > 40) {
+              headDone = true;
+              const { body: rest } = splitStanceTag(head);
+              if (rest) controller.enqueue(encoder.encode(rest));
+            }
           }
           if (event.type === "message_start" && "message" in event) {
             const msg = (event as unknown as { message: { usage?: { input_tokens?: number } } }).message;
@@ -89,16 +117,22 @@ export async function POST(req: Request) {
             tokensOut = usage?.output_tokens;
           }
         }
+        if (!headDone && head) {
+          const { body: rest } = splitStanceTag(head);
+          if (rest) controller.enqueue(encoder.encode(rest));
+        }
       } catch (err) {
         console.error("feel-it stream error", err);
-        controller.enqueue(encoder.encode("I lost you for a second — say that again?"));
+        try {
+          controller.enqueue(encoder.encode("I lost you for a second. Say that again?"));
+        } catch {}
       } finally {
-        controller.close();
-        recordClaudeUsage({
-          tokensIn,
-          tokensOut,
-          durationMs: Date.now() - start,
-        });
+        try {
+          await recordClaudeUsage({ tokensIn, tokensOut, durationMs: Date.now() - start });
+        } catch {}
+        try {
+          controller.close();
+        } catch {}
       }
     },
   });

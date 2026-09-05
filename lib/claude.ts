@@ -1,4 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
+import { STANCE_LIBRARY, TALKING_RULES } from "./aura-prompt";
 
 /* ------------------------------------------------------------------ */
 /* User & cultural profile                                             */
@@ -51,9 +52,46 @@ export const DEFAULT_PROFILE: UserProfile = {
 let _client: Anthropic | null = null;
 function client() {
   if (!_client) {
-    _client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+    _client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY, maxRetries: 1 });
   }
   return _client;
+}
+
+/** Aura's model. Env-configurable so cost and quality can be tuned without a deploy. */
+export const AURA_MODEL = process.env.AURA_MODEL ?? "claude-sonnet-5";
+
+/** Rough token budget for the conversation history sent each turn. */
+const HISTORY_TOKEN_BUDGET = Number(process.env.AURA_HISTORY_TOKENS ?? 6000);
+const MAX_HISTORY_TURNS = 40;
+
+function approxTokens(text: string): number {
+  return Math.ceil(text.length / 4);
+}
+
+function textOf(m: Anthropic.MessageParam): string {
+  if (typeof m.content === "string") return m.content;
+  return m.content.map((b) => ("text" in b && typeof b.text === "string" ? b.text : "")).join(" ");
+}
+
+/**
+ * Keeps the most recent turns within a token budget, always starting on a
+ * user turn and always ending on the latest user turn. A leading assistant
+ * greeting from the client is dropped because the API requires the first
+ * message to be from the user.
+ */
+export function trimHistory(messages: Anthropic.MessageParam[]): Anthropic.MessageParam[] {
+  let out = messages.slice(-MAX_HISTORY_TURNS);
+  while (out.length && out[0].role !== "user") out = out.slice(1);
+  let budget = HISTORY_TOKEN_BUDGET;
+  const kept: Anthropic.MessageParam[] = [];
+  for (let i = out.length - 1; i >= 0; i--) {
+    const cost = approxTokens(textOf(out[i]));
+    if (kept.length && budget - cost < 0) break;
+    budget -= cost;
+    kept.unshift(out[i]);
+  }
+  while (kept.length && kept[0].role !== "user") kept.shift();
+  return kept;
 }
 
 /* ------------------------------------------------------------------ */
@@ -247,17 +285,23 @@ interface ComposeArgs {
   legacyAddendum?: string;
 }
 
+/**
+ * Two parts: a STATIC prefix that is identical for every member using the
+ * same modes and channel (cached by the API), and a DYNAMIC suffix with the
+ * person's profile, memory, and any crisis script.
+ */
+export function composeSystemBlocks(args: ComposeArgs): { stable: string; dynamic: string } {
+  const stable = [MASTER_PROMPT, TALKING_RULES, STANCE_LIBRARY, ...(args.modeAddenda ?? [])];
+  if (args.legacyAddendum) stable.push(`# FEATURE-SPECIFIC INSTRUCTIONS\n${args.legacyAddendum}`);
+  if (args.voice) stable.push(VOICE_OVERLAY);
+  const dynamic = [buildCulturalBlock(args.profile), buildMemoryBlock(args.profile)];
+  if (args.crisisScript) dynamic.push(args.crisisScript);
+  return { stable: stable.join("\n\n"), dynamic: dynamic.join("\n\n") };
+}
+
 export function composeSystemPrompt(args: ComposeArgs): string {
-  const parts: string[] = [
-    MASTER_PROMPT,
-    buildCulturalBlock(args.profile),
-    buildMemoryBlock(args.profile),
-  ];
-  (args.modeAddenda ?? []).forEach((m) => parts.push(m));
-  if (args.legacyAddendum) parts.push(`# FEATURE-SPECIFIC INSTRUCTIONS\n${args.legacyAddendum}`);
-  if (args.voice) parts.push(VOICE_OVERLAY);
-  if (args.crisisScript) parts.push(args.crisisScript);
-  return parts.join("\n\n");
+  const { stable, dynamic } = composeSystemBlocks(args);
+  return `${stable}\n\n${dynamic}`;
 }
 
 // Backwards-compat for older callers (api/onboarding etc.).
@@ -273,9 +317,9 @@ export function streamChatResponse(
   messages: Anthropic.MessageParam[],
   profile: UserProfile,
   systemAddendum?: string,
-  opts?: { voice?: boolean; modeAddenda?: string[]; crisisScript?: string }
+  opts?: { voice?: boolean; modeAddenda?: string[]; crisisScript?: string; maxTokens?: number }
 ) {
-  const system = composeSystemPrompt({
+  const { stable, dynamic } = composeSystemBlocks({
     profile,
     modeAddenda: opts?.modeAddenda,
     crisisScript: opts?.crisisScript,
@@ -284,17 +328,20 @@ export function streamChatResponse(
   });
 
   return client().messages.stream({
-    model: "claude-sonnet-4-20250514",
-    max_tokens: 400,
+    model: AURA_MODEL,
+    max_tokens: opts?.maxTokens ?? (opts?.crisisScript ? 900 : 500),
     temperature: 0.6,
-    system,
-    messages,
+    system: [
+      { type: "text", text: stable, cache_control: { type: "ephemeral" } },
+      { type: "text", text: dynamic },
+    ],
+    messages: trimHistory(messages),
   });
 }
 
 export async function generateOnboardingReflection(profile: UserProfile): Promise<string> {
   const msg = await client().messages.create({
-    model: "claude-sonnet-4-20250514",
+    model: AURA_MODEL,
     max_tokens: 220,
     system:
       "You are Aura inside the Calm Therapist app. The user just finished onboarding. In 2-3 sentences, reflect back what you heard in warm, human language. Do not say 'I understand'. Be specific. Match their chosen tone. Show empathy through specificity, not performance.",

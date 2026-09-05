@@ -133,6 +133,9 @@ const NEGATED = /\b(i'?m\s+not|i\s+am\s+not|not\s+(feeling\s+)?suicidal|never\s+
 const PAST_RECOVERED = /\b(used\s+to\s+(be|feel)|was\s+suicidal\s+(in|back|years?|when)|years?\s+ago|in\s+20\d\d|back\s+then|not\s+anymore|i'?m\s+(ok|okay|fine|better)\s+now)\b/i;
 const IDIOMS = [
   /\b(end\s+(it|things)\s+with\s+(him|her|them|my|the|this))\b/i, // breakup
+  // A task or arrangement being ended, not a life.
+  /\b(deadline|project|assignment|exam|essay|shift|contract|lease|subscription|meeting|call|semester|course)\b[^.!?\n]{0,60}\b(end|ending|finish)\s+(it|things|this)\b/i,
+  /\b(end|ending|finish)\s+(it|things|this)\b[^.!?\n]{0,40}\b(deadline|project|assignment|exam|essay|shift|contract|lease|subscription|meeting|call|semester|course)\b/i,
   /\bkill(ing)?\s+(it|time|me\s+(with|how)|the\s+(vibe|mood|lights))\b/i,
   /\b(dying|dead)\s+(to|from)\s+(see|know|laugh|laughing|tired|exhaust)/i,
   /\b(disappear|get\s+away)\s+(for|to)\s+(a|the)\s+(weekend|week|day|beach|holiday|vacation|trip)\b/i,
