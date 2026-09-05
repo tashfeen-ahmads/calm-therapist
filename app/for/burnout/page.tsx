@@ -30,10 +30,10 @@ export default function BurnoutPage() {
         { href: "/features/reflect", label: "Monthly Reflect" },
         { href: "/features/voice", label: "Voice Agent" },
       ]}
-      testimonials={[
-        { name: "Tom, 38", text: "The monthly reflect feature showed me I've had the same argument with my wife twelve times this year. Seeing that pattern written down was the most useful thing any tool has ever done for me." },
-        { name: "Yusuf, 36", text: "I was running a team of 80. Calm Therapist saw the pattern in my weeks before I did. I cut three meetings and started sleeping again." },
-        { name: "Helen, 45", text: "I'd hit the wall before. This time I caught it. The weekly read was the part that mattered." },
+      moments={[
+        { title: "The same argument, again", text: "Aura can notice that this is the twelfth time this year the same fight has come up, and ask what is underneath it instead of refereeing it." },
+        { title: "The week that stopped making sense", text: "Sleep, meetings, weekends: patterns across weeks that are invisible from inside them. Aura holds the long view so you do not have to." },
+        { title: "Catching the wall before you hit it", text: "You have been here before. This time the signs are named early, in your own words from a few weeks ago." },
       ]}
       faqs={[
         { q: "Is burnout a real thing or just stress?", a: "Burnout is a recognised occupational phenomenon (WHO ICD-11). Calm Therapist treats it as a longitudinal pattern, not a single moment." },

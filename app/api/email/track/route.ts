@@ -1,3 +1,4 @@
+import { BRAND } from "@/lib/brand";
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { SESSION_COOKIE, verifySession } from "@/lib/auth";
@@ -5,7 +6,7 @@ import { scheduleEmail, cancelPendingFor } from "@/lib/email-queue";
 
 export const runtime = "nodejs";
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://calmtherapist.implenix.net";
+const APP_URL = BRAND.url;
 
 /**
  * Lifecycle signals from the app. Carries no conversation content: the

@@ -72,9 +72,9 @@ export default function HowItWorksPage() {
           <h2 style={{ marginBottom: 32 }}>Common questions</h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             {[
-              { q: "Is Calm Therapist a replacement for a human therapist?", a: "No. It is a companion alongside human care, not a substitute for it. If you have a clinician, you can export your record and bring it to sessions." },
+              { q: "Is Calm Therapist a replacement for a human therapist?", a: "No. It is a companion alongside human care, not a substitute for it. If you have a clinician, tell them what you and Aura have been working on; many people bring their patterns to sessions." },
               { q: "Does it train on my data?", a: "No. We do not train on your conversations. You can read the full architecture on the privacy page." },
-              { q: "What languages does it support?", a: "English, Spanish, and French at launch — with more rolling out as we get them right." },
+              { q: "What languages does it support?", a: "English, Urdu, Hindi, Arabic, Spanish, and French, including Roman Urdu and Hinglish. Aura switches when you do, mid-sentence." },
               { q: "Will I lose my data if I take a break?", a: "No. Calm Therapist holds your record indefinitely until you ask us to delete it. There is no streak system to lose." },
             ].map((f) => (
               <details key={f.q} className="card" style={{ padding: 24 }}>

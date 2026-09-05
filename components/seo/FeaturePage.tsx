@@ -2,6 +2,7 @@ import { Style } from "@/components/ui/Style";
 import Link from "next/link";
 import { PageShell } from "@/components/seo/PageShell";
 import { JsonLd, breadcrumbSchema } from "@/lib/seo";
+import { BRAND } from "@/lib/brand";
 
 export interface FeaturePageProps {
   slug: string;
@@ -19,7 +20,7 @@ export function FeaturePageTemplate(props: FeaturePageProps) {
     <PageShell>
       <JsonLd
         data={breadcrumbSchema([
-          { name: "Calm Therapist", path: "/" },
+          { name: BRAND.name, path: "/" },
           { name: "Features", path: "/features" },
           { name: props.label, path: `/features/${props.slug}` },
         ])}
@@ -90,13 +91,16 @@ export function FeaturePageTemplate(props: FeaturePageProps) {
 
       <section className="section">
         <div className="container" style={{ maxWidth: 880 }}>
-          <h3 style={{ marginBottom: 24 }}>Related</h3>
+          <h2 style={{ marginBottom: 24, fontSize: 32 }}>Related</h2>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
             {props.related.map((r) => (
               <Link key={r.href} href={r.href} className="btn-ghost">
                 {r.label}
               </Link>
             ))}
+            <Link href="/circles" className="btn-ghost">Circles</Link>
+            <Link href="/free-ai-therapist" className="btn-ghost">Free AI therapist</Link>
+            <Link href="/ai-therapist" className="btn-ghost">What an AI therapist is</Link>
           </div>
           <div style={{ marginTop: 48 }}>
             <Link href="/auth/signup" className="btn-primary">

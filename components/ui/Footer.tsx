@@ -6,33 +6,41 @@ import { BRAND } from "@/lib/brand";
 
 const productLinks = [
   { href: "/how-it-works", label: "How it works" },
-  { href: "/features", label: "Features" },
+  { href: "/features/chat", label: "Chat, free forever" },
+  { href: "/features/voice", label: "Voice" },
   { href: "/circles", label: "Circles" },
-  { href: "/#pricing", label: "Early access" },
+  { href: "/features/crisis", label: "Crisis safety" },
+  { href: "/features", label: "All features" },
+  { href: "/#pricing", label: "Founding members" },
 ];
 
-const resourcesLinks = [
-  { href: "/blog/why-ai-therapy-forgets-you", label: "Blog" },
-  { href: "/privacy", label: "Privacy" },
-  { href: "/for/anxiety", label: "For Anxiety" },
-  { href: "/for/depression", label: "For Depression" },
-  { href: "/for/grief", label: "For Grief" },
-  { href: "/for/burnout", label: "For Burnout" },
-  { href: "/for/relationships", label: "For Relationships" },
+const learnLinks = [
+  { href: "/ai-therapist", label: "AI therapist" },
+  { href: "/free-ai-therapist", label: "Free AI therapist" },
+  { href: "/what-is-an-ai-therapist", label: "What is an AI therapist?" },
+  { href: "/how-does-ai-therapy-work", label: "How AI therapy works" },
+  { href: "/is-ai-therapy-effective", label: "Is AI therapy effective?" },
+  { href: "/ai-therapist-vs-human-therapist", label: "AI vs human therapist" },
+  { href: "/ai-therapist-vs-chatgpt", label: "AI therapist vs ChatGPT" },
+  { href: "/ai-therapist-vs-betterhelp", label: "AI therapist vs BetterHelp" },
+  { href: "/ai-therapist-late-night", label: "An AI therapist at 2am" },
+  { href: "/ai-therapist-in-your-language", label: "In your language" },
+  { href: "/glossary", label: "Glossary" },
+  { href: "/blog", label: "Blog" },
+];
+
+const forLinks = [
+  { href: "/for/anxiety", label: "For anxiety" },
+  { href: "/for/depression", label: "For depression" },
+  { href: "/for/grief", label: "For grief" },
+  { href: "/for/burnout", label: "For burnout" },
+  { href: "/for/relationships", label: "For relationships" },
 ];
 
 const companyLinks = [
   { href: "/about", label: "About" },
   { href: "/privacy", label: "Privacy" },
   { href: "/terms", label: "Terms" },
-];
-
-const featureLinks = [
-  { href: "/features/voice", label: "Voice Agent" },
-  { href: "/features/chat", label: "Chat Agent" },
-  { href: "/features/journal", label: "Weekly Journal" },
-  { href: "/features/reflect", label: "Monthly Reflect" },
-  { href: "/features/crisis", label: "Crisis Safe" },
 ];
 
 export function Footer() {
@@ -42,7 +50,7 @@ export function Footer() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "1.4fr 1fr 1fr 1fr",
+            gridTemplateColumns: "1.3fr 1fr 1.1fr 1fr 0.8fr",
             gap: 48,
             marginBottom: 64,
           }}
@@ -62,8 +70,9 @@ export function Footer() {
             <SupportLink variant="footer" style={{ marginTop: 20, maxWidth: 300 }} />
           </div>
 
-          <FooterColumn title="Product" links={productLinks.concat(featureLinks)} />
-          <FooterColumn title="Resources" links={resourcesLinks} />
+          <FooterColumn title="Product" links={productLinks} />
+          <FooterColumn title="Learn" links={learnLinks} />
+          <FooterColumn title="For" links={forLinks} />
           <FooterColumn title="Company" links={companyLinks} />
         </div>
 

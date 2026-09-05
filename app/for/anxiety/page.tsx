@@ -30,17 +30,17 @@ export default function AnxietyPage() {
         { href: "/features/chat", label: "Chat Agent" },
         { href: "/features/journal", label: "Weekly Journal" },
       ]}
-      testimonials={[
-        { name: "Priya, 28", text: "The voice mode is the reason I keep coming back. I can't type when I'm anxious. But I can speak. And Calm Therapist listens without rushing me." },
-        { name: "Maya, 33", text: "It noticed I get worse on Tuesdays before I did. Just naming that has helped." },
-        { name: "Daniel, 29", text: "I used to dread therapy because I had to explain my whole life every time. Calm Therapist already knows. It's a different feeling." },
+      moments={[
+        { title: "When typing is impossible", text: "Hands shaking, chest tight, a thought that will not slow down. Voice is there for exactly that: you talk, Aura listens without rushing, and answers in a sentence or two." },
+        { title: "The pattern you cannot see from inside", text: "Worse on Tuesdays. Worse after calls with one person. Aura remembers the weeks and can say so, gently, when the pattern is real." },
+        { title: "Not explaining your whole life again", text: "Aura already knows the context you gave her. The conversation starts where you are, not where a form begins." },
       ]}
       faqs={[
         { q: "Is Calm Therapist a replacement for an anxiety therapist?", a: "No. Calm Therapist is a companion that helps you between sessions — or for moments where therapy isn't accessible. If you have a clinician, the longitudinal record is something you can share with them." },
         { q: "Does it help during a panic attack?", a: "Calm Therapist's voice mode is built for high-anxiety moments. It speaks slowly, uses grounding techniques, and never adds to your cognitive load. Crisis Safe activates automatically if your language indicates immediate danger." },
         { q: "Can it work without me typing?", a: "Yes. The voice agent uses ElevenLabs for natural conversation. You can have a full session without typing anything." },
         { q: "Will it remember my triggers?", a: "Yes. Memory is built into every mode. The longer you use Calm Therapist, the more accurately it understands your specific anxiety pattern." },
-        { q: "Is my data safe?", a: "Calm Therapist does not train on your conversations. Sessions are encrypted at rest. You can export or delete everything at any time." },
+        { q: "Is my data safe?", a: "Calm Therapist does not train on your conversations. Your record is stored for you, in your account, and you can delete everything at any time." },
       ]}
       related={[
         { href: "/for/depression", label: "For Depression" },

@@ -243,7 +243,7 @@ export function LeadPopup() {
                   )}
                 </form>
                 <p style={{ marginTop: 12, fontSize: 11, color: "var(--calm-ink-40)", lineHeight: 1.5 }}>
-                  We don&apos;t train on your messages. Backed by Implenix.
+                  We don&apos;t train on your messages. Chat is free, always.
                 </p>
               </>
             ) : (

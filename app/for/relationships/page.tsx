@@ -30,16 +30,16 @@ export default function RelationshipsPage() {
         { href: "/features/reflect", label: "Monthly Reflect" },
         { href: "/features/voice", label: "Voice Agent" },
       ]}
-      testimonials={[
-        { name: "Sara, 31", text: "It asked me how my sister was doing — the one I mentioned in passing two weeks ago. A human therapist has never done that." },
-        { name: "Tom, 38", text: "Twelve identical arguments in one year. I had no idea until Calm Therapist showed me." },
-        { name: "Imran, 33", text: "My wife and I are doing better. Mostly because I stopped making the same mistake every Sunday and didn't know it." },
+      moments={[
+        { title: "The sister you mentioned in passing", text: "Aura can ask how she is, weeks later, because she remembers. Small continuity is what makes the bigger conversations possible." },
+        { title: "Twelve identical arguments", text: "Seeing the shape of a repeated fight written down is different from living it. Aura can show you the shape without taking a side." },
+        { title: "The Sunday mistake", text: "The thing you do every Sunday without noticing. Named once, gently, it becomes something you can choose." },
       ]}
       faqs={[
         { q: "Can my partner use it too?", a: "Yes. Calm Therapist is single-user, but couples often each use it independently and bring insights back into the relationship." },
         { q: "Does it take sides?", a: "No. Calm Therapist's role is not to validate you against the other person. It surfaces patterns. What you do with them is yours." },
         { q: "Is it safe to talk about my partner here?", a: "Yes. Your data is encrypted and is never trained on. Only you see your sessions." },
-        { q: "Can I export and share with a couples therapist?", a: "Yes. The longitudinal record exports as PDF or JSON and can be a useful artefact in joint therapy." },
+        { q: "Can this help alongside couples therapy?", a: "Yes. The patterns Aura names over weeks can be a useful thing to bring into joint sessions, in your own words." },
         { q: "How long until I see a pattern?", a: "Most people see the first real pattern after three or four sessions. The Monthly Reflect is where the long-arc patterns become visible." },
       ]}
       related={[

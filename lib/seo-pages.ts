@@ -27,15 +27,131 @@ export interface SeoPage {
 
 const COMMON_RELATED = [
   { href: "/ai-therapist", label: "AI therapist — overview" },
+  { href: "/free-ai-therapist", label: "Free AI therapist" },
   { href: "/what-is-an-ai-therapist", label: "What is an AI therapist?" },
   { href: "/how-does-ai-therapy-work", label: "How does AI therapy work?" },
   { href: "/is-ai-therapy-effective", label: "Is AI therapy effective?" },
   { href: "/ai-therapist-vs-human-therapist", label: "AI vs human therapist" },
+  { href: "/ai-therapist-vs-chatgpt", label: "AI therapist vs ChatGPT" },
+  { href: "/ai-therapist-vs-betterhelp", label: "AI therapist vs BetterHelp" },
+  { href: "/ai-therapist-late-night", label: "An AI therapist at 2am" },
+  { href: "/ai-therapist-in-your-language", label: "In Urdu, Hindi, Arabic, Spanish, French" },
+  { href: "/circles", label: "Circles: small anonymous groups" },
 ];
 
 /* ---------- Pillar / cluster pages --------------------------------- */
 
 export const PAGES: Record<string, SeoPage> = {
+  "free-ai-therapist": {
+    slug: "free-ai-therapist",
+    title: "Free AI Therapist | Talk to Aura, No Card, No Session Cap — Calm Therapist",
+    description:
+      "A free AI therapist you can talk to any hour. Aura remembers you, pushes back kindly, never diagnoses, and shows the right crisis line for your country. Chat is free for everyone, always.",
+    h1: "A free AI therapist, without the catch.",
+    intro:
+      "Most \"free AI therapist\" apps are free for three messages, or free until the timer runs out, or free until you want the one feature that made you download it. Calm Therapist is different in one boring, important way: chat with Aura is free for everyone, with no session cap, no card, and no upgrade prompt in the middle of a hard night. The first 150 members also get voice and circles free for four months. This page says exactly what free means here, what it does not, and how we pay for it.",
+    sections: [
+      {
+        heading: "What free means here",
+        paragraphs: [
+          "Chat with Aura is free. Not free to start, not free for a trial, free. You can write to her at 2am and at 2pm, about the same thing or a different one, and nothing counts down. Your record is kept for you and only you, and Aura remembers what you told her last week when you come back.",
+        ],
+        bullets: [
+          "No session cap, no daily message limit, no timer",
+          "No card at sign-up, no upgrade wall inside a conversation",
+          "Memory across every conversation, so you never re-explain",
+          "Crisis-aware from the first message, with the line for your country",
+          "English, Urdu, Hindi, Arabic, Spanish, and French",
+        ],
+      },
+      {
+        heading: "What the founding 150 get on top",
+        paragraphs: [
+          "The first 150 members get everything free for four months from their own sign-up date: voice sessions when typing is too much, and a seat in circles when they open. After the founding period, voice and circles are part of an open space shown inside the app. Chat stays free. We do not print prices on this site because the search you made was for a free AI therapist, and that is what the chat is.",
+        ],
+      },
+      {
+        heading: "How a free AI therapist can afford to exist",
+        paragraphs: [
+          "Two ways. Members who find it useful can support the creator through a voluntary link in the app, and that unlocks nothing, on purpose. Later, voice and circles carry a price inside the dashboard for people who want them. Chat costs us fractions of a cent per conversation, so keeping it free is a choice we can keep.",
+          "What we do not do: sell your data, show ads, or train a model on what you tell Aura. If any of those ever paid for this, it would not be worth having.",
+        ],
+      },
+      {
+        heading: "What free does not mean",
+        paragraphs: [
+          "Free does not mean a licensed therapist. Aura is support: a place to think out loud, be heard, and see your own patterns. She does not diagnose or prescribe, and she says plainly when a professional is the right next step. Free also does not mean an emergency service. If you are in immediate danger, contact your local emergency number first; Aura will show you the crisis line for your country the moment it matters.",
+        ],
+      },
+      {
+        heading: "How it compares to other free options",
+        paragraphs: [
+          "A general chatbot is free too, and it forgets you every time, agrees with whatever you frame, and has no crisis pathway. A free trial of a therapy app ends. A helpline is for a crisis, not for the ordinary Tuesday that is slowly going wrong. Calm Therapist is built for the space between: the recurring thought, the argument you are rehearsing, the night you cannot switch off. Read the comparison pages linked below if you want the detail.",
+        ],
+      },
+    ],
+    faqs: [
+      { q: "Is the free AI therapist really unlimited?", a: "Yes. Chat with Aura has no session cap and no daily limit. We rate-limit only to stop abuse, at a level no person talking normally will ever reach." },
+      { q: "Do I need a card to sign up?", a: "No. An email and a password, or Google sign-in. Nothing is charged, and nothing can be charged, because there is nothing for sale on this site." },
+      { q: "What is free after the first 150 members?", a: "Chat, always. Voice and circles become part of an open space shown inside the app. Founding members keep their full access for four months from sign-up." },
+      { q: "Is it free in my language?", a: "Yes. Aura works in English, Urdu, Hindi, Arabic, Spanish, and French at no charge, and switches when you do." },
+      { q: "Is a free AI therapist safe to use?", a: "Aura runs every message through a safety layer that reads six languages, shows the crisis line for your country when something serious surfaces, and stays careful for the rest of the conversation. She is not an emergency service; for immediate danger, call your local emergency number." },
+    ],
+    related: COMMON_RELATED,
+    ctaLine: "Say one sentence on the homepage. No signup, no card, one reply.",
+  },
+
+  "ai-therapist-in-your-language": {
+    slug: "ai-therapist-in-your-language",
+    title: "AI Therapist in Urdu, Hindi, Arabic, Spanish, French | Calm Therapist",
+    description:
+      "An AI therapist that speaks your language and switches when you do: Urdu, Hindi, Arabic, Spanish, French, English, and the mix between. Built for diaspora families, not a Western template.",
+    h1: "An AI therapist that speaks the way you do at home.",
+    intro:
+      "Most mental-health apps are written in English, think in English, and assume a Western family. If you grew up between languages, that is a wall before the first sentence. Aura works in English, Urdu, Hindi, Arabic, Spanish, and French, reads Roman Urdu and Hinglish, and switches mid-sentence when you do. More importantly, she does not treat your family as a problem to set boundaries with.",
+    sections: [
+      {
+        heading: "Switch mid-sentence. Aura follows.",
+        paragraphs: [
+          "Write the first half in English and the feeling in Urdu. Type Hindi in Roman letters because that is how you text. Drop an Arabic phrase your mother uses. Aura answers in the language you wrote, and if you switch, she switches. There is no language setting to get right first.",
+        ],
+        bullets: [
+          "English, Urdu, Hindi, Arabic, Spanish, French",
+          "Roman Urdu, Hinglish, and code-switching in one message",
+          "Replies match your register, not a translated script",
+        ],
+      },
+      {
+        heading: "Safety that reads your language too",
+        paragraphs: [
+          "This is the part most multilingual apps skip. Aura's safety layer looks for risk in every supported language, including the quiet phrasings people actually use, and shows the crisis line for the country you live in, not a number from somewhere else. If something serious surfaces in Urdu at 2am, it is caught in Urdu at 2am.",
+        ],
+      },
+      {
+        heading: "Your family is not a diagnosis",
+        paragraphs: [
+          "A Western template says: set boundaries, use I-statements, prioritise yourself. In a communal family that advice is often wrong, and it lands as one more person who does not understand. Aura reads the cultural profile you give her: family system, diaspora status, how much stigma sits around all of this where you are. Guilt about resting while your parents worked two jobs is treated as real, not as a distortion to correct.",
+          "Body-first ways of saying you are not okay, the headache, the tiredness, the stomach, are heard as what they are. Aura does not redirect you to \"the real feeling\" as if the body were a detour.",
+        ],
+      },
+      {
+        heading: "Circles in your language and your background",
+        paragraphs: [
+          "When circles open, Aura groups small anonymous rooms by theme and, where the numbers allow, by language and background: saying no to family, comparison with cousins, being far from home, money guilt. Seven people who know exactly what \"we didn't come here to be lazy\" sounds like, without anyone having to explain it.",
+        ],
+      },
+    ],
+    faqs: [
+      { q: "Which languages does the AI therapist support?", a: "English, Urdu, Hindi, Arabic, Spanish, and French, including Roman Urdu and Hinglish. Aura replies in the language you write and switches when you do." },
+      { q: "Does voice work in my language?", a: "Voice follows the same profile as chat. Quality varies by language and accent; chat is the most reliable place to start in Urdu, Hindi, or Arabic." },
+      { q: "Is the crisis line for my country?", a: "Yes. Aura shows the crisis line for the country in your profile, never a default from elsewhere. If you have not set a country, she shows international options and asks." },
+      { q: "Does Aura understand cultural context, or just translate?", a: "She reads the profile you give her: family system, diaspora status, stigma, and how you express distress. Advice is adapted to that, not translated from a Western default." },
+      { q: "Is this free?", a: "Chat with Aura is free for everyone, in every supported language. The first 150 members also get voice and circles free for four months." },
+    ],
+    related: COMMON_RELATED,
+    ctaLine: "Write the first sentence in whichever language it comes in.",
+  },
+
   "ai-therapist": {
     slug: "ai-therapist",
     title: "AI Therapist | A Quiet Place to Think Out Loud — Calm Therapist",
@@ -66,7 +182,7 @@ export const PAGES: Record<string, SeoPage> = {
       {
         heading: "Privacy you can verify",
         paragraphs: [
-          "We do not train models on your conversations. Sessions are encrypted at rest. You can export everything in one click and delete everything in one click. Read the full architecture on our privacy page.",
+          "We do not train models on your conversations. Your record is stored for you, in your account, and you can delete everything in one click. Read the full architecture on our privacy page.",
         ],
       },
     ],
@@ -147,7 +263,7 @@ export const PAGES: Record<string, SeoPage> = {
       },
     ],
     faqs: [
-      { q: "Does AI therapy use ChatGPT?", a: "Calm Therapist runs on OpenAI's GPT-5.4 mini — and the difference is the prompt, memory, and safety architecture wrapped around it. The model is one input; the system is the product." },
+      { q: "Does AI therapy use ChatGPT?", a: "Calm Therapist runs on a model from OpenAI — and the difference is the prompt, memory, and safety architecture wrapped around it. The model is one input; the system is the product." },
       { q: "Is the memory accurate?", a: "It's only as accurate as what you've shared. If you contradict something, the system updates — you're always the source of truth." },
       { q: "Does AI therapy follow CBT or DBT?", a: "Calm Therapist draws from CBT, DBT, ACT and IFS, and adapts to the user — it doesn't impose one framework." },
     ],
@@ -185,7 +301,7 @@ export const PAGES: Record<string, SeoPage> = {
     ],
     faqs: [
       { q: "Can AI therapy replace a human therapist?", a: "No. It can be a companion alongside human care, or a useful first step toward it. For serious or persistent issues, see a clinician." },
-      { q: "How long until I notice an effect?", a: "People typically report feeling more clarity within two or three conversations. The compounding benefit comes from having continuity over weeks." },
+      { q: "How long until I notice an effect?", a: "Many people notice more clarity after the first few conversations. The compounding benefit comes from continuity over weeks: Aura remembers, so each conversation starts further along." },
       { q: "Is the evidence for AI therapy peer-reviewed?", a: "Some early trials are. The field is young; expect more in the next two to three years." },
     ],
     related: COMMON_RELATED,
@@ -221,8 +337,8 @@ export const PAGES: Record<string, SeoPage> = {
       },
     ],
     faqs: [
-      { q: "Is an AI therapist cheaper than a human therapist?", a: "Yes — meaningfully. Chat with Calm Therapist is free, while a single human session is typically $100–$300. The math doesn't make AI a replacement; it makes both possible." },
-      { q: "Can my therapist see what I told the AI?", a: "Only if you choose to share it. Calm Therapist exports cleanly to PDF or CSV." },
+      { q: "Is an AI therapist cheaper than a human therapist?", a: "Chat with Calm Therapist is free, with no session cap, while human therapy is priced per session. That does not make AI a replacement; it makes both possible, and it makes something available on the nights nothing else is." },
+      { q: "Can my therapist see what I told the AI?", a: "Only if you choose to tell them. Your record is yours, and nothing leaves your account unless you copy it out yourself." },
       { q: "Will my human therapist be offended?", a: "A good clinician welcomes anything that helps you between sessions, including this." },
     ],
     related: COMMON_RELATED,
@@ -253,7 +369,7 @@ export const PAGES: Record<string, SeoPage> = {
       {
         heading: "Honest cost comparison",
         paragraphs: [
-          "BetterHelp is roughly $260–$400 a month for weekly sessions. Calm Therapist chat is free, with no session cap. They are different products. Use whichever fits your situation, or use both — many people do.",
+          "BetterHelp charges a monthly subscription for weekly sessions with a licensed counsellor. Calm Therapist chat is free, with no session cap, and is not a licensed service. They are different products. Use whichever fits your situation, or use both — many people do.",
         ],
       },
     ],
@@ -296,8 +412,8 @@ export const PAGES: Record<string, SeoPage> = {
     ],
     faqs: [
       { q: "Can I just use ChatGPT instead?", a: "You can, and many people do. We'd suggest reading our piece on what makes that risky for therapeutic conversation specifically." },
-      { q: "Is Calm Therapist using ChatGPT under the hood?", a: "We run on the same family of OpenAI models, but not the ChatGPT product. The difference is the system around it: prompt, memory, and safety classifier." },
-      { q: "Why not use Claude directly?", a: "Same reason — without memory, prompt, and safety, the model is a model. The product is everything around it." },
+      { q: "Is Calm Therapist using ChatGPT under the hood?", a: "We use a model from OpenAI, but not the ChatGPT product. The difference is the system around it: prompt, memory, cultural profile, and a safety classifier that reads six languages." },
+      { q: "Why not use any general chatbot directly?", a: "Same reason — without memory, prompt, and safety, a model is a model. The product is everything around it, and the crisis pathway is the part a general chatbot does not have." },
     ],
     related: COMMON_RELATED,
     ctaLine: "See the difference in one sentence on the landing page.",

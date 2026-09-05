@@ -1,3 +1,4 @@
+import { BRAND } from "@/lib/brand";
 import { NextResponse } from "next/server";
 import { createUser, setVerifyToken } from "@/lib/users";
 import { buildSessionCookie, cookieDomainFor, isAdminEmail, signSession } from "@/lib/auth";
@@ -7,7 +8,7 @@ import { getTemplate } from "@/lib/email-templates";
 
 export const runtime = "nodejs";
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://calmtherapist.implenix.net";
+const APP_URL = BRAND.url;
 
 export async function POST(req: Request) {
   let body: { email?: string; password?: string; name?: string };

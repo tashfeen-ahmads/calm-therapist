@@ -1,3 +1,4 @@
+import { BRAND } from "@/lib/brand";
 import { NextResponse } from "next/server";
 import { setResetToken } from "@/lib/users";
 import { sendEmail } from "@/lib/email";
@@ -6,7 +7,7 @@ import { identifierFor, rateLimit } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://calmtherapist.implenix.net";
+const APP_URL = BRAND.url;
 
 /**
  * Issue a password-reset link. Always returns 200 (even if the email isn't

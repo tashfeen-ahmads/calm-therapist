@@ -59,20 +59,17 @@ export default function TermsPage() {
             </ul>
           </Section>
 
-          <Section title="Subscriptions and billing">
+          <Section title="Free access and support">
             <p>
-              Paid plans (monthly and yearly) renew automatically until you cancel. You can pause
-              or cancel anytime from <Link href="/dashboard/settings" style={{ color: "var(--calm-forest)" }}>Settings</Link>.
-              Cancellations take effect at the end of the current billing period — we don&apos;t prorate
-              partial periods.
+              Chat with Aura is free. The first founding members also receive voice and circles at no
+              charge for a fixed period from their sign-up date, shown in{" "}
+              <Link href="/dashboard/settings" style={{ color: "var(--calm-forest)" }}>Settings</Link>.
+              When paid options are introduced they will be shown inside the app before anything is
+              charged, and nothing renews without your explicit agreement.
             </p>
             <p>
-              Voice top-ups are one-time charges and non-refundable once applied to your quota.
-              Subscription refunds are handled case-by-case within 14 days of charge — write to us.
-            </p>
-            <p>
-              Prices can change. We&apos;ll email you at least 14 days before any price change affects
-              your renewal.
+              Contributions made through the &ldquo;support the creator&rdquo; link are voluntary gifts
+              processed by a third party. They do not unlock features and are not refundable by us.
             </p>
           </Section>
 
@@ -144,8 +141,8 @@ export default function TermsPage() {
           <Section title="Contact">
             <p>
               Questions, disputes, or just want to talk to a human? Email{" "}
-              <a href="mailto:hello@calmtherapist.implenix.net" style={{ color: "var(--calm-forest)" }}>
-                hello@calmtherapist.implenix.net
+              <a href="mailto:hello@calm-therapist.netlify.app" style={{ color: "var(--calm-forest)" }}>
+                hello@calm-therapist.netlify.app
               </a>
               .
             </p>

@@ -11,10 +11,9 @@ export function PrivacyBlock() {
           <ItalicLine>Share your data without your knowledge.</ItalicLine>
         </div>
         <p className="body-base" style={{ color: "var(--calm-ink-40)", lineHeight: 1.8 }}>
-          Calm Therapist runs on session-level encryption. We do not train models on your messages.
-          You can export everything you&apos;ve ever said, anytime. You can delete it all in one
-          click. We are committed to GDPR and HIPAA-aligned data handling, and we keep our promises
-          in the open.
+          Your conversations are stored for you, in your account, and used only so Aura can
+          remember you. We never sell your data and never train a model on it. You can delete
+          everything in one click from Settings. We keep our promises in the open.
         </p>
         <Link
           href="/privacy"

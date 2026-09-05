@@ -2,6 +2,7 @@ import Link from "next/link";
 import { PageShell } from "@/components/seo/PageShell";
 import { JsonLd, breadcrumbSchema, faqSchema } from "@/lib/seo";
 import type { SeoPage } from "@/lib/seo-pages";
+import { BRAND } from "@/lib/brand";
 
 interface Props {
   page: SeoPage;
@@ -14,7 +15,7 @@ export function SeoLongPage({ page, path }: Props) {
     <PageShell>
       <JsonLd
         data={breadcrumbSchema([
-          { name: "Calm Therapist", path: "/" },
+          { name: BRAND.name, path: "/" },
           { name: page.h1, path },
         ])}
       />
@@ -23,7 +24,7 @@ export function SeoLongPage({ page, path }: Props) {
       <article className="section">
         <div className="container" style={{ maxWidth: 760 }}>
           <p className="micro-label micro-label-bordered" style={{ marginBottom: 24 }}>
-            Calm Therapist
+            {BRAND.name}
           </p>
           <h1 style={{ marginBottom: 24, fontSize: 56, lineHeight: 1.1 }}>{page.h1}</h1>
           <p className="body-large" style={{ color: "var(--calm-ink-70)", marginBottom: 48 }}>
@@ -102,7 +103,7 @@ export function SeoLongPage({ page, path }: Props) {
               Related
             </p>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-              {page.related.map((r) => (
+              {page.related.filter((r) => r.href !== path).map((r) => (
                 <Link key={r.href} href={r.href} className="btn-ghost">
                   {r.label}
                 </Link>

@@ -31,7 +31,7 @@ export function Pricing() {
             badge={`First ${FOUNDING_CAP}`}
             features={[
               "Unlimited chat with Aura",
-              "Voice sessions, fair-use 60 minutes a month",
+              "Voice sessions when typing is too much",
               "A seat in circles when they open",
               "Your record, kept and yours",
               "Crisis-aware from message one",
@@ -46,7 +46,7 @@ export function Pricing() {
             features={[
               "Unlimited chat with Aura, always free",
               "Voice and circles become part of an open space",
-              "Founding members keep a permanent discount",
+              "Founding members are remembered as founding members",
               "Prices are shown inside your dashboard, never here",
             ]}
             cta="Start with chat"

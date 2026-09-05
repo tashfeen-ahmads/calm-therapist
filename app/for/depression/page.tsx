@@ -30,17 +30,17 @@ export default function DepressionPage() {
         { href: "/features/journal", label: "Weekly Journal" },
         { href: "/features/reflect", label: "Monthly Reflect" },
       ]}
-      testimonials={[
-        { name: "James, 41", text: "I don't do therapy. I never have. But Calm Therapist doesn't feel like therapy. It feels like finally having somewhere to think out loud." },
-        { name: "Aisha, 27", text: "I disappeared for three weeks. When I came back, Calm Therapist remembered everything. I didn't have to explain why I'd been gone. I just kept going." },
-        { name: "Noah, 35", text: "The Monthly Reflect saved me. I'd convinced myself nothing had changed. Then I read my own quotes and saw I was wrong." },
+      moments={[
+        { title: "Somewhere to think out loud", text: "Not therapy vocabulary, not a form. A place to put the thought down and have it heard back, at any hour." },
+        { title: "Coming back after three weeks", text: "No streak lost, no explanation owed. Aura remembers where you were and picks up there." },
+        { title: "Reading your own words back", text: "When you are sure nothing has changed, your own sentences from a month ago can say otherwise." },
       ]}
       faqs={[
         { q: "I can't keep up with apps. Will this be different?", a: "Calm Therapist has no streak system. There is no shame in coming back after weeks away. The agent remembers, and meets you where you are." },
         { q: "Is it safe if I'm having dark thoughts?", a: "Calm Therapist's Crisis Safe protocol activates automatically when language indicates suicidal ideation or self-harm. It will not minimise. It will surface verified resources for your region." },
         { q: "How is this different from a journaling app?", a: "Journaling apps are passive. Calm Therapist actively reads what you write across all modes and reflects patterns back to you in plain language." },
-        { q: "Can I export my history if I want to share it with a therapist?", a: "Yes. You can export your full record as a structured PDF or JSON, anytime." },
-        { q: "Does it work in languages other than English?", a: "Yes. Calm Therapist works in English, Spanish, and French, with more languages rolling out as we get them right." },
+        { q: "Can I share what I have worked on with a therapist?", a: "Yes. Your record is yours to read and tell them about. Many people bring the patterns Aura has named into their sessions." },
+        { q: "Does it work in languages other than English?", a: "Yes. Aura works in English, Urdu, Hindi, Arabic, Spanish, and French, and switches when you do, mid-sentence." },
       ]}
       related={[
         { href: "/for/anxiety", label: "For Anxiety" },

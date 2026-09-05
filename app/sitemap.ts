@@ -2,8 +2,9 @@ import type { MetadataRoute } from "next";
 import { POSTS } from "@/lib/blog";
 import { MODE_LIST } from "@/lib/features";
 import { PAGES, GLOSSARY } from "@/lib/seo-pages";
+import { BRAND } from "@/lib/brand";
 
-const BASE = process.env.NEXT_PUBLIC_APP_URL ?? "https://calmtherapist.implenix.net";
+const BASE = BRAND.url;
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
@@ -13,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/how-it-works", priority: 0.9, freq: "monthly" },
     { path: "/features", priority: 0.85, freq: "monthly" },
     { path: "/circles", priority: 0.9, freq: "weekly" },
+    { path: "/blog", priority: 0.7, freq: "weekly" },
     { path: "/about", priority: 0.7, freq: "monthly" },
     { path: "/privacy", priority: 0.6, freq: "monthly" },
     { path: "/terms", priority: 0.5, freq: "monthly" },

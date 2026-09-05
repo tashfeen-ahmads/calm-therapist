@@ -98,8 +98,12 @@ export default function CirclesPage() {
               </div>
             ))}
           </div>
-          <div style={{ marginTop: 40 }}>
+          <div style={{ marginTop: 40, display: "flex", gap: 12, flexWrap: "wrap" }}>
             <Link href="/auth/signup" className="btn-primary">Reserve a seat</Link>
+            <Link href="/free-ai-therapist" className="btn-ghost">Free AI therapist</Link>
+            <Link href="/ai-therapist-in-your-language" className="btn-ghost">In your language</Link>
+            <Link href="/features/crisis" className="btn-ghost">How safety works</Link>
+            <Link href="/how-it-works" className="btn-ghost">How it all works</Link>
           </div>
         </div>
       </section>
