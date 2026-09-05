@@ -9,7 +9,11 @@ const { spawnSync } = require("child_process");
 
 // Prefer a direct (unpooled) connection for migrations when the host provides one.
 const url =
-  process.env.NETLIFY_DATABASE_URL_UNPOOLED || process.env.DATABASE_URL || process.env.NETLIFY_DATABASE_URL;
+  process.env.NETLIFY_DATABASE_URL_UNPOOLED ||
+  process.env.DATABASE_DIRECT_URL ||
+  process.env.DATABASE_URL ||
+  process.env.NETLIFY_DB_URL ||
+  process.env.NETLIFY_DATABASE_URL;
 
 if (!url) {
   console.log("[migrate] no database URL set; skipping prisma migrate deploy.");
