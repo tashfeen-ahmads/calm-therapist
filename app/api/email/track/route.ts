@@ -7,11 +7,12 @@ export const runtime = "nodejs";
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://calmtherapist.implenix.net";
 
-type Event =
-  | { kind: "session-ended"; reflection?: string }
-  | { kind: "crisis-flagged"; tier: number }
-  | { kind: "topup-completed"; amountUsd: number }
-  | { kind: "user-active" };
+/**
+ * Lifecycle signals from the app. Carries no conversation content: the
+ * after-first email is sent once per member, the crisis follow-up is
+ * de-duplicated, and receipts are only ever created by the payment webhook.
+ */
+type Event = { kind: "session-ended" } | { kind: "crisis-flagged"; tier: number } | { kind: "user-active" };
 
 export async function POST(req: Request) {
   const claims = await verifySession(cookies().get(SESSION_COOKIE)?.value);
@@ -25,36 +26,20 @@ export async function POST(req: Request) {
   }
 
   const ctx = { name: claims.name, email: claims.email, appUrl: APP_URL };
+  const base = { userId: claims.sub, to: claims.email, ctx };
 
   switch (body.kind) {
     case "session-ended": {
-      await scheduleEmail({
-        userId: claims.sub,
-        to: claims.email,
-        templateKey: "after-first",
-        ctx: { ...ctx, reflection: body.reflection },
-      });
-      await cancelPendingFor(claims.sub, "inactive-3d");
-      await cancelPendingFor(claims.sub, "inactive-7d");
-      await cancelPendingFor(claims.sub, "inactive-30d");
-      await scheduleEmail({ userId: claims.sub, to: claims.email, templateKey: "inactive-3d", ctx, replaceExisting: true });
-      await scheduleEmail({ userId: claims.sub, to: claims.email, templateKey: "inactive-7d", ctx, replaceExisting: true });
-      await scheduleEmail({ userId: claims.sub, to: claims.email, templateKey: "inactive-30d", ctx, replaceExisting: true });
+      await scheduleEmail({ ...base, templateKey: "after-first", once: true });
+      await scheduleEmail({ ...base, templateKey: "inactive-3d", replaceExisting: true });
+      await scheduleEmail({ ...base, templateKey: "inactive-7d", replaceExisting: true });
+      await scheduleEmail({ ...base, templateKey: "inactive-30d", replaceExisting: true });
       break;
     }
     case "crisis-flagged": {
-      if (body.tier >= 2) {
-        await scheduleEmail({ userId: claims.sub, to: claims.email, templateKey: "crisis-followup-24h", ctx });
+      if (Number(body.tier) >= 2) {
+        await scheduleEmail({ ...base, templateKey: "crisis-followup-24h", replaceExisting: true });
       }
-      break;
-    }
-    case "topup-completed": {
-      await scheduleEmail({
-        userId: claims.sub,
-        to: claims.email,
-        templateKey: "topup-receipt",
-        ctx: { ...ctx, topupAmountUsd: body.amountUsd },
-      });
       break;
     }
     case "user-active": {
@@ -63,6 +48,8 @@ export async function POST(req: Request) {
       await cancelPendingFor(claims.sub, "inactive-30d");
       break;
     }
+    default:
+      return NextResponse.json({ error: "Unknown event" }, { status: 400 });
   }
 
   return NextResponse.json({ ok: true });

@@ -4,7 +4,7 @@ import { AdminShell } from "@/components/admin/AdminShell";
 import { SESSION_COOKIE, verifySession } from "@/lib/auth";
 import { getUserById } from "@/lib/users";
 
-export const metadata = { title: "Admin · Calm Therapist", robots: { index: false, follow: false } };
+export const metadata = { title: { absolute: "Admin · Calm Therapist" }, robots: { index: false, follow: false } };
 export const dynamic = "force-dynamic";
 
 /**

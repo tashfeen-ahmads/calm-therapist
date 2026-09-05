@@ -12,7 +12,8 @@ interface PageMetaArgs {
 export function pageMetadata({ title, description, path, ogImage = "/og-image.png" }: PageMetaArgs): Metadata {
   const url = `${BASE_URL}${path}`;
   return {
-    title,
+    // Absolute: page titles already carry the brand, so the root template must not append it again.
+    title: { absolute: title },
     description,
     alternates: { canonical: url },
     openGraph: {

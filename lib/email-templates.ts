@@ -34,6 +34,23 @@ export interface TemplateCtx {
   topupAmountUsd?: number;
   /** Verify or reset link path with token already appended. */
   actionUrl?: string;
+  /** One-click unsubscribe link, set by the queue for marketing-class mail. */
+  unsubscribeUrl?: string;
+}
+
+/** Templates that must always be sent regardless of email preferences. */
+const TRANSACTIONAL: ReadonlySet<EmailKey> = new Set<EmailKey>(["verify-email", "password-reset", "topup-receipt"]);
+export function isTransactional(key: EmailKey): boolean {
+  return TRANSACTIONAL.has(key);
+}
+
+function escapeHtml(v: string): string {
+  return v.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+
+/** Escapes every free-text field before it reaches a template. URLs are left as-is. */
+function safeCtx(ctx: TemplateCtx): TemplateCtx {
+  return { ...ctx, name: escapeHtml(ctx.name ?? "").slice(0, 60) || "there", reflection: undefined };
 }
 
 const wrap = (title: string, body: string) => `
@@ -358,8 +375,28 @@ ${appUrl}/dashboard/reflect
   },
 };
 
+const FOOTER_MARK = "Reply if you want to talk to a real person.";
+
+function withFooter(html: string, unsubscribeUrl?: string): string {
+  if (!unsubscribeUrl) return html;
+  return html.replace(
+    FOOTER_MARK,
+    `${FOOTER_MARK} <a href="${unsubscribeUrl}" style="color:#7C7C7C;text-decoration:underline;">Unsubscribe from check-ins</a>.`
+  );
+}
+
 export function getTemplate(key: EmailKey): EmailTemplate {
-  return TEMPLATES[key];
+  const tpl = TEMPLATES[key];
+  if (!tpl) throw new Error(`Unknown email template: ${key}`);
+  return {
+    ...tpl,
+    build(ctx: TemplateCtx) {
+      const safe = safeCtx(ctx);
+      const built = tpl.build(safe);
+      const text = ctx.unsubscribeUrl && !isTransactional(key) ? `${built.text}\n\nUnsubscribe from check-ins: ${ctx.unsubscribeUrl}` : built.text;
+      return { subject: built.subject, text, html: withFooter(built.html, isTransactional(key) ? undefined : ctx.unsubscribeUrl) };
+    },
+  };
 }
 
 export const ALL_TEMPLATES: EmailTemplate[] = Object.values(TEMPLATES);
