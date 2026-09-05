@@ -49,7 +49,7 @@ export default function AboutPage() {
           <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 16 }}>
             <Belief>The thing that makes therapy work is memory.</Belief>
             <Belief>Empathy is not a script. It is specificity.</Belief>
-            <Belief>Mental health support should be available in more than English.</Belief>
+            <Belief>Support should speak your language: Urdu, Hindi, Arabic, Spanish, French, and the mix between.</Belief>
             <Belief>Men should not have to learn therapy vocabulary to get help.</Belief>
             <Belief>A safe AI is one that knows the limits of its own competence.</Belief>
             <Belief>Your data is yours. Always.</Belief>

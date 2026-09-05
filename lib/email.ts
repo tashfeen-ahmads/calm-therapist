@@ -1,3 +1,4 @@
+import { BRAND } from "./brand";
 /**
  * Email send wrapper. If RESEND_API_KEY is set, real emails go through Resend.
  * If not, we log, and report ok:false in production so nothing is marked
@@ -14,8 +15,8 @@ interface SendOpts {
   headers?: Record<string, string>;
 }
 
-const FROM_DEFAULT = process.env.EMAIL_FROM ?? "Aura at Calm Therapist <hello@calmtherapist.implenix.net>";
-const REPLY_TO = process.env.EMAIL_REPLY_TO ?? "hello@calmtherapist.implenix.net";
+const FROM_DEFAULT = process.env.EMAIL_FROM ?? `Aura at ${BRAND.name} <hello@${new URL(BRAND.url).hostname}>`;
+const REPLY_TO = process.env.EMAIL_REPLY_TO ?? `hello@${new URL(BRAND.url).hostname}`;
 
 export async function sendEmail(opts: SendOpts): Promise<{ ok: boolean; error?: string }> {
   const key = process.env.RESEND_API_KEY;

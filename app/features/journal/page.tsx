@@ -37,7 +37,7 @@ export default function JournalModePage() {
       body={[
         "Most therapy apps treat journaling as a feature. Calm Therapist treats it as the connective tissue. Every chat and voice session is automatically pulled into the weekly journal — you don't have to remember anything to use it.",
         "The Weekly Journal is the only place where Calm Therapist will surface emotional themes proactively. You'll see a pattern named — gently, in your own words back to you. Sometimes that's the first time you've seen it.",
-        "Your journal is yours. You can edit it, export it as a clean PDF, and delete any entry. Calm Therapist will never publish, share, or train on what you write here. That promise is the foundation of why journaling works in the first place.",
+        "Your journal is yours. You can edit it and delete any entry. Calm Therapist will never publish, share, or train on what you write here. That promise is the foundation of why journaling works in the first place.",
         "Used together with the Monthly Reflect, the journal becomes a longitudinal record — not of \"progress\", but of presence. Calm Therapist isn't here to make you better. It's here to make you visible to yourself.",
       ]}
     />

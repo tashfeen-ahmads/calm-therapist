@@ -79,7 +79,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
 
       <section style={{ background: "var(--calm-mist)", padding: "80px 24px" }}>
         <div className="container" style={{ maxWidth: 880 }}>
-          <h3 style={{ marginBottom: 32 }}>Related articles</h3>
+          <h2 style={{ marginBottom: 32, fontSize: 32 }}>Related articles</h2>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }} className="related-grid">
             {post.related.map((r) => (
               <Link

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
+import { BRAND } from "./brand";
 
-const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://calmtherapist.implenix.net";
+const BASE_URL = BRAND.url;
 
 interface PageMetaArgs {
   title: string;
@@ -32,13 +33,12 @@ export function organizationSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Calm Therapist",
+    name: BRAND.name,
     url: BASE_URL,
     logo: `${BASE_URL}/og-image.png`,
-    parentOrganization: { "@type": "Organization", name: "Implenix", url: "https://implenix.net" },
-    sameAs: ["https://implenix.net"],
-    description:
-      "Calm Therapist is an AI therapy platform that remembers every session, supports voice, chat, journaling, and crisis safety, and is backed by Implenix.",
+    parentOrganization: { "@type": "Organization", name: BRAND.parent.name, url: BRAND.parent.url },
+    sameAs: [BRAND.parent.url],
+    description: BRAND.description,
   };
 }
 
@@ -83,13 +83,29 @@ export function howToSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "HowTo",
-    name: "How Calm Therapist Works",
+    name: `How ${BRAND.name} works`,
     step: [
-      { "@type": "HowToStep", position: 1, name: "Tell Calm Therapist who you are", text: "Onboard in 5 minutes — share what's on your mind, your goals, and how you want to be spoken to." },
-      { "@type": "HowToStep", position: 2, name: "Choose your mode", text: "Voice, chat, or journaling — switch any time." },
-      { "@type": "HowToStep", position: 3, name: "Build a longitudinal record", text: "Every session feeds the next. Memory, mood, and patterns build over weeks." },
-      { "@type": "HowToStep", position: 4, name: "Reflect monthly", text: "See your own words back to you in a monthly review." },
+      { "@type": "HowToStep", position: 1, name: "Say one sentence", text: "Try Aura on the homepage with no signup. One message, one reply." },
+      { "@type": "HowToStep", position: 2, name: "Tell Aura who you are", text: "A five-minute onboarding: what is on your mind, how you want to be spoken to, your language and culture." },
+      { "@type": "HowToStep", position: 3, name: "Chat or talk", text: "Chat is free, always. Voice when typing is too much. Aura remembers across both." },
+      { "@type": "HowToStep", position: 4, name: "Sit in a circle", text: "Small anonymous rooms of people carrying the same thing, hosted by Aura, once circles open." },
     ],
+  };
+}
+
+/** The product as a free web app, for rich results on "free AI therapist" queries. */
+export function softwareApplicationSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: BRAND.name,
+    applicationCategory: "HealthApplication",
+    operatingSystem: "Web",
+    url: BASE_URL,
+    description: BRAND.description,
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD", description: "Chat with Aura is free for everyone." },
+    featureList: ["Free AI therapist chat", "Voice sessions", "Anonymous support circles", "Crisis-aware safety layer", "Memory across sessions", "English, Urdu, Hindi, Arabic, Spanish, French"],
+    publisher: { "@type": "Organization", name: BRAND.parent.name, url: BRAND.parent.url },
   };
 }
 

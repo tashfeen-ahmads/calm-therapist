@@ -10,7 +10,7 @@ interface Campaign {
   sub: string;
   bullets: string[];
   ctaLabel: string;
-  testimonials: { name: string; text: string }[];
+  moments: { name: string; text: string }[];
 }
 
 const CAMPAIGNS: Record<string, Campaign> = {
@@ -21,13 +21,13 @@ const CAMPAIGNS: Record<string, Campaign> = {
     bullets: [
       "Built for anxiety — voice mode for the moments typing is impossible.",
       "Memory across every session. You don't repeat your story.",
-      "Free to try. Backed by Implenix.",
+      "Chat is free, always. No card.",
     ],
     ctaLabel: "Start your first session",
-    testimonials: [
-      { name: "Priya, 28", text: "I can't type when I'm anxious. But I can speak. Calm Therapist listens." },
-      { name: "Maya, 33", text: "It noticed I get worse on Tuesdays before I did." },
-      { name: "Daniel, 29", text: "I don't have to explain my whole life every time. It already knows." },
+    moments: [
+      { name: "When typing is impossible", text: "Hands shaking, chest tight. You talk, Aura listens without rushing." },
+      { name: "The pattern you cannot see", text: "Worse on Tuesdays. Aura remembers the weeks and can say so." },
+      { name: "No re-explaining", text: "Aura already knows the context. The conversation starts where you are." },
     ],
   },
   "men-burnout": {
@@ -40,26 +40,26 @@ const CAMPAIGNS: Record<string, Campaign> = {
       "Pattern detection — sleep, work, weekends — across the long view.",
     ],
     ctaLabel: "Try it free",
-    testimonials: [
-      { name: "Tom, 38", text: "Twelve identical arguments in one year. I had no idea." },
-      { name: "Yusuf, 36", text: "It saw the pattern in my weeks before I did. I cut three meetings." },
-      { name: "James, 41", text: "It doesn't feel like therapy. It feels like finally having somewhere to think out loud." },
+    moments: [
+      { name: "The same argument, again", text: "Twelve identical arguments in a year, seen written down for the first time." },
+      { name: "The week in the long view", text: "Sleep, meetings, weekends: the pattern is visible from outside the week." },
+      { name: "Somewhere to think", text: "Not therapy vocabulary. A direct tone and a place to put it down." },
     ],
   },
   "spanish-en": {
     slug: "spanish-en",
-    headline: "A quiet place to think — in English, Spanish, or French.",
-    sub: "Calm Therapist works in English, Spanish, and French. Voice when typing's too much. Real privacy. Real help.",
+    headline: "A quiet place to think — in your language.",
+    sub: "Aura works in English, Urdu, Hindi, Arabic, Spanish, and French, and switches when you do. Voice when typing's too much. Real privacy.",
     bullets: [
-      "English, Spanish, French — full conversational support.",
+      "English, Urdu, Hindi, Arabic, Spanish, French — and the mix between.",
       "Voice mode for the moments words come slowly.",
       "No data sold, no models trained on your story.",
     ],
     ctaLabel: "Start free",
-    testimonials: [
-      { name: "Lucia, 33", text: "Switching between English and Spanish mid-sentence — it just worked." },
-      { name: "Aisha, 27", text: "It remembered my mother's name. I didn't have to explain again." },
-      { name: "Daniel, 29", text: "Voice mode at 2am, walking, was the only thing that worked." },
+    moments: [
+      { name: "Mid-sentence", text: "Start in English, finish in Urdu. Aura follows without being asked." },
+      { name: "Your mother's name", text: "Said once, remembered. You do not explain the family again." },
+      { name: "2am, walking", text: "Voice when you cannot face anyone else in the room." },
     ],
   },
 };
@@ -71,11 +71,10 @@ export function generateStaticParams() {
 export function generateMetadata({ params }: { params: { slug: string } }) {
   const c = CAMPAIGNS[params.slug];
   if (!c) return {};
-  return pageMetadata({
-    title: `${c.headline} | Calm Therapist`,
-    description: c.sub,
-    path: `/lp/${c.slug}`,
-  });
+  return {
+    ...pageMetadata({ title: `${c.headline} | Calm Therapist`, description: c.sub, path: `/lp/${c.slug}` }),
+    robots: { index: false, follow: true },
+  };
 }
 
 export default function LpPage({ params }: { params: { slug: string } }) {
@@ -133,7 +132,7 @@ export default function LpPage({ params }: { params: { slug: string } }) {
 
         <section style={{ maxWidth: 1040, margin: "80px auto 0" }}>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16 }} className="lp-testi-grid">
-            {c.testimonials.map((t) => (
+            {c.moments.map((t) => (
               <div key={t.name} className="card">
                 <p
                   style={{

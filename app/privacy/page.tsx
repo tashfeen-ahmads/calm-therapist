@@ -5,7 +5,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Privacy at Calm Therapist | What We Do With Your Data (Spoiler: As Little As Possible)",
   description:
-    "Calm Therapist's full privacy architecture. No training on your data. Session-level encryption. One-click export and delete. Backed by Implenix.",
+    "Calm Therapist's full privacy architecture. No training on your data. Stored for you, in your account. One-click delete. Backed by Implenix.",
   path: "/privacy",
 });
 
@@ -42,9 +42,9 @@ export default function PrivacyPage() {
               account.
             </p>
             <p>
-              You can export everything you&apos;ve ever said to Calm Therapist as a clean JSON or
-              PDF, anytime. You can delete everything in one click. When you delete, the data is
-              gone — not soft-deleted, not archived. Gone.
+              You can delete everything in one click from Settings. When you delete, the data is
+              gone — not soft-deleted, not archived. Gone. A download of your record is on the way;
+              until it ships we will not claim it here.
             </p>
           </Section>
 

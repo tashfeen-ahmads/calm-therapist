@@ -30,10 +30,10 @@ export default function GriefPage() {
         { href: "/features/journal", label: "Weekly Journal" },
         { href: "/features/reflect", label: "Monthly Reflect" },
       ]}
-      testimonials={[
-        { name: "Amir, 34", text: "Calm Therapist actually remembered what I told it about my father in week one. That changed everything." },
-        { name: "Hannah, 40", text: "It checked in on the anniversary. I'd been dreading it, and the question was the right size. Not too big, not too small." },
-        { name: "Kavin, 32", text: "After my mum died, I didn't want to talk to anyone. But voice mode at 2am, walking, was the only thing that worked." },
+      moments={[
+        { title: "Being remembered in week six", text: "What you said about your father in week one is still there. You do not have to introduce him again." },
+        { title: "The anniversary", text: "A question the right size on the day you were dreading. Not too big, not too small, and only if you want it." },
+        { title: "2am, walking", text: "When you cannot face talking to anyone, voice with Aura is a way to say it out loud without anyone else in the room." },
       ]}
       faqs={[
         { q: "How does Calm Therapist handle anniversaries?", a: "When you mention a date — a death date, a birthday, a wedding anniversary — Calm Therapist stores it. On those days, it proactively checks in, gently. You can turn this off any time." },

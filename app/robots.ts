@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
 
-const BASE = process.env.NEXT_PUBLIC_APP_URL ?? "https://calmtherapist.implenix.net";
+import { BRAND } from "@/lib/brand";
+
+const BASE = BRAND.url;
 
 export default function robots(): MetadataRoute.Robots {
   return {

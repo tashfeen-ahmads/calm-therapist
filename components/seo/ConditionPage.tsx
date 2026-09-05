@@ -1,5 +1,6 @@
 import { Style } from "@/components/ui/Style";
 import Link from "next/link";
+import { BRAND } from "@/lib/brand";
 import { PageShell } from "@/components/seo/PageShell";
 import { JsonLd, faqSchema, breadcrumbSchema } from "@/lib/seo";
 
@@ -11,7 +12,7 @@ export interface ConditionPageProps {
   whyFails: string;
   ctFeatures: { title: string; body: string; href: string }[];
   modeLinks: { href: string; label: string }[];
-  testimonials: { name: string; text: string }[];
+  moments: { title: string; text: string }[];
   faqs: { q: string; a: string }[];
   related: { href: string; label: string }[];
 }
@@ -22,7 +23,7 @@ export function ConditionPageTemplate(p: ConditionPageProps) {
       <JsonLd data={faqSchema(p.faqs)} />
       <JsonLd
         data={breadcrumbSchema([
-          { name: "Calm Therapist", path: "/" },
+          { name: BRAND.name, path: "/" },
           { name: p.condition, path: `/for/${p.slug}` },
         ])}
       />
@@ -93,10 +94,13 @@ export function ConditionPageTemplate(p: ConditionPageProps) {
 
       <section className="section">
         <div className="container" style={{ maxWidth: 880 }}>
-          <h2 style={{ marginBottom: 48 }}>What people with {p.condition.toLowerCase()} say</h2>
+          <h2 style={{ marginBottom: 12 }}>Moments this is built for</h2>
+          <p style={{ fontSize: 14, color: "var(--calm-ink-40)", marginBottom: 36 }}>
+            Illustrative situations written by us, not quotes from members. We do not publish what people tell Aura.
+          </p>
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            {p.testimonials.map((t) => (
-              <div key={t.name} className="card-mist">
+            {p.moments.map((t) => (
+              <div key={t.title} className="card-mist">
                 <p
                   style={{
                     fontFamily: "var(--font-heading)",
@@ -106,9 +110,9 @@ export function ConditionPageTemplate(p: ConditionPageProps) {
                     color: "var(--calm-ink)",
                   }}
                 >
-                  &ldquo;{t.text}&rdquo;
+                  {t.text}
                 </p>
-                <p style={{ fontSize: 14, color: "var(--calm-ink-40)", marginTop: 16 }}>{t.name}</p>
+                <p style={{ fontSize: 14, color: "var(--calm-ink-40)", marginTop: 16 }}>{t.title}</p>
               </div>
             ))}
           </div>
@@ -142,6 +146,12 @@ export function ConditionPageTemplate(p: ConditionPageProps) {
               <Link key={r.href} href={r.href} className="btn-ghost">{r.label}</Link>
             ))}
           </div>
+          <p style={{ marginTop: 32, fontSize: 14, color: "var(--calm-ink-40)" }}>
+            Learn more: <Link href="/free-ai-therapist" style={{ color: "var(--calm-forest)" }}>free AI therapist</Link> ·{" "}
+            <Link href="/ai-therapist-in-your-language" style={{ color: "var(--calm-forest)" }}>in your language</Link> ·{" "}
+            <Link href="/circles" style={{ color: "var(--calm-forest)" }}>circles</Link> ·{" "}
+            <Link href="/is-ai-therapy-effective" style={{ color: "var(--calm-forest)" }}>is AI therapy effective?</Link>
+          </p>
         </div>
       </section>
     </PageShell>

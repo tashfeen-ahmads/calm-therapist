@@ -1,3 +1,4 @@
+import { BRAND } from "./brand";
 import { sendEmail } from "./email";
 import { getTemplate, EmailKey, TemplateCtx, isTransactional } from "./email-templates";
 import { dbEnabled, prisma } from "./prisma";
@@ -40,7 +41,7 @@ const globalAny = globalThis as unknown as { __calmEmailQueue?: QueuedEmail[] };
 const memoryQueue: QueuedEmail[] = globalAny.__calmEmailQueue ?? [];
 globalAny.__calmEmailQueue = memoryQueue;
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://calmtherapist.implenix.net";
+const APP_URL = BRAND.url;
 
 function backoffMinutes(attempt: number): number {
   return Math.min(6 * 60, 5 * 2 ** attempt); // 5, 10, 20, 40, 80 minutes, capped
