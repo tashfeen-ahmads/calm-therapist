@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { apiFetch } from "@/components/dashboard/api";
 
 interface Reflection { month: string; label: string; sessions: number; checkins: number; averageMood?: number; previousAverageMood?: number; themes: string[]; quotes: string[]; shift: string; enough: boolean }
 
@@ -9,11 +10,10 @@ export default function ReflectPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("/api/reflect").then(async (res) => {
-      const d = await res.json();
-      if (!res.ok) setError(d.error ?? "Could not build the month.");
-      else setR(d.reflection);
-    }).catch(() => setError("Could not build the month."));
+    apiFetch<{ reflection: Reflection }>("/api/reflect").then(({ data, error }) => {
+      if (error) setError(error);
+      else if (data) setR(data.reflection);
+    });
   }, []);
 
   return (

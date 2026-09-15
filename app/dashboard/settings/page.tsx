@@ -5,6 +5,7 @@ import { readState, writeState } from "@/components/onboarding/OnboardingShell";
 import { SupportLink } from "@/components/ui/SupportLink";
 import { UnlockDialog } from "@/components/dashboard/UnlockDialog";
 import type { Access } from "@/lib/access";
+import { apiFetch } from "@/components/dashboard/api";
 
 interface Me {
   email: string;
@@ -43,13 +44,11 @@ export default function SettingsPage() {
     if (s.crisisContactName) setCrisisName(s.crisisContactName);
     if (s.crisisContactPhone) setCrisisPhone(s.crisisContactPhone);
 
-    fetch("/api/auth/me")
-      .then((r) => r.json())
-      .then((data: { user: Me | null }) => {
-        setMe(data.user);
-        if (data.user) setEmailOptOut(data.user.emailOptOut);
-      })
-      .catch(() => {});
+    apiFetch<{ user: Me | null }>("/api/auth/me").then(({ data }) => {
+      if (!data) return;
+      setMe(data.user);
+      if (data.user) setEmailOptOut(data.user.emailOptOut);
+    });
     fetch("/api/users/me/profile")
       .then((r) => (r.ok ? r.json() : null))
       .then((d: { profile?: { language?: string; tone?: string; crisisContactName?: string; crisisContactPhone?: string } } | null) => {
@@ -59,8 +58,7 @@ export default function SettingsPage() {
         if (p.tone) setTone(p.tone as typeof tone);
         if (p.crisisContactName) setCrisisName(p.crisisContactName);
         if (p.crisisContactPhone) setCrisisPhone(p.crisisContactPhone);
-      })
-      .catch(() => {});
+      });
   }, []);
 
   const save = async () => {
@@ -207,10 +205,7 @@ function Membership({ me }: { me: Me | null }) {
 
   const loadQuota = useCallback(() => {
     if (!me?.access.voice) return;
-    fetch("/api/voice/quota")
-      .then((r) => r.json())
-      .then((d: Quota) => setQuota(d))
-      .catch(() => {});
+    apiFetch<Quota>("/api/voice/quota").then(({ data: d }) => d && setQuota(d));
   }, [me?.access.voice]);
 
   useEffect(loadQuota, [loadQuota]);

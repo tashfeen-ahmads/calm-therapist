@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Style } from "@/components/ui/Style";
+import { apiFetch } from "@/components/dashboard/api";
 
 interface Goal { id: string; title: string; description?: string; frequency: "daily" | "3x-week" | "weekly"; week: { day: string; done: boolean }[]; progress: number; doneToday: boolean }
 
@@ -16,7 +17,12 @@ export default function GoalsPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("/api/goals").then((r) => (r.ok ? r.json() : null)).then((d) => { if (d) { setGoals(d.goals ?? []); setMax(d.max ?? 5); } }).finally(() => setLoaded(true));
+    apiFetch<{ goals?: Goal[]; max?: number }>("/api/goals")
+      .then(({ data: d, error: err }) => {
+        if (err) setError(err);
+        if (d) { setGoals(d.goals ?? []); setMax(d.max ?? 5); }
+      })
+      .finally(() => setLoaded(true));
   }, []);
 
   const add = async (e: React.FormEvent) => {

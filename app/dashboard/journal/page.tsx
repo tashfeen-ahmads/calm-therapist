@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { apiFetch } from "@/components/dashboard/api";
 
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
@@ -19,10 +20,14 @@ export default function JournalPage() {
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    fetch("/api/journal").then((r) => (r.ok ? r.json() : null)).then((d) => {
-      if (!d) return;
-      setEntry(d.entry); setContent(d.entry.content ?? ""); setMoods(d.moods ?? []); setSessions(d.sessions ?? []);
-    }).catch(() => {});
+    apiFetch<{ entry: Entry; moods: Mood[]; sessions: SessionRow[] }>("/api/journal").then(({ data, error }) => {
+      if (error) { setError(error); return; }
+      if (!data?.entry) return;
+      setEntry(data.entry);
+      setContent(data.entry.content ?? "");
+      setMoods(data.moods ?? []);
+      setSessions(data.sessions ?? []);
+    });
   }, []);
 
   const save = async (text: string) => {

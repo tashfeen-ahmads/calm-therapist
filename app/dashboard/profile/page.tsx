@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Style } from "@/components/ui/Style";
+import { apiFetch } from "@/components/dashboard/api";
 
 interface Memory { id: string; statement: string; category: string; mentions: number; firstMentioned: string; lastMentioned: string }
 interface Profile { name: string; age?: string; tone: string; language: string; focusAreas: string[]; countryOfResidence?: string }
@@ -19,13 +20,16 @@ export default function ProfilePage() {
   const [notice, setNotice] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("/api/users/me/profile").then((r) => (r.ok ? r.json() : null)).then((d) => { if (d?.profile) { setProfile(d.profile); setMemories(d.memories ?? []); } }).catch(() => {});
-    fetch("/api/sessions?limit=20").then((r) => (r.ok ? r.json() : null)).then((d) => d && setSessions(d.sessions ?? [])).catch(() => {});
-    fetch("/api/mood?days=30").then((r) => (r.ok ? r.json() : null)).then((d) => d && setMoods(d.moods ?? [])).catch(() => {});
-    fetch("/api/auth/me").then((r) => r.json()).then((d) => {
-      if (d.user?.createdAt) setMemberSince(new Date(d.user.createdAt).toLocaleDateString(undefined, { month: "long", year: "numeric" }));
-      if (typeof d.user?.memberNumber === "number") setMemberNumber(d.user.memberNumber);
-    }).catch(() => {});
+    apiFetch<{ profile?: Profile; memories?: Memory[] }>("/api/users/me/profile").then(({ data: d }) => {
+      if (d?.profile) { setProfile(d.profile); setMemories(d.memories ?? []); }
+    });
+    apiFetch<{ sessions?: SessionRow[] }>("/api/sessions?limit=20").then(({ data: d }) => d && setSessions(d.sessions ?? []));
+    apiFetch<{ moods?: Mood[] }>("/api/mood?days=30").then(({ data: d }) => d && setMoods(d.moods ?? []));
+    apiFetch<{ user?: { createdAt?: string; memberNumber?: number } }>("/api/auth/me").then(({ data: d }) => {
+      if (!d?.user) return;
+      if (d.user.createdAt) setMemberSince(new Date(d.user.createdAt).toLocaleDateString(undefined, { month: "long", year: "numeric" }));
+      if (typeof d.user.memberNumber === "number") setMemberNumber(d.user.memberNumber);
+    });
   }, []);
 
   const forget = async (id: string) => {

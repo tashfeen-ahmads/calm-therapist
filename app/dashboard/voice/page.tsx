@@ -9,6 +9,7 @@ import { useServerProfile } from "@/components/dashboard/useServerProfile";
 import type { AgentModeKey, UserProfile } from "@/lib/aura";
 import { Style } from "@/components/ui/Style";
 import type { Access } from "@/lib/access";
+import { apiFetch } from "@/components/dashboard/api";
 
 interface QuotaSnapshot {
   plan: "free" | "pro";
@@ -46,11 +47,8 @@ export default function VoicePage() {
   };
 
   const refreshQuota = async () => {
-    try {
-      const res = await fetch("/api/voice/quota");
-      const data = await res.json();
-      if (res.ok) setQuota(data);
-    } catch {}
+    const { data } = await apiFetch<QuotaSnapshot>("/api/voice/quota");
+    if (data) setQuota(data);
   };
 
   const hasVoice = quota?.access.voice === true;

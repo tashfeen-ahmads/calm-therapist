@@ -10,6 +10,7 @@ import { readState } from "@/components/onboarding/OnboardingShell";
 import { FeedbackPrompt } from "@/components/dashboard/FeedbackPrompt";
 import type { Access } from "@/lib/access";
 import { CIRCLES_OPEN_AT } from "@/lib/circle-themes";
+import { apiFetch } from "@/components/dashboard/api";
 
 const MOOD_LABELS = ["Struggling", "Low", "Okay", "Good", "Settled"];
 
@@ -22,33 +23,27 @@ export default function DashboardHome() {
   const [accessLine, setAccessLine] = useState<string | null>(null);
   const [members, setMembers] = useState<number | null>(null);
   const [unlockOpen, setUnlockOpen] = useState(false);
+  const [moodError, setMoodError] = useState<string | null>(null);
 
   useEffect(() => {
     const s = readState() as Record<string, string>;
     if (s.name) setName(s.name);
     setDateLine(new Date().toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" }));
-    fetch("/api/auth/me")
-      .then((r) => r.json())
-      .then((d: { user?: { name?: string; access?: Access; accessLine?: string } }) => {
+    apiFetch<{ user?: { name?: string; access?: Access; accessLine?: string } }>("/api/auth/me")
+      .then(({ data: d }) => {
+        if (!d) return;
         if (d.user?.access) setAccess(d.user.access);
         if (d.user?.accessLine) setAccessLine(d.user.accessLine);
         if (d.user?.name && !s.name) setName(d.user.name);
-      })
-      .catch(() => {});
-    fetch("/api/mood?days=1")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((d: { moods?: { day: string; score: number }[] } | null) => {
-        const today = new Date().toISOString().slice(0, 10);
-        const t = d?.moods?.find((m) => m.day === today);
-        if (t) setMood(t.score);
-      })
-      .catch(() => {});
-    fetch("/api/founding")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((d: { members?: number } | null) => {
-        if (d && typeof d.members === "number") setMembers(d.members);
-      })
-      .catch(() => {});
+      });
+    apiFetch<{ moods?: { day: string; score: number }[] }>("/api/mood?days=1").then(({ data: d }) => {
+      const today = new Date().toISOString().slice(0, 10);
+      const t = d?.moods?.find((m) => m.day === today);
+      if (t) setMood(t.score);
+    });
+    apiFetch<{ members?: number }>("/api/founding").then(({ data: d }) => {
+      if (d && typeof d.members === "number") setMembers(d.members);
+    });
   }, []);
 
   const greeting = useGreeting();
@@ -123,9 +118,20 @@ export default function DashboardHome() {
           {[1, 2, 3, 4, 5].map((n) => (
             <button
               key={n}
-              onClick={() => {
+              onClick={async () => {
+                const previous = mood;
                 setMood(n);
-                fetch("/api/mood", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ score: n }) }).catch(() => {});
+                setMoodError(null);
+                const { error } = await apiFetch("/api/mood", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ score: n }),
+                });
+                if (error) {
+                  // Do not leave it looking saved when it is not.
+                  setMood(previous);
+                  setMoodError(error);
+                }
               }}
               style={{
                 width: 56,
@@ -149,6 +155,9 @@ export default function DashboardHome() {
             </button>
           ))}
         </div>
+        {moodError && (
+          <p style={{ fontSize: 13, color: "var(--calm-ink-70)", margin: "-12px 0 16px" }}>{moodError}</p>
+        )}
         <p style={{ fontSize: 13, color: "var(--calm-ink-40)" }}>
           {mood ? MOOD_LABELS[mood - 1] : "Tap a number — no explanation needed."}
         </p>

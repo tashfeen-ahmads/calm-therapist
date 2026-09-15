@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { Style } from "@/components/ui/Style";
+import { apiFetch } from "@/components/dashboard/api";
 
 interface Review {
   id: string;
@@ -28,10 +29,7 @@ export default function ReviewsPage() {
   const [writing, setWriting] = useState(false);
 
   const load = useCallback(() => {
-    fetch("/api/reviews", { cache: "no-store" })
-      .then((r) => (r.ok ? r.json() : null))
-      .then((d) => d && setReviews(d.reviews))
-      .catch(() => setReviews([]));
+    apiFetch<{ reviews: Review[] }>("/api/reviews").then(({ data }) => setReviews(data?.reviews ?? []));
   }, []);
 
   useEffect(load, [load]);

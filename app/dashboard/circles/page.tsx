@@ -6,6 +6,7 @@ import { Style } from "@/components/ui/Style";
 import { UnlockDialog } from "@/components/dashboard/UnlockDialog";
 import type { Access } from "@/lib/access";
 import { CIRCLE_MINUTES, CIRCLE_RULES, CIRCLE_SEATS, CIRCLE_THEMES } from "@/lib/circle-themes";
+import { apiFetch } from "@/components/dashboard/api";
 
 interface Stats { members: number; openAt: number; interested: number; themes: { slug: string; count: number }[] }
 interface Payload { themes: string[]; stats: Stats; access: Access; animal: string }
@@ -18,14 +19,11 @@ export default function CirclesDashboardPage() {
   const [unlockOpen, setUnlockOpen] = useState(false);
 
   const load = () => {
-    fetch("/api/circles/interest")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((d: Payload | null) => {
-        if (!d) return;
-        setData(d);
-        setPicked(new Set(d.themes));
-      })
-      .catch(() => {});
+    apiFetch<Payload>("/api/circles/interest").then(({ data: d }) => {
+      if (!d) return;
+      setData(d);
+      setPicked(new Set(d.themes));
+    });
   };
 
   useEffect(load, []);
