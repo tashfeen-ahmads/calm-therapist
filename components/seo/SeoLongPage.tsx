@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { PageShell } from "@/components/seo/PageShell";
-import { JsonLd, breadcrumbSchema, faqSchema, medicalWebPageSchema, citationSchema } from "@/lib/seo";
+import { JsonLd, breadcrumbSchema, faqSchema, medicalWebPageSchema, citationSchema, speakableSchema } from "@/lib/seo";
 import { AUTHOR, REVIEWER, EDITORIAL_POLICY_PATH } from "@/lib/authorship";
 import type { SeoPage } from "@/lib/seo-pages";
 import { BRAND } from "@/lib/brand";
@@ -22,6 +22,7 @@ export function SeoLongPage({ page, path }: Props) {
         ])}
       />
       <JsonLd data={faqSchema(page.faqs)} />
+      <JsonLd data={speakableSchema(path)} />
       <JsonLd
         data={{
           ...medicalWebPageSchema({ title: page.title, description: page.description, path }),
@@ -33,7 +34,7 @@ export function SeoLongPage({ page, path }: Props) {
         <div className="container" style={{ maxWidth: 760 }}>
           <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "Learn", href: "/ai-therapist" }, { name: page.h1 }]} />
           <h1 style={{ marginBottom: 24, fontSize: 56, lineHeight: 1.1 }}>{page.h1}</h1>
-          <p className="body-large" style={{ color: "var(--calm-ink-70)", marginBottom: 24 }}>
+          <p className="body-large answer-lede" style={{ color: "var(--calm-ink-70)", marginBottom: 24 }}>
             {page.intro}
           </p>
 

@@ -903,40 +903,77 @@ export const GLOSSARY: Record<string, SeoPage> = {
     ctaLine: "Try noticing one in your own thinking — type it on the landing page.",
   },
 
-  rumination: {
+
+  "rumination": {
     slug: "rumination",
-    title: "Rumination: Why Going in Circles Hurts More Than It Helps",
+    title: "Rumination: Why Thinking About It Again Does Not Help",
     description:
-      "Rumination is repeated, passive thinking about what's wrong. It feels productive. It isn't. Here's what it is, why it sticks, and what shifts it.",
-    h1: "Rumination — going in circles.",
+      "Rumination is the loop that feels like problem-solving and is not. What separates it from reflection, why it sustains depression and anxiety, and what actually interrupts it.",
+    h1: "Rumination, and why it never resolves.",
     intro:
-      "Rumination is repeated, passive thinking about what's wrong, why it's wrong, and what it means about you. It feels like working on the problem. It isn't. It's the same loop, dressed up in slightly different words each time.",
+      "Rumination is the thought that keeps arriving. You turn it over, look at it from another angle, and arrive exactly where you started, more tired. It feels like working on the problem. That feeling is the trap, and it is the single most reliable thing separating people who recover from a bad period and people who stay in one.",
     sections: [
       {
-        heading: "Why ruminating feels productive",
+        heading: "What rumination actually is",
         paragraphs: [
-          "Because it engages the same neural circuitry as actual problem-solving without the costly business of trying things. The brain reads activity as progress. Hours pass, nothing changes externally, but it felt like work.",
+          "Rumination is repetitive, passive thought focused on the causes and consequences of distress rather than on anything you could do next. The defining feature is not how long you think, or how painful it is. It is that the thinking has no exit condition. There is no question being answered, so no answer can end it.",
+          "Psychologists separate it from worry, which points forward at things that have not happened, and from reflection, which is deliberate and goes somewhere. Rumination points backward and circles. Most people do all three, often in the same hour, and cannot tell them apart from the inside.",
         ],
       },
       {
-        heading: "What actually shifts a rumination loop",
+        heading: "How to tell it apart from reflection",
         paragraphs: [
-          "Modality switch. If you're stuck in your head, the way out is rarely through more thought. It's a body, a place, an action — even small. A walk. A different room. Naming what you can see. The agent in Calm AI Therapy is trained to interrupt loops, not feed them.",
+          "Reflection asks a question you could answer. Rumination asks a question with no answer, usually starting with why: why did I say that, why am I like this, why does this keep happening to me. Notice that none of those can be finished. You can think about them for six hours and be no closer, which is precisely why six hours go by.",
+          "The practical test is the handle. After twenty minutes of reflection you usually have something you did not have before: a name for the feeling, a sentence that fits, one thing you might do. After twenty minutes of rumination you have the same thought, plus exhaustion, plus the additional belief that you are the sort of person who cannot stop thinking.",
+        ],
+        bullets: [
+          "Reflection: what am I actually feeling, and what is underneath it?",
+          "Rumination: why am I like this?",
+          "Reflection ends when the question is answered.",
+          "Rumination ends when you are too tired to continue.",
+        ],
+      },
+      {
+        heading: "Why it keeps going",
+        paragraphs: [
+          "Rumination survives because it impersonates effort. Stopping feels like giving up on a problem that matters, or like letting yourself off. So the loop is protected by the thing that would otherwise end it, which is your own seriousness about the problem.",
+          "It also narrows what you can reach. The longer the loop runs, the more the memories and interpretations that come to mind match the mood you are already in, and the more obvious it seems that the bleak reading is simply accurate. This is one of the better-evidenced mechanisms sustaining low mood, and it is why the advice to think positively lands as insulting. The problem is not the content of the thought. It is the shape of the loop.",
+        ],
+      },
+      {
+        heading: "What actually interrupts it",
+        paragraphs: [
+          "Three things have reasonable support, and none of them is deciding to stop.",
+          "The first is changing the question from why to what: what is this feeling, what would I need, what is one thing I could do in the next hour. A concrete question has an ending, so the thinking can finish. The second is putting it into language outside your head, written or spoken, because a loop that has to become a sentence has to commit to something and stops being able to circle. The third is moving your attention into something absorbing enough to require it, which is not distraction in the avoidant sense but a genuine break in the circuit.",
+          "This is the mechanism Aura is built around. Saying the thing out loud to something that remembers what you said last week makes the loop visible as a loop, and a named pattern is much easier to step out of than an unnamed one.",
+        ],
+      },
+      {
+        heading: "When it is more than a habit",
+        paragraphs: [
+          "Persistent rumination is strongly associated with depression and anxiety disorders, and it is a documented risk factor rather than only a symptom. If the loop runs most days, follows you into sleep, or carries thoughts of harming yourself, that is the point to involve a human professional rather than a product.",
+          "Nothing on this page is a diagnosis, and Aura is not treatment. If you are in immediate danger, contact your local emergency number.",
         ],
       },
     ],
     faqs: [
-      { q: "Is rumination the same as worry?", a: "Closely related but distinct. Worry tends to be future-oriented and what-if; rumination is past- or self-oriented and why-am-I." },
-      { q: "Can rumination be helpful?", a: "Brief, focused reflection helps. The loop without an exit is what hurts." },
+      { q: "Is rumination the same as overthinking?", a: "Overthinking is the everyday word for it, and it covers both rumination and worry. Rumination specifically means repetitive passive thought about distress that has already happened, with no question that could resolve it." },
+      { q: "Is rumination a mental illness?", a: "No. It is a thinking pattern, and everyone does it. It becomes clinically relevant when it is persistent enough to sustain low mood, disrupt sleep, or interfere with daily functioning, at which point it is worth talking to a professional." },
+      { q: "How do I stop ruminating at night?", a: "Night is the worst case because there is nothing competing for your attention. What helps most is getting the loop out of your head and into words somewhere external, and replacing the why question with a what question you could actually answer. Trying to force sleep usually makes it worse." },
+      { q: "Can talking to an AI help with rumination?", a: "It can help with the part that responds to externalising: saying the thing out loud, having it reflected back, and noticing the loop as a loop rather than as the truth. It is not treatment, and it is not a substitute for a therapist if the pattern is persistent." },
+      { q: "What is the difference between rumination and processing something?", a: "Processing changes your relationship to the event over time; rumination reruns it unchanged. If you are arriving somewhere slightly different each time, you are processing. If you are arriving in the same place more tired, you are ruminating." },
     ],
     related: [
-      { href: "/glossary/cognitive-distortions", label: "Cognitive distortions" },
       { href: "/glossary/self-reflection", label: "Self-reflection" },
+      { href: "/glossary/cognitive-distortions", label: "Cognitive distortions" },
+      { href: "/for/anxiety", label: "An AI therapist for anxiety" },
+      { href: "/for/depression", label: "An AI therapist for depression" },
+      { href: "/ai-therapist-late-night", label: "An AI therapist at 2am" },
       { href: "/ai-therapist", label: "AI therapist" },
     ],
-    ctaLine: "If you're in a loop, try one sentence — see if naming it helps.",
+    ctaLine: "Next time the loop starts, try putting one sentence of it somewhere outside your head.",
+    sources: [EVIDENCE.harms, EVIDENCE.apa],
   },
-
   "self-reflection": {
     slug: "self-reflection",
     title: "Self-Reflection: The Skill, Not the Aesthetic",

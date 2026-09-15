@@ -202,6 +202,44 @@ export function softwareApplicationSchema() {
   };
 }
 
+
+/**
+ * Marks the short, direct answer at the top of a page as the speakable part.
+ *
+ * Answer engines — AI Overviews, Perplexity, ChatGPT search — extract a
+ * concise answer and cite the page it came from. The research is consistent
+ * that pages leading with a plain-language answer before the explanation get
+ * cited; pages that build up to the answer get read and dropped. This marks
+ * which element is that answer.
+ */
+export function speakableSchema(path: string, selectors: string[] = ["h1", ".answer-lede"]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    url: `${BASE_URL}${path}`,
+    speakable: { "@type": "SpeakableSpecification", cssSelector: selectors },
+  };
+}
+
+/**
+ * Aggregate rating from approved member reviews.
+ *
+ * On YMYL topics, review and rating signals now carry real weight in who
+ * ranks. Emitted only when there are genuine approved reviews behind it —
+ * an invented rating is both a manual-action risk and a lie about what
+ * other people thought of a mental health product.
+ */
+export function aggregateRatingSchema(args: { ratingValue: number; reviewCount: number }) {
+  if (!args.reviewCount || args.reviewCount < 1) return null;
+  return {
+    "@type": "AggregateRating",
+    ratingValue: Number(args.ratingValue.toFixed(1)),
+    reviewCount: args.reviewCount,
+    bestRating: 5,
+    worstRating: 1,
+  };
+}
+
 export function breadcrumbSchema(items: { name: string; path: string }[]) {
   return {
     "@context": "https://schema.org",
