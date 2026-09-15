@@ -114,6 +114,7 @@ export default function AdminEmailsPage() {
         <p style={{ color: "var(--calm-ink-40)", fontSize: 14 }}>Nothing in this bucket.</p>
       ) : (
         <div style={{ background: "var(--calm-white)", border: "1px solid var(--calm-ink-10)", borderRadius: 12, overflow: "hidden" }}>
+          <div className="table-scroll">
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead>
               <tr style={{ background: "var(--calm-mist)" }}>
@@ -155,6 +156,7 @@ export default function AdminEmailsPage() {
               ))}
             </tbody>
           </table>
+          </div>
         </div>
       )}
     </div>

@@ -60,7 +60,7 @@ export default function ProfilePage() {
   const avg = moods.length ? (moods.reduce((s, m) => s + m.score, 0) / moods.length).toFixed(1) : null;
 
   return (
-    <div style={{ padding: "48px 32px", maxWidth: 980, margin: "0 auto" }}>
+    <div className="page-pad" style={{ maxWidth: 980, margin: "0 auto" }}>
       <h2 style={{ marginBottom: 32 }}>Your space</h2>
 
       <div className="card" style={{ marginBottom: 32 }}>

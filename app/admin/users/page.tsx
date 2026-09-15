@@ -22,6 +22,7 @@ export default async function AdminUsersPage() {
             overflow: "hidden",
           }}
         >
+          <div className="table-scroll">
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead>
               <tr style={{ background: "var(--calm-mist)" }}>
@@ -54,6 +55,7 @@ export default async function AdminUsersPage() {
               ))}
             </tbody>
           </table>
+          </div>
         </div>
       )}
     </div>

@@ -17,7 +17,7 @@ export default function BlogIndex() {
       <section className="section">
         <div className="container" style={{ maxWidth: 880 }}>
           <p className="micro-label micro-label-bordered" style={{ marginBottom: 24 }}>Blog</p>
-          <h1 style={{ marginBottom: 24, fontSize: 56 }}>Notes from building a free AI therapist.</h1>
+          <h1 style={{ marginBottom: 24, fontSize: "clamp(32px, 6vw, 56px)" }}>Notes from building a free AI therapist.</h1>
           <p className="body-large" style={{ color: "var(--calm-ink-70)", marginBottom: 48 }}>
             What AI therapy gets wrong, what memory changes, and what we are learning as members arrive.
           </p>

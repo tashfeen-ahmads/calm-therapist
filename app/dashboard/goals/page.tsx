@@ -45,7 +45,7 @@ export default function GoalsPage() {
   };
 
   return (
-    <div style={{ padding: "48px 32px", maxWidth: 880, margin: "0 auto" }}>
+    <div className="page-pad" style={{ maxWidth: 880, margin: "0 auto" }}>
       <h2 style={{ marginBottom: 8 }}>What you&apos;re after</h2>
       <p className="body-large" style={{ color: "var(--calm-ink-40)", marginBottom: 32 }}>Small, specific, and yours. Tick the day it happened.</p>
 

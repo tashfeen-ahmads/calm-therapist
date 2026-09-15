@@ -9,7 +9,7 @@ export default function NotFound() {
       <section className="section">
         <div className="container" style={{ maxWidth: 720 }}>
           <p className="micro-label micro-label-bordered" style={{ marginBottom: 24 }}>404</p>
-          <h1 style={{ marginBottom: 24, fontSize: 56 }}>That page isn&apos;t here.</h1>
+          <h1 style={{ marginBottom: 24, fontSize: "clamp(32px, 6vw, 56px)" }}>That page isn&apos;t here.</h1>
           <p className="body-large" style={{ color: "var(--calm-ink-70)", marginBottom: 32 }}>
             The link may be old, or it moved when we did. The conversation is still open.
           </p>

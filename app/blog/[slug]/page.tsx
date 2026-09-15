@@ -39,7 +39,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
           <p className="micro-label micro-label-bordered" style={{ marginBottom: 24 }}>
             Calm AI Therapy Editorial · {post.readingMinutes} min read
           </p>
-          <h1 style={{ marginBottom: 32, fontSize: 56, lineHeight: 1.1 }}>{post.title}</h1>
+          <h1 style={{ marginBottom: 32, fontSize: "clamp(32px, 6vw, 56px)", lineHeight: 1.1 }}>{post.title}</h1>
           <p className="body-large" style={{ color: "var(--calm-ink-40)", marginBottom: 24 }}>
             {post.description}
           </p>

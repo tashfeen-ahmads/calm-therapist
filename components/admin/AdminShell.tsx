@@ -60,6 +60,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       <Style>{`
         .admin-root {
           min-height: 100vh;
+          min-height: 100dvh;
           display: flex;
           background: var(--calm-white);
         }

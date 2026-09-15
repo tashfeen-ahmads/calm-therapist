@@ -57,7 +57,7 @@ export default function DashboardHome() {
   };
 
   return (
-    <div style={{ padding: "48px 32px", maxWidth: 980, margin: "0 auto" }}>
+    <div className="page-pad" style={{ maxWidth: 980, margin: "0 auto" }}>
       <h2 style={{ marginBottom: 8 }}>
         {greeting}, {name}.
       </h2>

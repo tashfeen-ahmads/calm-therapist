@@ -61,7 +61,7 @@ export default function JournalPage() {
   const scoreFor = (day: string) => moods.find((m) => m.day === day)?.score ?? null;
 
   return (
-    <div style={{ padding: "48px 32px", maxWidth: 880, margin: "0 auto" }}>
+    <div className="page-pad" style={{ maxWidth: 880, margin: "0 auto" }}>
       <h2 style={{ marginBottom: 8 }}>This week</h2>
       <p className="body-large" style={{ color: "var(--calm-ink-40)", marginBottom: 40 }}>{entry ? weekRange(entry.weekStart) : "…"}</p>
 

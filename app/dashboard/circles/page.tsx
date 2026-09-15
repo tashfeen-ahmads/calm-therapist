@@ -64,7 +64,7 @@ export default function CirclesDashboardPage() {
   const counts = new Map((stats?.themes ?? []).map((t) => [t.slug, t.count]));
 
   return (
-    <div style={{ padding: "48px 32px", maxWidth: 980, margin: "0 auto" }}>
+    <div className="page-pad" style={{ maxWidth: 980, margin: "0 auto" }}>
       <p className="body-micro" style={{ color: "var(--calm-forest)", marginBottom: 12 }}>Circles</p>
       <h2 style={{ marginBottom: 8 }}>{open ? "Circles are open." : "Small rooms, opening soon."}</h2>
       <p className="body-large" style={{ color: "var(--calm-ink-40)", marginBottom: 32, maxWidth: 640 }}>

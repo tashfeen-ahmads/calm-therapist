@@ -35,7 +35,7 @@ export default function ReviewsPage() {
   useEffect(load, [load]);
 
   return (
-    <div style={{ padding: "48px 24px", maxWidth: 780, margin: "0 auto" }}>
+    <div className="page-pad" style={{ maxWidth: 780, margin: "0 auto" }}>
       <p className="body-micro" style={{ color: "var(--calm-forest)", marginBottom: 12 }}>Your reviews</p>
       <h2 style={{ marginBottom: 8 }}>How has it been?</h2>
       <p className="body-large" style={{ color: "var(--calm-ink-40)", marginBottom: 32, maxWidth: 560 }}>

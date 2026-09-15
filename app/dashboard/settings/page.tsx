@@ -104,7 +104,7 @@ export default function SettingsPage() {
   };
 
   return (
-    <div style={{ padding: "48px 32px", maxWidth: 880, margin: "0 auto" }}>
+    <div className="page-pad" style={{ maxWidth: 880, margin: "0 auto" }}>
       <h2 style={{ marginBottom: 32 }}>Settings</h2>
 
       {me && (

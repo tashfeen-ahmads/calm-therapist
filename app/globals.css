@@ -41,32 +41,52 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0;
 }
 
+/*
+ * Fluid type.
+ *
+ * This used to be a fixed size with one breakpoint at 768px, which meant a
+ * 72px heading became a 44px heading in one jump and did nothing at all
+ * between 320px and 767px. clamp() scales continuously instead, so a 360px
+ * phone and a 700px tablet each get a size that fits them rather than the
+ * same size built for neither.
+ *
+ * The minimums are the important half: they are what a heading collapses to
+ * on the narrowest phone still in real use.
+ */
 h1 {
-  font-size: 72px;
-  line-height: 1.05;
+  font-size: clamp(34px, 7vw, 72px);
+  line-height: 1.08;
   letter-spacing: -0.02em;
 }
 
 h2 {
-  font-size: 48px;
-  line-height: 1.1;
+  font-size: clamp(27px, 4.6vw, 48px);
+  line-height: 1.15;
   letter-spacing: -0.015em;
 }
 
 h3 {
-  font-size: 32px;
-  line-height: 1.2;
+  font-size: clamp(21px, 3vw, 32px);
+  line-height: 1.25;
 }
 
 h4 {
-  font-size: 22px;
-  line-height: 1.3;
+  font-size: clamp(18px, 2vw, 22px);
+  line-height: 1.35;
 }
 
-@media (max-width: 768px) {
-  h1 { font-size: 44px; }
-  h2 { font-size: 34px; }
-  h3 { font-size: 26px; }
+/* Long words and URLs must not push the page sideways on a narrow screen. */
+h1, h2, h3, h4 {
+  overflow-wrap: break-word;
+}
+
+/*
+ * Nothing may cause a horizontal scrollbar. A page that slides sideways on a
+ * phone feels broken even when everything on it works.
+ */
+body {
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 p { margin: 0; }
@@ -326,3 +346,36 @@ textarea.input {
 /* Hide scrollbar for horizontal scroll cards */
 .no-scrollbar { scrollbar-width: none; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
+
+
+/*
+ * Dashboard page padding.
+ *
+ * Every dashboard page hardcoded 48px top and 32px sides, which on a 360px
+ * phone leaves 296px for the content and pushes the first line of anything
+ * below the fold. This scales with the viewport instead.
+ */
+.page-pad {
+  padding: clamp(24px, 5vw, 48px) clamp(16px, 4vw, 32px);
+  width: 100%;
+}
+
+/* Wide data tables scroll inside their own box, never the page. */
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.table-scroll table {
+  min-width: 560px;
+}
+
+/*
+ * Touch targets. Pointer-coarse only, so a mouse still gets the compact
+ * admin controls while a thumb gets something it can actually hit.
+ */
+@media (pointer: coarse) {
+  button, .btn-primary, .btn-ghost, .btn-light, .pill {
+    min-height: 44px;
+  }
+}

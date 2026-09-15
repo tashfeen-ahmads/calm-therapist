@@ -33,7 +33,7 @@ export function SeoLongPage({ page, path }: Props) {
       <article className="section">
         <div className="container" style={{ maxWidth: 760 }}>
           <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "Learn", href: "/ai-therapist" }, { name: page.h1 }]} />
-          <h1 style={{ marginBottom: 24, fontSize: 56, lineHeight: 1.1 }}>{page.h1}</h1>
+          <h1 style={{ marginBottom: 24, fontSize: "clamp(32px, 6vw, 56px)", lineHeight: 1.1 }}>{page.h1}</h1>
           <p className="body-large answer-lede" style={{ color: "var(--calm-ink-70)", marginBottom: 24 }}>
             {page.intro}
           </p>

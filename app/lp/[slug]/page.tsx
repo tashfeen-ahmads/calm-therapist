@@ -91,7 +91,7 @@ export default function LpPage({ params }: { params: { slug: string } }) {
 
       <main style={{ padding: "32px 24px 64px" }}>
         <section style={{ maxWidth: 760, margin: "0 auto", textAlign: "center" }}>
-          <h1 style={{ marginBottom: 24, fontSize: 56, lineHeight: 1.1 }}>{c.headline}</h1>
+          <h1 style={{ marginBottom: 24, fontSize: "clamp(32px, 6vw, 56px)", lineHeight: 1.1 }}>{c.headline}</h1>
           <p className="body-large" style={{ color: "var(--calm-ink-40)", marginBottom: 40 }}>
             {c.sub}
           </p>

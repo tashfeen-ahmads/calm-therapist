@@ -73,7 +73,7 @@ export function FeelItFirst() {
         </span>
 
         <h1
-          style={{ fontSize: 68, lineHeight: 1.05, marginBottom: 24 }}
+          style={{ fontSize: "clamp(34px, 7.5vw, 68px)", lineHeight: 1.05, marginBottom: 24 }}
         >
           A free AI therapist that remembers you.
         </h1>

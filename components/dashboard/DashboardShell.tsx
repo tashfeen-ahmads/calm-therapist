@@ -36,6 +36,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         .dashboard-main {
           margin-left: 240px;
           min-height: 100vh;
+          min-height: 100dvh;
           padding-bottom: 24px;
           transition: margin-left 0.22s ease;
         }
