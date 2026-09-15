@@ -1,7 +1,16 @@
-# Netlify serves the public site. Everything that needs the backend
-# (API routes, dashboard, auth, onboarding, admin) is proxied to the Render
-# service below at status 200, so the browser sees one origin and cookies
-# stay first-party. Replace the Render URL once your service has its address.
+# Netlify serves the site. Only the parts that genuinely need the backend go
+# to Render: the API, and /admin, whose pages are server components that read
+# the database directly.
+#
+# Everything else stays here on purpose. /auth, /dashboard and /onboarding are
+# client components that reach the backend through /api, so they do not need
+# to run on Render, and proxying them actively broke them: Next.js generates a
+# random BUILD_ID per build, Netlify and Render build independently, and
+# /_next/* is not proxied. Render's HTML therefore asked the browser for asset
+# paths only Render had, the browser asked Netlify for them, and got a 404.
+# No JavaScript ran, so every client page under those paths rendered its
+# server shell and nothing else. Serving the HTML and its assets from the same
+# host is what keeps them in step.
 [build]
   command = "npm run build"
   publish = ".next"
@@ -16,30 +25,6 @@
 [[redirects]]
   from = "/api/*"
   to = "https://calm-therapist.onrender.com/api/:splat"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/dashboard/*"
-  to = "https://calm-therapist.onrender.com/dashboard/:splat"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/dashboard"
-  to = "https://calm-therapist.onrender.com/dashboard"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/auth/*"
-  to = "https://calm-therapist.onrender.com/auth/:splat"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/onboarding/*"
-  to = "https://calm-therapist.onrender.com/onboarding/:splat"
   status = 200
   force = true
 
