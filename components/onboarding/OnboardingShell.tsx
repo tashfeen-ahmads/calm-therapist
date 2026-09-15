@@ -4,25 +4,23 @@ import Link from "next/link";
 import { ReactNode } from "react";
 
 interface ShellProps {
-  step: 1 | 2 | 3 | 4 | 5;
+  step: 1 | 2 | 3 | 5;
   children: ReactNode;
 }
 
-// Three-stage journey for the user even though there are five page slots.
-// Steps 4 and 5 collapse into "almost there" so the user feels close to
-// actually talking to Aura.
-const DISPLAY_STAGE: Record<1 | 2 | 3 | 4 | 5, { stage: number }> = {
+// Four screens, shown to the member as three stages: the last two collapse
+// into "almost there" so the end feels close rather than open-ended.
+const DISPLAY_STAGE: Record<1 | 2 | 3 | 5, { stage: number }> = {
   1: { stage: 1 },
   2: { stage: 2 },
   3: { stage: 3 },
-  4: { stage: 3 },
   5: { stage: 3 },
 };
 
 export function OnboardingShell({ step, children }: ShellProps) {
   const stage = DISPLAY_STAGE[step].stage;
   const pct = (stage / 3) * 100;
-  // Step 5 reaches back to step 3 because we skip step 4 (goals).
+  // Step 5 reaches back to step 3: there is no step 4 any more.
   const prev =
     step === 5 ? "/onboarding/step-3" : step > 1 ? `/onboarding/step-${step - 1}` : null;
   return (
