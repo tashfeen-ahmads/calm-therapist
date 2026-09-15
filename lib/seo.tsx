@@ -152,6 +152,8 @@ export function articleSchema(args: {
   slug: string;
   publishedAt: string;
   updatedAt?: string;
+  /** The post's own feature image, rather than the site-wide social card. */
+  image?: string;
 }) {
   return {
     "@context": "https://schema.org",
@@ -166,7 +168,7 @@ export function articleSchema(args: {
       name: BRAND.name,
       logo: { "@type": "ImageObject", url: `${BASE_URL}/og-image.png` },
     },
-    image: [`${BASE_URL}/og-image.png`],
+    image: [`${BASE_URL}${args.image ?? "/og-image.png"}`],
     inLanguage: "en",
     mainEntityOfPage: { "@type": "WebPage", "@id": `${BASE_URL}/blog/${args.slug}` },
   };

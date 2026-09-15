@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FAFAF8"/>
+      <stop offset="100%" stop-color="#D6E8E4"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#g)"/>
+  <circle cx="839" cy="238" r="70" fill="none" stroke="#4A7A6D" stroke-width="2.4" opacity="0.34"/><circle cx="839" cy="238" r="152" fill="none" stroke="#4A7A6D" stroke-width="2.4" opacity="0.298"/><circle cx="839" cy="238" r="233" fill="none" stroke="#4A7A6D" stroke-width="2.4" opacity="0.256"/><circle cx="839" cy="238" r="315" fill="none" stroke="#4A7A6D" stroke-width="2.4" opacity="0.214"/><circle cx="839" cy="238" r="397" fill="none" stroke="#4A7A6D" stroke-width="2.4" opacity="0.172"/><circle cx="839" cy="238" r="479" fill="none" stroke="#4A7A6D" stroke-width="2.4" opacity="0.13"/><circle cx="839" cy="238" r="560" fill="none" stroke="#4A7A6D" stroke-width="2.4" opacity="0.088"/>
+  <path d="M0 446 Q 600 349 1200 446" fill="none" stroke="#355A4F" stroke-width="2" opacity="0.30"/>
+  <path d="M0 472 Q 600 398 1200 472" fill="none" stroke="#355A4F" stroke-width="1.4" opacity="0.18"/>
+  <rect x="0" y="625" width="1200" height="5" fill="#4A7A6D" opacity="0.85"/>
+</svg>

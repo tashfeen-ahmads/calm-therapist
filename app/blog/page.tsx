@@ -27,7 +27,15 @@ export default function BlogIndex() {
                 <p className="body-micro" style={{ color: "var(--calm-forest)", marginBottom: 10 }}>
                   {new Date(p.publishedAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })} · {p.readingMinutes} min
                 </p>
-                <h2 style={{ fontSize: 28, marginBottom: 8 }}>{p.title}</h2>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={p.image}
+                  alt=""
+                  width={1200}
+                  height={630}
+                  style={{ width: "100%", height: "auto", borderRadius: 10, marginBottom: 14, display: "block" }}
+                />
+                <h2 style={{ fontSize: "clamp(21px, 3vw, 28px)", marginBottom: 8 }}>{p.title}</h2>
                 <p style={{ fontSize: 15, lineHeight: 1.7, color: "var(--calm-ink-70)" }}>{p.description}</p>
               </Link>
             ))}

@@ -31,6 +31,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
           description: post.description,
           slug: post.slug,
           publishedAt: post.publishedAt,
+          image: post.image,
         })}
       />
 
@@ -43,6 +44,14 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
           <p className="body-large" style={{ color: "var(--calm-ink-40)", marginBottom: 24 }}>
             {post.description}
           </p>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={post.image}
+            alt=""
+            width={1200}
+            height={630}
+            style={{ width: "100%", height: "auto", borderRadius: 14, margin: "8px 0 32px", display: "block" }}
+          />
           <p style={{ fontSize: 13, color: "var(--calm-ink-40)", marginBottom: 64 }}>
             Published{" "}
             {new Date(post.publishedAt).toLocaleDateString(undefined, {
