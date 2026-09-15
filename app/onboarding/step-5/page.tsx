@@ -5,12 +5,19 @@ import Link from "next/link";
 import { OnboardingShell, readState } from "@/components/onboarding/OnboardingShell";
 import { Logo } from "@/components/ui/Logo";
 
+const TONE_LABEL: Record<string, string> = { warm: "Warm", direct: "Direct", clinical: "Measured" };
+const WANT_LABEL: Record<string, string> = {
+  listen: "She listens",
+  think: "She helps you think",
+  practical: "She helps you decide",
+};
+
 interface Snapshot {
   name?: string;
   tone?: string;
-  goals?: string[];
   focusAreas?: string[];
   language?: string;
+  wantsFirst?: string;
 }
 
 export default function Step5Page() {
@@ -71,9 +78,9 @@ export default function Step5Page() {
 
       <div className="card" style={{ marginBottom: 32 }}>
         <SummaryRow label="Name" value={snap.name ?? "—"} />
-        <SummaryRow label="Tone" value={snap.tone ?? "warm"} />
-        <SummaryRow label="Focus" value={(snap.focusAreas ?? []).join(", ") || "—"} />
-        <SummaryRow label="Goals" value={(snap.goals ?? []).join(" · ") || "—"} last />
+        <SummaryRow label="Tone" value={TONE_LABEL[snap.tone ?? "warm"]} />
+        <SummaryRow label="Focus" value={(snap.focusAreas ?? []).join(", ") || "Whatever comes up"} />
+        <SummaryRow label="First" value={WANT_LABEL[snap.wantsFirst ?? "listen"]} last />
       </div>
 
       <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>

@@ -36,6 +36,11 @@ export interface UserProfile {
   language: string;
   culture?: CulturalProfile;
   activeModes?: AgentModeKey[];
+  /**
+   * What they said they wanted when they signed up. Shapes the opening move
+   * only; what they actually do in the conversation overrides it immediately.
+   */
+  opening?: "listen" | "think" | "practical";
 }
 
 export const DEFAULT_PROFILE: UserProfile = {
@@ -290,13 +295,33 @@ export function buildMemoryBlock(p: UserProfile): string {
       "[SEMANTIC] Sparse — early in the relationship.",
       "[EPISODIC] No prior sessions to reference.",
       "[ACTIVE MODES] " + (p.activeModes?.length ? p.activeModes.join(", ") : "none"),
+      p.opening
+      ? `[OPENING] When they signed up they said they mostly wanted you to ${
+          p.opening === "listen"
+            ? "just listen while they get it out, so start in reflect or company and do not offer anything"
+            : p.opening === "think"
+            ? "help them think it through, so a reflection followed by one real question is welcome"
+            : "help them decide something, so you may move to problem-solve sooner, but still ask before you do"
+        }. This is a starting posture, not a rule. What they do in the conversation overrides it from the first message.`
+      : "",
       "",
       "Prioritize learning the user. Do not pretend to know them.",
-    ].join("\n");
+    ]
+      .filter(Boolean)
+      .join("\n");
   }
   return [
     "# MEMORY CONTEXT FOR THIS TURN",
-    `[SEMANTIC] Name: ${p.name}. Age group: ${p.age ?? "not specified"}. Goals: ${p.currentGoals.join("; ") || "none yet"}. Focus areas: ${p.focusAreas.join(", ") || "none yet"}.`,
+    `[SEMANTIC] Name: ${p.name}. Goals: ${p.currentGoals.join("; ") || "none yet"}. Focus areas: ${p.focusAreas.join(", ") || "none yet"}.`,
+    p.opening
+      ? `[OPENING] When they signed up they said they mostly wanted you to ${
+          p.opening === "listen"
+            ? "just listen while they get it out, so start in reflect or company and do not offer anything"
+            : p.opening === "think"
+            ? "help them think it through, so a reflection followed by one real question is welcome"
+            : "help them decide something, so you may move to problem-solve sooner, but still ask before you do"
+        }. This is a starting posture, not a rule. What they do in the conversation overrides it from the first message.`
+      : "",
     `[EPISODIC] This is session ${p.sessionCount}. Things you remember about this person:`,
     ...p.memories.slice(0, 20).map((m, i) => `  ${i + 1}. ${m}`),
     "[ACTIVE MODES] " + (p.activeModes?.length ? p.activeModes.join(", ") : "none"),

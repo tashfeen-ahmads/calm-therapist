@@ -57,6 +57,8 @@ export function sanitizeProfile(p: Partial<UserProfile> & { name?: string }): Us
     language: clean(p.language, MAX.language) ?? "en",
     culture: culture as UserProfile["culture"],
     activeModes: Array.isArray(p.activeModes) ? (p.activeModes ?? []).slice(0, 2) : [],
+    opening:
+      p.opening === "listen" || p.opening === "think" || p.opening === "practical" ? p.opening : undefined,
   };
 }
 

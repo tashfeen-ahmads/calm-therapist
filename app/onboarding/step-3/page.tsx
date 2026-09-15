@@ -5,173 +5,126 @@ import { useRouter } from "next/navigation";
 import { OnboardingShell, readState, writeState } from "@/components/onboarding/OnboardingShell";
 
 const TONES = [
-  { key: "warm", title: "Warm and gentle", desc: "Like a friend who has all the time in the world." },
-  { key: "direct", title: "Direct and clear", desc: "No soft-pedalling. Tell me what I need to hear." },
-  { key: "clinical", title: "Clinical and structured", desc: "Evidence-based, methodical, and precise." },
+  { key: "warm", label: "Warm", line: "Gentle. Stays with the feeling before anything else." },
+  { key: "direct", label: "Direct", line: "Plain. Says the thing, kindly, without circling it." },
+  { key: "clinical", label: "Measured", line: "Calm and structured. Less warmth, more clarity." },
 ];
 
-const MODES = ["Voice", "Chat", "I'm not sure yet"];
-
-const CULTURAL_CONTEXTS = [
-  { key: "communal", title: "Communal", desc: "Family and community shape my decisions." },
-  { key: "individualist", title: "Individualist", desc: "I largely chart my own path." },
-  { key: "mixed-diaspora", title: "Mixed / diaspora", desc: "I move between two cultural worlds." },
+/**
+ * How open is this subject where they live?
+ *
+ * This replaces two free-text boxes and a country-code field. The old version
+ * asked people to describe their own cultural context in prose and then type
+ * "PK" or "AE" from memory, which is a lot to ask of someone who arrived
+ * because they were struggling. Three taps carry the same signal, and more
+ * honestly: what matters to Aura is not which country it is, it is whether
+ * this person can talk about it with anyone around them.
+ */
+const OPENNESS = [
+  { key: "low", label: "It's normal to talk about this", line: "People around me would understand." },
+  { key: "moderate", label: "It's not really discussed", line: "I'd be careful who I told." },
+  { key: "high", label: "It would cause real trouble", line: "Nobody around me can know." },
 ];
 
-const STIGMA = [
-  { key: "high", label: "High — talking about this is risky around me" },
-  { key: "moderate", label: "Moderate" },
-  { key: "low", label: "Low — open conversation is fine" },
+const WANTS = [
+  { key: "listen", label: "Just listen", line: "I need to get it out." },
+  { key: "think", label: "Help me think", line: "I want to understand it better." },
+  { key: "practical", label: "Help me decide", line: "There's something I have to do." },
 ];
 
 export default function Step3Page() {
   const router = useRouter();
-  const [tone, setTone] = useState<string>("warm");
-  const [mode, setMode] = useState<string>("I'm not sure yet");
-  const [culturalContext, setCulturalContext] = useState<string>("");
-  const [stigmaContext, setStigmaContext] = useState<string>("moderate");
-  const [country, setCountry] = useState<string>("");
+  const [tone, setTone] = useState("warm");
+  const [openness, setOpenness] = useState("moderate");
+  const [want, setWant] = useState("listen");
 
   useEffect(() => {
-    const s = readState() as Record<string, string>;
-    if (s.tone) setTone(s.tone);
-    if (s.startingMode) setMode(s.startingMode);
-    if (s.culturalContext) setCulturalContext(s.culturalContext);
-    if (s.stigmaContext) setStigmaContext(s.stigmaContext);
-    if (s.country) setCountry(s.country);
+    const s = readState() as Record<string, unknown>;
+    if (typeof s.tone === "string") setTone(s.tone);
+    if (typeof s.stigmaContext === "string") setOpenness(s.stigmaContext);
+    if (typeof s.wantsFirst === "string") setWant(s.wantsFirst);
   }, []);
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    writeState({ tone, startingMode: mode, culturalContext, stigmaContext, country });
-    // Skip the goals step in onboarding — users can add goals from the
-    // dashboard once they've felt the value of the first conversation.
+    writeState({ tone, stigmaContext: openness, wantsFirst: want });
     router.push("/onboarding/step-5");
   };
 
   return (
     <OnboardingShell step={3}>
-      <h2 style={{ marginBottom: 16 }}>Choose your tone.</h2>
+      <h2 style={{ marginBottom: 16 }}>How should Aura be with you?</h2>
       <p className="body-large" style={{ color: "var(--calm-ink-40)", marginBottom: 32 }}>
-        Calm AI Therapy adapts to how you want to be spoken to.
+        Three taps and you are in. None of it is fixed; tell her to change and she will.
       </p>
 
       <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: 32 }}>
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          {TONES.map((t) => {
-            const active = tone === t.key;
-            return (
-              <button
-                type="button"
-                key={t.key}
-                onClick={() => setTone(t.key)}
-                style={{
-                  textAlign: "left",
-                  background: active ? "var(--calm-forest)" : "var(--calm-white)",
-                  color: active ? "white" : "var(--calm-ink)",
-                  border: active ? "1px solid var(--calm-forest)" : "1px solid var(--calm-ink-10)",
-                  borderRadius: 12,
-                  padding: 28,
-                  cursor: "pointer",
-                  transition: "all 0.2s ease",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 6,
-                }}
-              >
-                <span style={{ fontFamily: "var(--font-heading)", fontSize: 22, fontWeight: 500 }}>
-                  {t.title}
-                </span>
-                <span style={{ fontSize: 14, opacity: active ? 0.85 : 0.6 }}>{t.desc}</span>
-              </button>
-            );
-          })}
-        </div>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <span className="body-micro" style={{ color: "var(--calm-ink-40)" }}>
-            How do you want to start?
-          </span>
-          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-            {MODES.map((m) => (
-              <button
-                type="button"
-                key={m}
-                onClick={() => setMode(m)}
-                className={`pill ${mode === m ? "active" : ""}`}
-              >
-                {m}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <span className="body-micro" style={{ color: "var(--calm-ink-40)" }}>
-            How does your world work?
-          </span>
-          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-            {CULTURAL_CONTEXTS.map((c) => (
-              <button
-                type="button"
-                key={c.key}
-                onClick={() => setCulturalContext(c.key)}
-                className={`pill ${culturalContext === c.key ? "active" : ""}`}
-                title={c.desc}
-              >
-                {c.title}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <span className="body-micro" style={{ color: "var(--calm-ink-40)" }}>
-            Mental-health stigma in your environment?
-          </span>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {STIGMA.map((s) => (
-              <label
-                key={s.key}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 10,
-                  padding: "10px 14px",
-                  border: "1px solid var(--calm-ink-10)",
-                  borderRadius: 8,
-                  cursor: "pointer",
-                  background: stigmaContext === s.key ? "var(--calm-forest-10)" : "transparent",
-                }}
-              >
-                <input
-                  type="radio"
-                  name="stigma"
-                  value={s.key}
-                  checked={stigmaContext === s.key}
-                  onChange={() => setStigmaContext(s.key)}
-                />
-                <span style={{ fontSize: 14 }}>{s.label}</span>
-              </label>
-            ))}
-          </div>
-        </div>
-
-        <label style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          <span className="body-micro" style={{ color: "var(--calm-ink-40)" }}>Country (so we route the right crisis line if needed)</span>
-          <input
-            className="input"
-            placeholder="e.g. PK, US, UK, IN, AE…"
-            value={country}
-            onChange={(e) => setCountry(e.target.value.toUpperCase())}
-            maxLength={3}
-          />
-        </label>
+        <CardGroup label="Her tone" options={TONES} value={tone} onChange={setTone} />
+        <CardGroup
+          label="Talking about this where you are"
+          options={OPENNESS}
+          value={openness}
+          onChange={setOpenness}
+        />
+        <CardGroup label="Right now, you mostly want her to" options={WANTS} value={want} onChange={setWant} />
 
         <button type="submit" className="btn-primary" style={{ alignSelf: "flex-start" }}>
           Continue
         </button>
       </form>
     </OnboardingShell>
+  );
+}
+
+function CardGroup({
+  label,
+  options,
+  value,
+  onChange,
+}: {
+  label: string;
+  options: { key: string; label: string; line: string }[];
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  return (
+    <fieldset style={{ border: 0, padding: 0, margin: 0 }}>
+      <legend className="body-micro" style={{ color: "var(--calm-ink-40)", marginBottom: 12 }}>
+        {label}
+      </legend>
+      <div className="onboard-cards">
+        {options.map((o) => {
+          const on = value === o.key;
+          return (
+            <button
+              type="button"
+              key={o.key}
+              onClick={() => onChange(o.key)}
+              aria-pressed={on}
+              style={{
+                textAlign: "left",
+                padding: "14px 16px",
+                borderRadius: 12,
+                cursor: "pointer",
+                background: on ? "var(--calm-forest-10)" : "var(--calm-white)",
+                border: "1px solid " + (on ? "var(--calm-forest)" : "var(--calm-ink-10)"),
+                transition: "all 0.15s ease",
+              }}
+            >
+              <span style={{ display: "block", fontSize: 15, fontWeight: 500, color: "var(--calm-ink)" }}>
+                {o.label}
+              </span>
+              <span style={{ display: "block", fontSize: 13, color: "var(--calm-ink-40)", marginTop: 4, lineHeight: 1.5 }}>
+                {o.line}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+      <style>{`
+        .onboard-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        @media (max-width: 620px) { .onboard-cards { grid-template-columns: 1fr; } }
+      `}</style>
+    </fieldset>
   );
 }

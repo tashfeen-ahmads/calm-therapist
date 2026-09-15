@@ -91,3 +91,25 @@ test("softened output passes its own rule check", async () => {
   const raw = "So it wasn't the call — it was saying yes first.";
   assert.deepEqual(checkTalkingRules(softenDashes(raw)), []);
 });
+
+test("the opening posture reaches a brand new member's prompt", async () => {
+  const { composeSystemPrompt, DEFAULT_PROFILE } = await import("../lib/aura.ts");
+  const fresh = { ...DEFAULT_PROFILE, sessionCount: 1, opening: "listen" as const };
+  const prompt = composeSystemPrompt({ profile: fresh });
+  // The first conversation is exactly where this signal does its work.
+  assert.match(prompt, /\[OPENING\]/);
+  assert.match(prompt, /do not offer anything/i);
+});
+
+test("someone who wants help deciding gets a different posture", async () => {
+  const { composeSystemPrompt, DEFAULT_PROFILE } = await import("../lib/aura.ts");
+  const prompt = composeSystemPrompt({ profile: { ...DEFAULT_PROFILE, opening: "practical" } });
+  assert.match(prompt, /problem-solve sooner/i);
+  assert.match(prompt, /still ask before you do/i);
+});
+
+test("no opening preference leaves no stray marker in the prompt", async () => {
+  const { composeSystemPrompt, DEFAULT_PROFILE } = await import("../lib/aura.ts");
+  const prompt = composeSystemPrompt({ profile: DEFAULT_PROFILE });
+  assert.ok(!prompt.includes("[OPENING]"));
+});
