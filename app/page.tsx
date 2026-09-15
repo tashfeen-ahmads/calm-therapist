@@ -11,6 +11,7 @@ import { HomeFaq } from "@/components/landing/HomeFaq";
 import { PrivacyBlock } from "@/components/landing/Privacy";
 import { CirclesSection } from "@/components/landing/CirclesSection";
 import { FinalCTA } from "@/components/landing/FinalCTA";
+import { Reviews } from "@/components/landing/Reviews";
 import { LeadPopupLazy } from "@/components/landing/LeadPopupLazy";
 import { JsonLd, organizationSchema, softwareApplicationSchema, webSiteSchema } from "@/lib/seo";
 import { BRAND } from "@/lib/brand";
@@ -39,6 +40,7 @@ export default function HomePage() {
         <Languages />
         <ConditionPaths />
         <PrivacyBlock />
+        <Reviews />
         <HomeFaq />
         <FinalCTA />
       </main>

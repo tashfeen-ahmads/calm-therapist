@@ -7,7 +7,8 @@ interface Props {
   items: FeedbackRecord[];
 }
 
-const TABS: { key: "needs-attention" | "neutral" | "positive" | "all"; label: string }[] = [
+const TABS: { key: "to-publish" | "needs-attention" | "neutral" | "positive" | "all"; label: string }[] = [
+  { key: "to-publish", label: "Waiting to publish" },
   { key: "needs-attention", label: "Needs attention" },
   { key: "neutral", label: "Neutral" },
   { key: "positive", label: "Positive" },
@@ -17,7 +18,13 @@ const TABS: { key: "needs-attention" | "neutral" | "positive" | "all"; label: st
 export function FeedbackList({ items }: Props) {
   const [tab, setTab] = useState<typeof TABS[number]["key"]>("needs-attention");
   const [list, setList] = useState(items);
-  const filtered = tab === "all" ? list : list.filter((r) => r.category === tab);
+  const filtered =
+    tab === "all"
+      ? list
+      : tab === "to-publish"
+      ? // Consented, has words, and nobody has decided about it yet.
+        list.filter((r) => r.publicConsent && r.comment.length > 0 && !r.published && !r.rejectedAt)
+      : list.filter((r) => r.category === tab);
 
   const respond = async (id: string) => {
     const text = window.prompt("Your response (kept private to the team)");
@@ -33,6 +40,22 @@ export function FeedbackList({ items }: Props) {
     } else {
       window.alert(data.error ?? "Could not save response.");
     }
+  };
+
+  /**
+   * Approve or decline a review for the public site. Declining keeps the row:
+   * the feedback is still worth reading and the member may still deserve a
+   * reply, it simply does not go on a marketing page.
+   */
+  const setPublished = async (id: string, published: boolean) => {
+    const res = await fetch("/api/admin/feedback/publish", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, published }),
+    });
+    const data = await res.json();
+    if (res.ok) setList((prev) => prev.map((r) => (r.id === id ? data.record : r)));
+    else window.alert(data.error ?? "Could not change that.");
   };
 
   const markReviewed = async (id: string) => {
@@ -91,6 +114,18 @@ export function FeedbackList({ items }: Props) {
                 <p style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.06em" }}>
                   {r.status}
                 </p>
+                {r.publicConsent && (
+                  <p
+                    style={{
+                      fontSize: 11,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.06em",
+                      color: r.published ? "var(--calm-forest)" : "var(--calm-ink-40)",
+                    }}
+                  >
+                    {r.published ? "live on site" : r.rejectedAt ? "not published" : "consented, unreviewed"}
+                  </p>
+                )}
               </div>
             </div>
             {r.comment && (
@@ -110,6 +145,33 @@ export function FeedbackList({ items }: Props) {
               {r.status === "new" && (
                 <button onClick={() => markReviewed(r.id)} className="btn-ghost" style={{ height: 32, fontSize: 12 }}>
                   Mark reviewed
+                </button>
+              )}
+              {r.publicConsent && r.comment.length > 0 && !r.published && (
+                <button
+                  onClick={() => setPublished(r.id, true)}
+                  className="btn-primary"
+                  style={{ height: 32, fontSize: 12 }}
+                >
+                  Publish to site
+                </button>
+              )}
+              {r.publicConsent && r.comment.length > 0 && !r.published && !r.rejectedAt && (
+                <button
+                  onClick={() => setPublished(r.id, false)}
+                  className="btn-ghost"
+                  style={{ height: 32, fontSize: 12 }}
+                >
+                  Do not publish
+                </button>
+              )}
+              {r.published && (
+                <button
+                  onClick={() => setPublished(r.id, false)}
+                  className="btn-ghost"
+                  style={{ height: 32, fontSize: 12 }}
+                >
+                  Take down
                 </button>
               )}
             </div>

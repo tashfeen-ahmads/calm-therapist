@@ -215,11 +215,20 @@ model Feedback {
   status        String    @default("new") // "new" | "reviewed" | "responded"
   adminResponse String?
   respondedAt   DateTime?
+  // Admin moderation. A review is invisible to the public until someone has
+  // read it and said yes: members can write anything, including another
+  // person's name, a phone number, or a link we would not want on a homepage.
+  published     Boolean   @default(false)
+  publishedAt   DateTime?
+  /// Set when an admin explicitly declines to publish, so it stops appearing
+  /// in the moderation queue without being deleted.
+  rejectedAt    DateTime?
   // The conversation this was about, when one was recent enough to tell.
   sessionId     String?
   createdAt     DateTime  @default(now())
 
   @@index([category, createdAt])
+  @@index([published, createdAt])
   @@index([userId])
 }
 

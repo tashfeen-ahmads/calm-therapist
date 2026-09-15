@@ -15,6 +15,7 @@ const ITEMS = [
   { href: "/dashboard/reflect", label: "Looking back", icon: ReflectIcon },
   { href: "/dashboard/goals", label: "What you're after", icon: GoalsIcon },
   { href: "/dashboard/profile", label: "Your space", icon: ProfileIcon },
+  { href: "/dashboard/reviews", label: "Your reviews", icon: ReviewIcon },
   { href: "/dashboard/settings", label: "Preferences", icon: SettingsIcon },
 ];
 
@@ -402,6 +403,14 @@ function CirclesIcon({ active }: { active?: boolean }) {
       <circle cx="12" cy="7.5" r="1.4" fill="currentColor" stroke="none" />
       <circle cx="16" cy="14.5" r="1.4" fill="currentColor" stroke="none" />
       <circle cx="8" cy="14.5" r="1.4" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+function ReviewIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden>
+      <path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8L3.5 9.7l5.9-.9L12 3.5z" strokeLinejoin="round" />
     </svg>
   );
 }

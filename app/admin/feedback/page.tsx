@@ -9,8 +9,9 @@ export default async function AdminFeedbackPage() {
     <div>
       <h2 style={{ marginBottom: 8 }}>Feedback</h2>
       <p style={{ color: "var(--calm-ink-70)", marginBottom: 32 }}>
-        Low-star feedback shows up here first. 4★+ comments with consent are surfaced on the
-        public site.
+        Low-star feedback shows up here first, because that is the feedback worth acting on.
+        Nothing reaches the public site on its own: a consented review sits in
+        &ldquo;Waiting to publish&rdquo; until someone reads it and says yes.
       </p>
       <FeedbackList items={items} />
     </div>

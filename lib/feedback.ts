@@ -17,6 +17,10 @@ export interface FeedbackRecord {
   adminResponse?: string;
   respondedAt?: string;
   sessionId?: string;
+  /** Live on the public site. False until an admin approves it. */
+  published: boolean;
+  publishedAt?: string;
+  rejectedAt?: string;
 }
 
 const globalAny = globalThis as unknown as { __calmFeedback?: FeedbackRecord[] };
@@ -68,6 +72,7 @@ export async function captureFeedback(input: {
     publicConsent: input.publicConsent,
     category,
     status: "new",
+    published: false,
     createdAt: new Date().toISOString(),
     sessionId: input.sessionId,
   };
@@ -118,19 +123,88 @@ export async function listFeedback(filter?: {
     .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
 }
 
+/**
+ * Reviews shown on the public site.
+ *
+ * Three conditions, all required. The member ticked the box allowing us to
+ * quote them, they wrote something, and an admin has read it and approved it.
+ * Consent alone is not enough: a member can write another person's name, a
+ * phone number, or a link, and none of that should be able to reach a
+ * homepage without a human looking at it first.
+ */
 export async function publicHighlights(limit = 6): Promise<FeedbackRecord[]> {
   if (dbEnabled) {
     const rows = await prisma.feedback.findMany({
-      where: { category: "positive", publicConsent: true, comment: { not: "" } },
-      orderBy: { createdAt: "desc" },
+      where: { published: true, publicConsent: true, comment: { not: "" } },
+      orderBy: { publishedAt: "desc" },
       take: limit,
     });
     return rows.map(rowToRecord);
   }
   return memoryStore
-    .filter((r) => r.category === "positive" && r.publicConsent && r.comment.length > 0)
+    .filter((r) => r.published && r.publicConsent && r.comment.length > 0)
     .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
     .slice(0, limit);
+}
+
+/**
+ * Approve or decline a review for the public site.
+ *
+ * Rejecting keeps the row: the feedback is still worth reading and the member
+ * still deserves a reply, it simply does not go on the marketing pages.
+ */
+export async function setReviewPublished(id: string, published: boolean): Promise<FeedbackRecord | null> {
+  const now = new Date();
+  if (dbEnabled) {
+    try {
+      const row = await prisma.feedback.update({
+        where: { id },
+        data: published
+          ? { published: true, publishedAt: now, rejectedAt: null }
+          : { published: false, publishedAt: null, rejectedAt: now },
+      });
+      return rowToRecord(row);
+    } catch {
+      return null;
+    }
+  }
+  const idx = memoryStore.findIndex((r) => r.id === id);
+  if (idx === -1) return null;
+  const next: FeedbackRecord = {
+    ...memoryStore[idx],
+    published,
+    publishedAt: published ? now.toISOString() : undefined,
+    rejectedAt: published ? undefined : now.toISOString(),
+  };
+  memoryStore[idx] = next;
+  return next;
+}
+
+/** Every review one member has left, newest first, for their own dashboard. */
+export async function reviewsByUser(userId: string): Promise<FeedbackRecord[]> {
+  if (dbEnabled) {
+    const rows = await prisma.feedback.findMany({ where: { userId }, orderBy: { createdAt: "desc" } });
+    return rows.map(rowToRecord);
+  }
+  return memoryStore
+    .filter((r) => r.userId === userId)
+    .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+}
+
+/**
+ * The rating shown publicly, computed only from approved reviews.
+ *
+ * Returns null below a floor: an "average" of one review is not an average,
+ * and publishing AggregateRating schema off a thin sample is the kind of
+ * thing that earns a manual action rather than a rich result.
+ */
+export async function publicRating(minimum = 3): Promise<{ ratingValue: number; reviewCount: number } | null> {
+  const rows = dbEnabled
+    ? await prisma.feedback.findMany({ where: { published: true }, select: { rating: true } })
+    : memoryStore.filter((r) => r.published).map((r) => ({ rating: r.rating }));
+  if (rows.length < minimum) return null;
+  const total = rows.reduce((sum, r) => sum + r.rating, 0);
+  return { ratingValue: total / rows.length, reviewCount: rows.length };
 }
 
 export async function setFeedbackStatus(
@@ -202,6 +276,9 @@ interface PrismaFeedbackRow {
   respondedAt: Date | null;
   createdAt: Date;
   sessionId: string | null;
+  published: boolean;
+  publishedAt: Date | null;
+  rejectedAt: Date | null;
 }
 
 function rowToRecord(row: PrismaFeedbackRow): FeedbackRecord {
@@ -219,5 +296,8 @@ function rowToRecord(row: PrismaFeedbackRow): FeedbackRecord {
     respondedAt: row.respondedAt?.toISOString(),
     sessionId: row.sessionId ?? undefined,
     createdAt: row.createdAt.toISOString(),
+    published: row.published,
+    publishedAt: row.publishedAt?.toISOString(),
+    rejectedAt: row.rejectedAt?.toISOString(),
   };
 }
