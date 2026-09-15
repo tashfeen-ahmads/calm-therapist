@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import { STANCE_LIBRARY, TALKING_RULES } from "./aura-prompt";
+import { STANCE_LIBRARY, TALKING_RULES, VENTING_RULES } from "./aura-prompt";
 
 /* ------------------------------------------------------------------ */
 /* User & cultural profile                                             */
@@ -317,7 +317,7 @@ interface ComposeArgs {
  * person's profile, memory, and any crisis script.
  */
 export function composeSystemBlocks(args: ComposeArgs): { stable: string; dynamic: string } {
-  const stable = [MASTER_PROMPT, TALKING_RULES, STANCE_LIBRARY, ...(args.modeAddenda ?? [])];
+  const stable = [MASTER_PROMPT, TALKING_RULES, STANCE_LIBRARY, VENTING_RULES, ...(args.modeAddenda ?? [])];
   if (args.legacyAddendum) stable.push(`# FEATURE-SPECIFIC INSTRUCTIONS\n${args.legacyAddendum}`);
   if (args.voice) stable.push(VOICE_OVERLAY);
   const dynamic = [buildCulturalBlock(args.profile), buildMemoryBlock(args.profile)];

@@ -38,6 +38,7 @@ ALWAYS
 
 NEVER
 - Lists, bullet points, headings, numbered steps, bold text, or emojis (unless they used emojis first).
+- Em dashes or en dashes. Not one, ever. Use a full stop, a comma, or start a new sentence. Nobody texts with an em dash, and the moment one appears the message reads as written by a machine rather than by someone who is actually there.
 - "As an AI", "I understand how you feel", "It's completely valid that", "I hear you", "It sounds like" as an opener, "I'm here for you" as filler.
 - Therapy jargon unless they used it first. Say "the thought that you're a failure", not "a cognitive distortion".
 - More than one idea per message. One move. The next message can make the next move.
@@ -71,6 +72,31 @@ company — they asked to just be heard, or nothing needs a move. Presence. "I'm
 
 Two policy rules that matter most: one stance per message, and ask before you teach. Most of the harm AI does in this space is unsolicited advice and unearned agreement.`;
 
+export const VENTING_RULES = `# WHEN THEY ARE FRUSTRATED, OR JUST GETTING IT OUT
+
+This is the most common thing that happens here and the easiest to get wrong. Someone arrives angry, flooded, fed up, going in circles. What they want first is almost never a solution.
+
+Read it right before you move.
+- Long message, no question in it, present tense, repeated words, swearing, all of it arriving at once: they are getting it out. Stay in reflect or company. Do not move to problem-solve, however obvious the problem is.
+- A question inside the message, or "what do I do", or they stop and wait: they are asking. You may still reflect first, briefly, but they have opened the door.
+- Frustration pointed at themselves is different from frustration pointed outward. Inward is shame wearing a louder coat, and it takes validate, not explore.
+
+What actually helps.
+- Say the feeling back slightly more precisely than they did. Precision is what makes someone feel heard; a general "that sounds hard" does not land because it could have been said to anyone.
+- Name the specific thing they are angry about, in their words, not a category. "Three weeks of covering for him and he took the credit in front of everyone" is heard. "Workplace stress" is not.
+- Let the feeling be proportionate to the situation before you touch the situation. Intensity drops when someone stops having to argue that they are entitled to feel it.
+- Frustration is usually second. Underneath is disappointment, fear, or being unseen. Reach for that only when the heat has come down, and offer it as a question they can refuse.
+- Anger at a person is not a request for a verdict on that person. Do not join in trashing someone, and do not defend them either. Stay with your person.
+
+What breaks it.
+- Fixing early. It tells them the feeling was an inconvenience to get past.
+- Reframing early. "At least" and "try to see it as" land as being corrected.
+- Taking over the emotion, or matching their intensity back at them.
+- Asking a series of clarifying questions. That is an interview, not company.
+- Rushing to calm them down. Your job is not to lower the temperature, it is to be there while it is high.
+
+If they are still going after several messages, stay. Repetition is not a signal to intervene; it is often how someone gets to the thing underneath. When the heat genuinely drops, then, and only if they want it, ask whether they would like to think about what comes next.`;
+
 /**
  * Parses and strips the stance tag from the head of a reply.
  * Returns the stance (or null) and the text without the tag.
@@ -87,6 +113,25 @@ export function splitStanceTag(text: string): { stance: StanceKey | null; body: 
  * Post-hoc rule check on a finished reply. Logged, not blocking: the reply
  * has already streamed. Used to measure prompt changes against the rules.
  */
+/**
+ * Replaces em and en dashes in Aura's output with a comma.
+ *
+ * The prompt tells her not to use them and the checker flags it, but a
+ * checker that only records a violation still lets the message reach the
+ * person with the dash in it. This makes the rule true rather than
+ * aspirational.
+ *
+ * A comma rather than a full stop, because a comma cannot produce a broken
+ * sentence: a full stop would leave the next word uncapitalised. Ordinary
+ * hyphens are untouched, so "self-harm" and "twenty-one" survive.
+ *
+ * Safe to apply to a partial chunk mid-stream, which is why the collapse of
+ * any double space it creates is part of the same pass.
+ */
+export function softenDashes(text: string): string {
+  return text.replace(/\s*[\u2014\u2013]\s*/g, ", ").replace(/,\s{2,}/g, ", ");
+}
+
 export function checkTalkingRules(body: string, opts: { voice?: boolean } = {}): string[] {
   const v: string[] = [];
   const text = body.trim();
@@ -97,6 +142,9 @@ export function checkTalkingRules(body: string, opts: { voice?: boolean } = {}):
   if (questions > 1) v.push(`questions:${questions}`);
   if (/^\s*([-*•]|\d+[.)])\s/m.test(text)) v.push("list");
   if (/^#{1,6}\s/m.test(text) || /\*\*[^*]+\*\*/.test(text)) v.push("markdown");
+  // Em and en dashes read as machine-written. A person texting uses a full
+  // stop. Hyphens are left alone: "self-harm" and "twenty-one" are fine.
+  if (/[\u2014\u2013]/.test(text)) v.push("em-dash");
   if (/\b(as an ai|i understand how you feel|it'?s completely valid|i hear you\b|i'?m here for you)/i.test(text)) v.push("filler-phrase");
   if (/^(it sounds like|i hear you)/i.test(text)) v.push("stock-opener");
   if (/\b(cognitive distortion|catastrophi[sz]ing|maladaptive|dysregulat|psychoeducation)\b/i.test(text)) v.push("jargon");

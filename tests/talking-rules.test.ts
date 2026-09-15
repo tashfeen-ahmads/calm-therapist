@@ -50,3 +50,44 @@ test("voice replies are held shorter", () => {
   assert.ok(checkTalkingRules(four, { voice: true }).some((v) => v.startsWith("too-long")));
   assert.ok(!checkTalkingRules("One. Two. Three.", { voice: false }).some((v) => v.startsWith("too-long")));
 });
+
+test("em dashes and en dashes are violations", () => {
+  // Nobody texts with an em dash. One is enough to make a message read as
+  // machine-written, which is the whole thing Aura is trying not to be.
+  assert.ok(checkTalkingRules("You said yes — before you'd decided.").includes("em-dash"));
+  assert.ok(checkTalkingRules("Three weeks – and he took the credit.").includes("em-dash"));
+});
+
+test("hyphens are left alone", () => {
+  // The rule is about the long dashes, not ordinary hyphenation.
+  assert.deepEqual(checkTalkingRules("That's a well-worn path for you."), []);
+  assert.deepEqual(checkTalkingRules("Twenty-one is young to carry that."), []);
+});
+
+test("the venting guidance reaches the prompt", async () => {
+  const { VENTING_RULES } = await import("../lib/aura-prompt.ts");
+  // The two failure modes the evidence is clearest on.
+  assert.match(VENTING_RULES, /do not move to problem-solve/i);
+  assert.match(VENTING_RULES, /reframing early/i);
+});
+
+test("long dashes are replaced before the reply is sent", async () => {
+  const { softenDashes } = await import("../lib/aura-prompt.ts");
+  assert.equal(
+    softenDashes("You said yes — before you'd decided."),
+    "You said yes, before you'd decided."
+  );
+  assert.equal(softenDashes("Three weeks–and he took the credit."), "Three weeks, and he took the credit.");
+});
+
+test("softening dashes leaves ordinary hyphens and clean text alone", async () => {
+  const { softenDashes } = await import("../lib/aura-prompt.ts");
+  assert.equal(softenDashes("That's a well-worn path."), "That's a well-worn path.");
+  assert.equal(softenDashes("Take your time."), "Take your time.");
+});
+
+test("softened output passes its own rule check", async () => {
+  const { softenDashes } = await import("../lib/aura-prompt.ts");
+  const raw = "So it wasn't the call — it was saying yes first.";
+  assert.deepEqual(checkTalkingRules(softenDashes(raw)), []);
+});
