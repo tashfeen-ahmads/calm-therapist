@@ -73,7 +73,7 @@ export default function Step2Page() {
 
         <label style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           <span className="body-micro" style={{ color: "var(--calm-ink-40)" }}>
-            Anything else you want Calm AI to know?
+            Anything else you want Calm AI Therapy to know?
           </span>
           <textarea
             className="input"

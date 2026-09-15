@@ -2,9 +2,9 @@ import { FeaturePageTemplate } from "@/components/seo/FeaturePage";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Weekly Journal | Patterns You Couldn't See | Calm AI",
+  title: "Weekly Journal | Patterns You Couldn't See | Calm AI Therapy",
   description:
-    "AI-powered weekly journaling that reads back to you what you didn't notice. Calm AI's Weekly Journal turns scattered sessions into a coherent story.",
+    "AI-powered weekly journaling that reads back to you what you didn't notice. Calm AI Therapy's Weekly Journal turns scattered sessions into a coherent story.",
   path: "/features/journal",
 });
 
@@ -13,20 +13,20 @@ export default function JournalModePage() {
     <FeaturePageTemplate
       slug="journal"
       label="Weekly Journal"
-      oneLiner="A private space to track your week. Calm AI surfaces patterns you didn't notice."
+      oneLiner="A private space to track your week. Calm AI Therapy surfaces patterns you didn't notice."
       problem={{
         title: "You can't see your own pattern.",
         body:
-          "When you're inside a week, the week looks like noise. From outside, it looks like a pattern. Calm AI sits outside the week, with all your sessions in view, and shows you what you said.",
+          "When you're inside a week, the week looks like noise. From outside, it looks like a pattern. Calm AI Therapy sits outside the week, with all your sessions in view, and shows you what you said.",
       }}
       steps={[
         { title: "Write briefly", body: "Three lines is enough. The week doesn't need a thesis." },
-        { title: "Calm AI reviews", body: "It cross-references your sessions, mood check-ins, and journal entries." },
+        { title: "Calm AI Therapy reviews", body: "It cross-references your sessions, mood check-ins, and journal entries." },
         { title: "Read what you missed", body: "A 3-paragraph weekly read of patterns you wouldn't have caught yourself." },
       ]}
       who={[
-        { title: "If you've journaled before", body: "You know writing helps. Calm AI gives you the analyst you were missing." },
-        { title: "If you've never journaled", body: "Three lines is the rule. Calm AI does the thinking." },
+        { title: "If you've journaled before", body: "You know writing helps. Calm AI Therapy gives you the analyst you were missing." },
+        { title: "If you've never journaled", body: "Three lines is the rule. Calm AI Therapy does the thinking." },
         { title: "If you forget how the week went", body: "By Sunday, Monday's argument has vanished. The journal holds what your memory let go." },
       ]}
       related={[
@@ -35,10 +35,10 @@ export default function JournalModePage() {
         { href: "/for/burnout", label: "For Burnout" },
       ]}
       body={[
-        "Most therapy apps treat journaling as a feature. Calm AI treats it as the connective tissue. Every chat and voice session is automatically pulled into the weekly journal — you don't have to remember anything to use it.",
-        "The Weekly Journal is the only place where Calm AI will surface emotional themes proactively. You'll see a pattern named — gently, in your own words back to you. Sometimes that's the first time you've seen it.",
-        "Your journal is yours. You can edit it and delete any entry. Calm AI will never publish, share, or train on what you write here. That promise is the foundation of why journaling works in the first place.",
-        "Used together with the Monthly Reflect, the journal becomes a longitudinal record — not of \"progress\", but of presence. Calm AI isn't here to make you better. It's here to make you visible to yourself.",
+        "Most therapy apps treat journaling as a feature. Calm AI Therapy treats it as the connective tissue. Every chat and voice session is automatically pulled into the weekly journal — you don't have to remember anything to use it.",
+        "The Weekly Journal is the only place where Calm AI Therapy will surface emotional themes proactively. You'll see a pattern named — gently, in your own words back to you. Sometimes that's the first time you've seen it.",
+        "Your journal is yours. You can edit it and delete any entry. Calm AI Therapy will never publish, share, or train on what you write here. That promise is the foundation of why journaling works in the first place.",
+        "Used together with the Monthly Reflect, the journal becomes a longitudinal record — not of \"progress\", but of presence. Calm AI Therapy isn't here to make you better. It's here to make you visible to yourself.",
       ]}
     />
   );

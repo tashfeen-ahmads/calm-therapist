@@ -37,7 +37,7 @@ export function ConditionPageTemplate(p: ConditionPageProps) {
           <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "For", href: "/for/anxiety" }, { name: p.condition }]} />
           <h1 style={{ marginBottom: 24 }}>{p.h1}</h1>
           <p className="body-large" style={{ color: "var(--calm-ink-40)" }}>
-            Calm AI is built around how {p.condition.toLowerCase()} actually works — memory,
+            Calm AI Therapy is built around how {p.condition.toLowerCase()} actually works — memory,
             voice when typing is hard, and a longitudinal record so you don&apos;t start over every
             time.
           </p>
@@ -68,7 +68,7 @@ export function ConditionPageTemplate(p: ConditionPageProps) {
 
       <section style={{ background: "var(--calm-white)", padding: "80px 24px" }}>
         <div className="container" style={{ maxWidth: 1000 }}>
-          <h2 style={{ marginBottom: 48 }}>How Calm AI is different</h2>
+          <h2 style={{ marginBottom: 48 }}>How Calm AI Therapy is different</h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }} className="ct-grid">
             {p.ctFeatures.map((f) => (
               <Link key={f.title} href={f.href} className="card" style={{ textDecoration: "none", color: "inherit" }}>
@@ -141,7 +141,7 @@ export function ConditionPageTemplate(p: ConditionPageProps) {
           <p className="body-large" style={{ color: "var(--calm-ink-40)", marginBottom: 32 }}>
             No appointment. No waiting. No judgment.
           </p>
-          <Link href="/auth/signup" className="btn-primary">Begin with Calm AI</Link>
+          <Link href="/auth/signup" className="btn-primary">Begin with Calm AI Therapy</Link>
 
           <div style={{ marginTop: 48, display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
             {p.related.map((r) => (

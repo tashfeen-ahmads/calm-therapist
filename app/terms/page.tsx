@@ -3,9 +3,9 @@ import { PageShell } from "@/components/seo/PageShell";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Terms of Service | Calm AI",
+  title: "Terms of Service | Calm AI Therapy",
   description:
-    "The terms for using Calm AI — what we promise, what we ask, and the limits of what an AI companion can do.",
+    "The terms for using Calm AI Therapy — what we promise, what we ask, and the limits of what an AI companion can do.",
   path: "/terms",
 });
 
@@ -21,13 +21,13 @@ export default function TermsPage() {
           </p>
           <h1 style={{ marginBottom: 32 }}>The terms, in plain English.</h1>
           <p className="body-large" style={{ color: "var(--calm-ink-40)", marginBottom: 56 }}>
-            By using Calm AI you agree to the following. We&apos;ve kept it short and human.
+            By using Calm AI Therapy you agree to the following. We&apos;ve kept it short and human.
             Last updated {LAST_UPDATED}.
           </p>
 
-          <Section title="What Calm AI is — and isn't">
+          <Section title="What Calm AI Therapy is — and isn't">
             <p>
-              Calm AI is an AI companion built to help you reflect, name what you&apos;re
+              Calm AI Therapy is an AI companion built to help you reflect, name what you&apos;re
               feeling, and keep your space open between hard moments. It is <strong>not a
               substitute for licensed mental-health care</strong>, a clinical diagnosis, or a crisis
               service. If you are in danger or in immediate distress, please reach out to a
@@ -41,7 +41,7 @@ export default function TermsPage() {
 
           <Section title="Your account">
             <ul style={{ listStyle: "disc", paddingLeft: 24, margin: 0, display: "flex", flexDirection: "column", gap: 8 }}>
-              <li>You must be 16 or older to use Calm AI.</li>
+              <li>You must be 16 or older to use Calm AI Therapy.</li>
               <li>You are responsible for keeping your password safe and for activity on your account.</li>
               <li>One account per person. Don&apos;t share your login.</li>
               <li>Use a real email address — we send important account messages there.</li>
@@ -49,7 +49,7 @@ export default function TermsPage() {
           </Section>
 
           <Section title="What you can do here">
-            <p>You may use Calm AI for personal reflection, journaling, conversations with Aura, and saving your own goals and memories. You may not:</p>
+            <p>You may use Calm AI Therapy for personal reflection, journaling, conversations with Aura, and saving your own goals and memories. You may not:</p>
             <ul style={{ listStyle: "disc", paddingLeft: 24, margin: 0, display: "flex", flexDirection: "column", gap: 8 }}>
               <li>Use the service to harm yourself or others.</li>
               <li>Scrape, reverse-engineer, or attempt to extract our prompts or model behavior.</li>
@@ -118,7 +118,7 @@ export default function TermsPage() {
 
           <Section title="Service availability">
             <p>
-              We aim for high uptime, but Calm AI is software — outages, maintenance, and
+              We aim for high uptime, but Calm AI Therapy is software — outages, maintenance, and
               third-party API hiccups happen. We can&apos;t guarantee uninterrupted service. If voice
               is unavailable, text remains open.
             </p>
@@ -126,7 +126,7 @@ export default function TermsPage() {
 
           <Section title="Limitation of liability">
             <p>
-              To the maximum extent permitted by law, Calm AI is not liable
+              To the maximum extent permitted by law, Calm AI Therapy is not liable
               for indirect, incidental, or consequential damages arising from your use of the
               service. Our total liability for any claim is limited to the amount you paid us in
               the twelve months before the claim.
@@ -154,7 +154,7 @@ export default function TermsPage() {
 
           <Section title="Governing law">
             <p>
-              These terms are governed by the laws of the jurisdiction where Calm AI is
+              These terms are governed by the laws of the jurisdiction where Calm AI Therapy is
               registered. Disputes will be handled in the courts of that jurisdiction unless local
               consumer-protection law gives you a different right.
             </p>

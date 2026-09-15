@@ -22,7 +22,7 @@ export const FEATURES: Record<FeatureKey, FeatureDefinition> = {
     slug: "chat",
     oneLiner: "Write when you're not ready to speak. Structured, safe, and always available.",
     longDescription:
-      "The Chat Agent is the slowest, most deliberate way to talk to Calm AI. Type at your own pace. Re-read your own words. Let the conversation breathe.",
+      "The Chat Agent is the slowest, most deliberate way to talk to Calm AI Therapy. Type at your own pace. Re-read your own words. Let the conversation breathe.",
     systemAddendum:
       "You are in chat mode. Take time. Use longer, fuller responses (3-5 sentences). Reference past memories when relevant.",
   },
@@ -30,7 +30,7 @@ export const FEATURES: Record<FeatureKey, FeatureDefinition> = {
     key: "voice",
     label: "Voice Agent",
     slug: "voice",
-    oneLiner: "Talk. Calm AI listens, reflects, and responds — like a conversation, not a form.",
+    oneLiner: "Talk. Calm AI Therapy listens, reflects, and responds — like a conversation, not a form.",
     longDescription:
       "The Voice Agent is built for the moments you can't type — when anxiety makes your hands shake, when you're walking, when you just need to talk.",
     systemAddendum:
@@ -40,9 +40,9 @@ export const FEATURES: Record<FeatureKey, FeatureDefinition> = {
     key: "journal",
     label: "Weekly Journal",
     slug: "journal",
-    oneLiner: "A private space to track your week. Calm AI surfaces patterns you didn't notice.",
+    oneLiner: "A private space to track your week. Calm AI Therapy surfaces patterns you didn't notice.",
     longDescription:
-      "Each week, Calm AI reviews what you wrote and what you talked about. It surfaces patterns and emotional themes — gently, without judgment.",
+      "Each week, Calm AI Therapy reviews what you wrote and what you talked about. It surfaces patterns and emotional themes — gently, without judgment.",
     systemAddendum:
       "You are reviewing this person's week with them. Your role is to surface patterns, name emotional themes, and highlight growth they may not have noticed themselves.",
   },

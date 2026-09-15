@@ -46,9 +46,9 @@ export default function Step5Page() {
         <div style={{ display: "inline-block", marginBottom: 24 }}>
           <Logo animated href={null} size={64} showWordmark={false} />
         </div>
-        <h2 style={{ marginBottom: 16 }}>Calm AI is ready for you.</h2>
+        <h2 style={{ marginBottom: 16 }}>Calm AI Therapy is ready for you.</h2>
         <p className="body-large" style={{ color: "var(--calm-ink-40)", marginBottom: 40 }}>
-          Here&apos;s what Calm AI knows about you so far:
+          Here&apos;s what Calm AI Therapy knows about you so far:
         </p>
       </div>
 
@@ -108,5 +108,5 @@ function SummaryRow({ label, value, last }: { label: string; value: string; last
 function FALLBACK(s: Snapshot) {
   const name = s.name ?? "you";
   const focus = (s.focusAreas ?? []).slice(0, 2).join(" and ").toLowerCase();
-  return `So, ${name} — what brings you here is ${focus || "something worth taking seriously"}. Calm AI will hold what you share, and build on every session. We can start whenever you're ready.`;
+  return `So, ${name} — what brings you here is ${focus || "something worth taking seriously"}. Calm AI Therapy will hold what you share, and build on every session. We can start whenever you're ready.`;
 }

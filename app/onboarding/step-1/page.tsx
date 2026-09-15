@@ -38,7 +38,7 @@ export default function Step1Page() {
     <OnboardingShell step={1}>
       <h2 style={{ marginBottom: 16 }}>Let&apos;s start with the easy part.</h2>
       <p className="body-large" style={{ color: "var(--calm-ink-40)", marginBottom: 40 }}>
-        Just a few details so Calm AI can speak to you, not at you.
+        Just a few details so Calm AI Therapy can speak to you, not at you.
       </p>
 
       <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: 24 }}>
@@ -47,7 +47,7 @@ export default function Step1Page() {
             className="input"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="What should Calm AI call you?"
+            placeholder="What should Calm AI Therapy call you?"
             required
           />
         </Field>
@@ -77,7 +77,7 @@ export default function Step1Page() {
             ))}
           </select>
           <p style={{ fontSize: 13, color: "var(--calm-ink-40)", marginTop: 8 }}>
-            More languages are coming. Calm AI will adapt to whatever language you use.
+            More languages are coming. Calm AI Therapy will adapt to whatever language you use.
           </p>
         </Field>
 

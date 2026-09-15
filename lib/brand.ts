@@ -4,7 +4,7 @@
  * Aura, the companion, keeps her name across brands.
  */
 export const BRAND = {
-  name: process.env.NEXT_PUBLIC_BRAND_NAME ?? "Calm AI",
+  name: process.env.NEXT_PUBLIC_BRAND_NAME ?? "Calm AI Therapy",
   shortName: process.env.NEXT_PUBLIC_BRAND_SHORT ?? "Calm",
   agent: "Aura",
   url: process.env.NEXT_PUBLIC_APP_URL ?? "https://calmaitherapy.com",

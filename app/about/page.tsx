@@ -3,9 +3,9 @@ import { PageShell } from "@/components/seo/PageShell";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "About Calm AI | A free AI therapist that remembers you",
+  title: "About Calm AI Therapy | A free AI therapist that remembers you",
   description:
-    "Calm AI is a free AI therapist built to close the documented failures in AI mental health products: lost memory, hollow empathy, unsafe crisis handling, and cultural blindness.",
+    "Calm AI Therapy is a free AI therapist built to close the documented failures in AI mental health products: lost memory, hollow empathy, unsafe crisis handling, and cultural blindness.",
   path: "/about",
 });
 
@@ -20,11 +20,11 @@ export default function AboutPage() {
           <h1 style={{ marginBottom: 32 }}>This is not another wellness app.</h1>
 
           <Para>
-            Calm AI exists because the AI therapy market is failing the people
+            Calm AI Therapy exists because the AI therapy market is failing the people
             who need it most. We mapped the 12 most common failure modes — memory loss, fake
             empathy, dangerous crisis responses, cultural blindness, the absence of a human
             handoff, the stigma men face when stepping into therapy spaces, and more — and built
-            Calm AI to solve each of them.
+            Calm AI Therapy to solve each of them.
           </Para>
 
           <Para>
@@ -45,7 +45,7 @@ export default function AboutPage() {
           </ul>
 
           <div style={{ marginTop: 64 }}>
-            <Link href="/auth/signup" className="btn-primary">Start with Calm AI</Link>
+            <Link href="/auth/signup" className="btn-primary">Start with Calm AI Therapy</Link>
           </div>
         </div>
       </article>

@@ -13,6 +13,8 @@ export interface SeoFaq {
   a: string;
 }
 
+import type { Source } from "./authorship";
+
 export interface SeoPage {
   slug: string;
   title: string;
@@ -23,6 +25,12 @@ export interface SeoPage {
   faqs: SeoFaq[];
   related: { href: string; label: string }[];
   ctaLine: string;
+  /**
+   * Primary sources behind the factual claims on this page. Mental health is
+   * a YMYL topic: an uncited claim about outcomes is treated as a low-quality
+   * signal, and a reader deserves to check us.
+   */
+  sources?: Source[];
 }
 
 const COMMON_RELATED = [
@@ -54,17 +62,64 @@ const COMPARE_RELATED = [
   { href: "/circles", label: "Circles" },
 ];
 
+
+/* ---------- Primary sources ---------------------------------------- */
+
+/**
+ * The evidence base the clinical claims on this site rest on. Cited rather
+ * than paraphrased, because on a YMYL topic an uncited outcome claim is both
+ * a weak ranking signal and a thing a reader cannot check.
+ */
+const EVIDENCE = {
+  engagement: {
+    label: "Baumel et al., Objective User Engagement With Mental Health Apps",
+    url: "https://www.jmir.org/2019/9/e14567/",
+    publisher: "Journal of Medical Internet Research",
+    year: 2019,
+  },
+  accountability: {
+    label: "The Supportive Accountability Model in Digital Health: a scoping review",
+    url: "https://www.jmir.org/2025/1/e72639",
+    publisher: "Journal of Medical Internet Research",
+    year: 2025,
+  },
+  harms: {
+    label: '"This app said I had severe depression": unintentional harms of mental health apps',
+    url: "https://dl.acm.org/doi/full/10.1145/3613904.3642178",
+    publisher: "ACM CHI",
+    year: 2024,
+  },
+  apa: {
+    label: "APA advisory on the use of AI in mental health",
+    url: "https://www.news-medical.net/news/20251113/APA-urges-safeguards-for-using-AI-in-mental-health.aspx",
+    publisher: "American Psychological Association",
+    year: 2025,
+  },
+  sentiment: {
+    label: "mHealth app user perspectives: sentiment and thematic analysis",
+    url: "https://www.frontiersin.org/journals/psychiatry/articles/10.3389/fpsyt.2022.857304/full",
+    publisher: "Frontiers in Psychiatry",
+    year: 2022,
+  },
+  gamification: {
+    label: "Regulatory status of health apps that employ gamification",
+    url: "https://www.nature.com/articles/s41598-024-71808-2",
+    publisher: "Nature Scientific Reports",
+    year: 2024,
+  },
+} as const;
+
 /* ---------- Pillar / cluster pages --------------------------------- */
 
 export const PAGES: Record<string, SeoPage> = {
   "free-ai-therapist": {
     slug: "free-ai-therapist",
-    title: "Free AI Therapist | No Card, No Session Cap | Calm AI",
+    title: "Free AI Therapist | No Card, No Session Cap | Calm AI Therapy",
     description:
       "A free AI therapist you can talk to any hour. Aura remembers you, pushes back kindly, never diagnoses, and shows the crisis line for your country. Free, always.",
     h1: "A free AI therapist, without the catch.",
     intro:
-      "Most \"free AI therapist\" apps are free for three messages, or free until the timer runs out, or free until you want the one feature that made you download it. Calm AI is different in one boring, important way: chat with Aura is free for everyone, with no session cap, no card, and no upgrade prompt in the middle of a hard night. This page says exactly what free means here, what it does not, and how we pay for it.",
+      "Most \"free AI therapist\" apps are free for three messages, or free until the timer runs out, or free until you want the one feature that made you download it. Calm AI Therapy is different in one boring, important way: chat with Aura is free for everyone, with no session cap, no card, and no upgrade prompt in the middle of a hard night. This page says exactly what free means here, what it does not, and how we pay for it.",
     sections: [
       {
         heading: "What free means here",
@@ -101,7 +156,7 @@ export const PAGES: Record<string, SeoPage> = {
       {
         heading: "How it compares to other free options",
         paragraphs: [
-          "A general chatbot is free too, and it forgets you every time, agrees with whatever you frame, and has no crisis pathway. A free trial of a therapy app ends. A helpline is for a crisis, not for the ordinary Tuesday that is slowly going wrong. Calm AI is built for the space between: the recurring thought, the argument you are rehearsing, the night you cannot switch off. Read the comparison pages linked below if you want the detail.",
+          "A general chatbot is free too, and it forgets you every time, agrees with whatever you frame, and has no crisis pathway. A free trial of a therapy app ends. A helpline is for a crisis, not for the ordinary Tuesday that is slowly going wrong. Calm AI Therapy is built for the space between: the recurring thought, the argument you are rehearsing, the night you cannot switch off. Read the comparison pages linked below if you want the detail.",
         ],
       },
     ],
@@ -114,6 +169,7 @@ export const PAGES: Record<string, SeoPage> = {
     ],
     related: COMMON_RELATED,
     ctaLine: "Say one sentence on the homepage. No signup, no card, one reply.",
+    sources: [EVIDENCE.engagement, EVIDENCE.sentiment, EVIDENCE.apa],
   },
 
   "ai-therapist-in-your-language": {
@@ -169,17 +225,17 @@ export const PAGES: Record<string, SeoPage> = {
 
   "ai-therapist": {
     slug: "ai-therapist",
-    title: "AI Therapist | Free, Remembers You, Any Hour | Calm AI",
+    title: "AI Therapist | Free, Remembers You, Any Hour | Calm AI Therapy",
     description:
       "Talk through what's on your mind, anytime. An AI that listens, reflects, and helps you see your own thoughts more clearly. No appointment, private, free to start.",
     h1: "AI therapist — a quiet place to think out loud.",
     intro:
-      "Calm AI is an AI companion built for the moments you can't stop thinking. Not a chatbot. Not a wellness app. A quiet space to write or speak, and to be heard back with specificity instead of script. You don't need to be in crisis to use it. You just need somewhere to put what's in your head.",
+      "Calm AI Therapy is an AI companion built for the moments you can't stop thinking. Not a chatbot. Not a wellness app. A quiet space to write or speak, and to be heard back with specificity instead of script. You don't need to be in crisis to use it. You just need somewhere to put what's in your head.",
     sections: [
       {
         heading: "What you can use it for",
         paragraphs: [
-          "Most people open Calm AI for one of three reasons: a thought that's been on a loop, a conversation they're rehearsing, or a feeling that won't name itself. The agent meets you wherever you arrive. You can write three lines or talk for twenty minutes.",
+          "Most people open Calm AI Therapy for one of three reasons: a thought that's been on a loop, a conversation they're rehearsing, or a feeling that won't name itself. The agent meets you wherever you arrive. You can write three lines or talk for twenty minutes.",
         ],
         bullets: [
           "Untangle an argument before it happens",
@@ -189,9 +245,9 @@ export const PAGES: Record<string, SeoPage> = {
         ],
       },
       {
-        heading: "What makes Calm AI different from a generic chatbot",
+        heading: "What makes Calm AI Therapy different from a generic chatbot",
         paragraphs: [
-          "Generic AI chats start over every conversation. Calm AI remembers. Names, dates, the dreams you mentioned in passing — held quietly until you bring them up again. The tone shifts to match yours: warm if you want warm, direct if you want direct. And the agent is trained to refuse to feed worry-loops with reassurance, because reassurance is what makes anxiety worse over time.",
+          "Generic AI chats start over every conversation. Calm AI Therapy remembers. Names, dates, the dreams you mentioned in passing — held quietly until you bring them up again. The tone shifts to match yours: warm if you want warm, direct if you want direct. And the agent is trained to refuse to feed worry-loops with reassurance, because reassurance is what makes anxiety worse over time.",
         ],
       },
       {
@@ -202,19 +258,20 @@ export const PAGES: Record<string, SeoPage> = {
       },
     ],
     faqs: [
-      { q: "Is an AI therapist a real therapist?", a: "No. Calm AI is an AI companion. It is not a substitute for a licensed clinician, and we are clear about that everywhere it matters. For acute issues, please connect with a human." },
+      { q: "Is an AI therapist a real therapist?", a: "No. Calm AI Therapy is an AI companion. It is not a substitute for a licensed clinician, and we are clear about that everywhere it matters. For acute issues, please connect with a human." },
       { q: "Do I need to sign up to try it?", a: "No. The landing page lets you type one message and get one response with no account. After that, opening a space takes 30 seconds." },
       { q: "Is it private?", a: "Yes. We do not train on your messages. You can export or delete everything anytime." },
-      { q: "How is it different from journaling apps?", a: "Calm AI actively reflects what you wrote and noticed across sessions. Journaling apps store; Calm AI responds." },
+      { q: "How is it different from journaling apps?", a: "Calm AI Therapy actively reflects what you wrote and noticed across sessions. Journaling apps store; Calm AI Therapy responds." },
       { q: "Is it free?", a: "Yes. No cap, no card, no trial. You sign up with an email address so Aura can remember you, and start." },
     ],
     related: COMMON_RELATED,
     ctaLine: "Try one sentence on the landing page. No signup screen first.",
+    sources: [EVIDENCE.apa, EVIDENCE.engagement, EVIDENCE.accountability],
   },
 
   "what-is-an-ai-therapist": {
     slug: "what-is-an-ai-therapist",
-    title: "What Is an AI Therapist? | Calm AI",
+    title: "What Is an AI Therapist? | Calm AI Therapy",
     description:
       "An AI therapist is a software companion you can talk to like a thoughtful friend. Here's what they're useful for, what they're not, and how to tell a good one from a bad one.",
     h1: "What is an AI therapist?",
@@ -243,15 +300,16 @@ export const PAGES: Record<string, SeoPage> = {
     faqs: [
       { q: "Is an AI therapist safe?", a: "Used as a companion alongside human care, yes — and safer than no support at all. For crisis, AI is not a substitute for professional help." },
       { q: "Can an AI therapist help with anxiety?", a: "It can support reflection on anxious patterns. The best ones avoid feeding reassurance loops, which is what actually moves anxiety over time." },
-      { q: "Is an AI therapist confidential?", a: "Calm AI does not train on your data and gives you delete in one click. Read the privacy page." },
+      { q: "Is an AI therapist confidential?", a: "Calm AI Therapy does not train on your data and gives you delete in one click. Read the privacy page." },
     ],
     related: COMMON_RELATED,
-    ctaLine: "Try Calm AI with one sentence — no signup first.",
+    ctaLine: "Try Calm AI Therapy with one sentence — no signup first.",
+    sources: [EVIDENCE.apa, EVIDENCE.harms],
   },
 
   "how-does-ai-therapy-work": {
     slug: "how-does-ai-therapy-work",
-    title: "How Does AI Therapy Work? | Calm AI",
+    title: "How Does AI Therapy Work? | Calm AI Therapy",
     description:
       "AI therapy combines a memory layer, a trained therapeutic stance, and a safety system. Here's how each piece works — and what to look for in any product that calls itself one.",
     h1: "How does AI therapy work?",
@@ -261,7 +319,7 @@ export const PAGES: Record<string, SeoPage> = {
       {
         heading: "The model: trained for stance, not just chat",
         paragraphs: [
-          "The underlying model in Calm AI is prompted into a specific therapeutic stance — validate-and-change, not yes-person. Anti-sycophancy rules. Anti-reassurance in anxiety contexts. Cultural humility. The model is the tool; the prompt is the training. Both matter.",
+          "The underlying model in Calm AI Therapy is prompted into a specific therapeutic stance — validate-and-change, not yes-person. Anti-sycophancy rules. Anti-reassurance in anxiety contexts. Cultural humility. The model is the tool; the prompt is the training. Both matter.",
         ],
       },
       {
@@ -278,12 +336,13 @@ export const PAGES: Record<string, SeoPage> = {
       },
     ],
     faqs: [
-      { q: "Does AI therapy use ChatGPT?", a: "Calm AI runs on a model from OpenAI — and the difference is the prompt, memory, and safety architecture wrapped around it. The model is one input; the system is the product." },
+      { q: "Does AI therapy use ChatGPT?", a: "Calm AI Therapy runs on a model from OpenAI — and the difference is the prompt, memory, and safety architecture wrapped around it. The model is one input; the system is the product." },
       { q: "Is the memory accurate?", a: "It's only as accurate as what you've shared. If you contradict something, the system updates — you're always the source of truth." },
-      { q: "Does AI therapy follow CBT or DBT?", a: "Calm AI draws from CBT, DBT, ACT and IFS, and adapts to the user — it doesn't impose one framework." },
+      { q: "Does AI therapy follow CBT or DBT?", a: "Calm AI Therapy draws from CBT, DBT, ACT and IFS, and adapts to the user — it doesn't impose one framework." },
     ],
     related: COMMON_RELATED,
     ctaLine: "See it in one message on the landing page.",
+    sources: [EVIDENCE.accountability, EVIDENCE.engagement],
   },
 
   "is-ai-therapy-effective": {
@@ -321,11 +380,12 @@ export const PAGES: Record<string, SeoPage> = {
     ],
     related: COMMON_RELATED,
     ctaLine: "Open a space. See whether it feels useful for you, specifically.",
+    sources: [EVIDENCE.engagement, EVIDENCE.accountability, EVIDENCE.harms, EVIDENCE.apa],
   },
 
   "ai-therapist-vs-human-therapist": {
     slug: "ai-therapist-vs-human-therapist",
-    title: "AI Therapist vs Human Therapist | Calm AI",
+    title: "AI Therapist vs Human Therapist | Calm AI Therapy",
     description:
       "An honest comparison of an AI therapist vs a human therapist. What each is for, what each isn't, and how to use both well together.",
     h1: "AI therapist vs human therapist.",
@@ -352,22 +412,23 @@ export const PAGES: Record<string, SeoPage> = {
       },
     ],
     faqs: [
-      { q: "Is an AI therapist cheaper than a human therapist?", a: "Chat with Calm AI is free, with no session cap, while human therapy is priced per session. That does not make AI a replacement; it makes both possible, and it makes something available on the nights nothing else is." },
+      { q: "Is an AI therapist cheaper than a human therapist?", a: "Chat with Calm AI Therapy is free, with no session cap, while human therapy is priced per session. That does not make AI a replacement; it makes both possible, and it makes something available on the nights nothing else is." },
       { q: "Can my therapist see what I told the AI?", a: "Only if you choose to tell them. Your record is yours, and nothing leaves your account unless you copy it out yourself." },
       { q: "Will my human therapist be offended?", a: "A good clinician welcomes anything that helps you between sessions, including this." },
     ],
     related: COMMON_RELATED,
-    ctaLine: "Try Calm AI alongside whatever care you already have.",
+    ctaLine: "Try Calm AI Therapy alongside whatever care you already have.",
+    sources: [EVIDENCE.accountability, EVIDENCE.engagement, EVIDENCE.apa],
   },
 
   "ai-therapist-vs-betterhelp": {
     slug: "ai-therapist-vs-betterhelp",
-    title: "AI Therapist vs BetterHelp | Calm AI",
+    title: "AI Therapist vs BetterHelp | Calm AI Therapy",
     description:
-      "BetterHelp is human therapists over text and video. Calm AI is an AI companion that fits between sessions. Here's how they actually compare.",
+      "BetterHelp is human therapists over text and video. Calm AI Therapy is an AI companion that fits between sessions. Here's how they actually compare.",
     h1: "AI therapist vs BetterHelp.",
     intro:
-      "Different tools for different moments. BetterHelp connects you with a licensed human therapist. Calm AI gives you an AI companion that's available the rest of the time. They're not really competitors — they're complements, and people who use both report each one working better.",
+      "Different tools for different moments. BetterHelp connects you with a licensed human therapist. Calm AI Therapy gives you an AI companion that's available the rest of the time. They're not really competitors — they're complements, and people who use both report each one working better.",
     sections: [
       {
         heading: "What BetterHelp is good for",
@@ -376,7 +437,7 @@ export const PAGES: Record<string, SeoPage> = {
         ],
       },
       {
-        heading: "Where Calm AI fits",
+        heading: "Where Calm AI Therapy fits",
         paragraphs: [
           "Between BetterHelp sessions. At hours your therapist isn't available. For the recurring thought that doesn't quite warrant a session of its own. For the days you can't afford or access a human appointment. The AI is the container for everything that doesn't fit into 50 minutes a week.",
         ],
@@ -384,24 +445,24 @@ export const PAGES: Record<string, SeoPage> = {
       {
         heading: "Honest cost comparison",
         paragraphs: [
-          "BetterHelp charges a monthly subscription for weekly sessions with a licensed counsellor. Calm AI chat is free, with no session cap, and is not a licensed service. They are different products. Use whichever fits your situation, or use both — many people do.",
+          "BetterHelp charges a monthly subscription for weekly sessions with a licensed counsellor. Calm AI Therapy chat is free, with no session cap, and is not a licensed service. They are different products. Use whichever fits your situation, or use both — many people do.",
         ],
       },
     ],
     faqs: [
-      { q: "Should I use BetterHelp or Calm AI?", a: "If you have not started any care at all, both are reasonable starting points. If you can afford it, BetterHelp + Calm AI works well together." },
-      { q: "Is Calm AI a replacement for BetterHelp?", a: "No. Calm AI is an AI companion; BetterHelp connects you to a human therapist. They do different things." },
-      { q: "Does Calm AI share data with BetterHelp?", a: "No. Your data stays yours and is not shared with anyone." },
+      { q: "Should I use BetterHelp or Calm AI Therapy?", a: "If you have not started any care at all, both are reasonable starting points. If you can afford it, BetterHelp + Calm AI Therapy works well together." },
+      { q: "Is Calm AI Therapy a replacement for BetterHelp?", a: "No. Calm AI Therapy is an AI companion; BetterHelp connects you to a human therapist. They do different things." },
+      { q: "Does Calm AI Therapy share data with BetterHelp?", a: "No. Your data stays yours and is not shared with anyone." },
     ],
     related: COMMON_RELATED,
-    ctaLine: "Try Calm AI for the time between human sessions.",
+    ctaLine: "Try Calm AI Therapy for the time between human sessions.",
   },
 
   "ai-therapist-vs-chatgpt": {
     slug: "ai-therapist-vs-chatgpt",
     title: "AI Therapist vs ChatGPT | Why Generic AI Isn't Built for This",
     description:
-      "ChatGPT can talk. Calm AI is built for therapeutic conversation. The difference is memory, stance, and a safety system that's been clinically reviewed.",
+      "ChatGPT can talk. Calm AI Therapy is built for therapeutic conversation. The difference is memory, stance, and a safety system that's been clinically reviewed.",
     h1: "AI therapist vs ChatGPT.",
     intro:
       "ChatGPT is a brilliant general-purpose assistant. It is not built for therapeutic conversation, and using it that way creates risks — sycophancy, reassurance loops in anxiety, and dangerous gaps in crisis. A purpose-built AI therapist solves all three.",
@@ -409,25 +470,25 @@ export const PAGES: Record<string, SeoPage> = {
       {
         heading: "Memory: the part ChatGPT doesn't really have",
         paragraphs: [
-          "ChatGPT's session memory is improving but is not designed for longitudinal therapeutic care. Calm AI's memory is structured: facts about you, episodes from past sessions, what coping techniques actually worked for you specifically. The agent is meaningfully different in week eight than it was in week one.",
+          "ChatGPT's session memory is improving but is not designed for longitudinal therapeutic care. Calm AI Therapy's memory is structured: facts about you, episodes from past sessions, what coping techniques actually worked for you specifically. The agent is meaningfully different in week eight than it was in week one.",
         ],
       },
       {
         heading: "Stance: the part the prompt does",
         paragraphs: [
-          "Calm AI is prompted into anti-sycophancy: it disagrees gently, names cognitive distortions, refuses to give reassurance in anxiety contexts. ChatGPT, by default, agrees with whatever you frame for it — which is the opposite of what helps.",
+          "Calm AI Therapy is prompted into anti-sycophancy: it disagrees gently, names cognitive distortions, refuses to give reassurance in anxiety contexts. ChatGPT, by default, agrees with whatever you frame for it — which is the opposite of what helps.",
         ],
       },
       {
         heading: "Safety: the part that has to never fail",
         paragraphs: [
-          "Calm AI runs every user message through a tier classifier and a clinician-written crisis protocol. When something serious surfaces, the agent cannot freelance — it follows a script that has been triple-tested. ChatGPT improvises, and improvisation in crisis is dangerous.",
+          "Calm AI Therapy runs every user message through a tier classifier and a clinician-written crisis protocol. When something serious surfaces, the agent cannot freelance — it follows a script that has been triple-tested. ChatGPT improvises, and improvisation in crisis is dangerous.",
         ],
       },
     ],
     faqs: [
       { q: "Can I just use ChatGPT instead?", a: "You can, and many people do. We'd suggest reading our piece on what makes that risky for therapeutic conversation specifically." },
-      { q: "Is Calm AI using ChatGPT under the hood?", a: "We use a model from OpenAI, but not the ChatGPT product. The difference is the system around it: prompt, memory, cultural profile, and a safety classifier that reads six languages." },
+      { q: "Is Calm AI Therapy using ChatGPT under the hood?", a: "We use a model from OpenAI, but not the ChatGPT product. The difference is the system around it: prompt, memory, cultural profile, and a safety classifier that reads six languages." },
       { q: "Why not use any general chatbot directly?", a: "Same reason — without memory, prompt, and safety, a model is a model. The product is everything around it, and the crisis pathway is the part a general chatbot does not have." },
     ],
     related: COMMON_RELATED,
@@ -441,7 +502,7 @@ export const PAGES: Record<string, SeoPage> = {
       "When the thoughts won't stop and there's no one to call. An AI therapist for late-night, designed to slow you down — not feed you reassurance.",
     h1: "An AI therapist for the 3am thoughts.",
     intro:
-      "The thoughts that wake you up don't care that no one is awake. Calm AI is built for those hours specifically — slower, quieter, designed to interrupt the loop instead of feeding it.",
+      "The thoughts that wake you up don't care that no one is awake. Calm AI Therapy is built for those hours specifically — slower, quieter, designed to interrupt the loop instead of feeding it.",
     sections: [
       {
         heading: "Why nights are different",
@@ -463,7 +524,7 @@ export const PAGES: Record<string, SeoPage> = {
       },
     ],
     faqs: [
-      { q: "Will Calm AI wake me up with notifications?", a: "Only if you've asked us to. Default is silent." },
+      { q: "Will Calm AI Therapy wake me up with notifications?", a: "Only if you've asked us to. Default is silent." },
       { q: "Can it help me actually fall asleep?", a: "Indirectly — by helping you put the thought down. We don't pretend to be a sleep app." },
       { q: "Is it free at night?", a: "Yes, at any hour. Nothing expires at 3am, nothing counts down, and there is no upgrade prompt waiting in the middle of a hard night." },
     ],
@@ -731,6 +792,7 @@ export const PAGES: Record<string, SeoPage> = {
     ],
     related: COMPARE_RELATED,
     ctaLine: "Run the four tests on Aura first. It costs one sentence.",
+    sources: [EVIDENCE.engagement, EVIDENCE.gamification, EVIDENCE.sentiment],
   },
 
   "is-ai-therapy-safe": {
@@ -793,6 +855,7 @@ export const PAGES: Record<string, SeoPage> = {
     ],
     related: COMPARE_RELATED,
     ctaLine: "See the safety layer work: say one honest sentence on the homepage.",
+    sources: [EVIDENCE.harms, EVIDENCE.apa, EVIDENCE.sentiment],
   },
 };
 
@@ -822,7 +885,7 @@ export const GLOSSARY: Record<string, SeoPage> = {
         ],
       },
       {
-        heading: "How Calm AI treats them",
+        heading: "How Calm AI Therapy treats them",
         paragraphs: [
           "When the agent notices one of these patterns in your message, it gently names it and invites you to look at it from a different angle. It does not lecture you or list distortions in a wall of text. It picks one and asks one question.",
         ],
@@ -858,7 +921,7 @@ export const GLOSSARY: Record<string, SeoPage> = {
       {
         heading: "What actually shifts a rumination loop",
         paragraphs: [
-          "Modality switch. If you're stuck in your head, the way out is rarely through more thought. It's a body, a place, an action — even small. A walk. A different room. Naming what you can see. The agent in Calm AI is trained to interrupt loops, not feed them.",
+          "Modality switch. If you're stuck in your head, the way out is rarely through more thought. It's a body, a place, an action — even small. A walk. A different room. Naming what you can see. The agent in Calm AI Therapy is trained to interrupt loops, not feed them.",
         ],
       },
     ],
@@ -892,7 +955,7 @@ export const GLOSSARY: Record<string, SeoPage> = {
       {
         heading: "Why it works",
         paragraphs: [
-          "The act of putting an internal experience into language changes the experience. The same thought, written or spoken, becomes more handle-able. Calm AI is built around this — it's not a feed of advice, it's a place to think out loud.",
+          "The act of putting an internal experience into language changes the experience. The same thought, written or spoken, becomes more handle-able. Calm AI Therapy is built around this — it's not a feed of advice, it's a place to think out loud.",
         ],
       },
     ],

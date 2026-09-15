@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { BRAND } from "./brand";
+import { AUTHOR, REVIEWER, EDITORIAL_POLICY_PATH, type Source } from "./authorship";
 
 const BASE_URL = BRAND.url;
 
@@ -21,7 +22,7 @@ export function pageMetadata({ title, description, path, ogImage = "/og-image.pn
       title,
       description,
       url,
-      siteName: "Calm AI",
+      siteName: "Calm AI Therapy",
       images: [{ url: ogImage, width: 1200, height: 630 }],
       type: "website",
     },
@@ -53,9 +54,84 @@ export function webSiteSchema() {
   };
 }
 
-/** Articles are published by the organisation, not a named person. */
+/**
+ * The author, as a named entity rather than a bare organisation.
+ *
+ * Google's quality raters treat an unnamed corporate author as a weak signal
+ * on YMYL topics, which mental health is. A named entity with stated expertise
+ * and a link to a published editorial process is what they are looking for.
+ */
 export function authorSchema() {
-  return { "@type": "Organization", name: BRAND.name, url: BASE_URL };
+  return {
+    "@type": "Organization",
+    name: AUTHOR.name,
+    url: `${BASE_URL}${EDITORIAL_POLICY_PATH}`,
+    description: AUTHOR.credential,
+    knowsAbout: [
+      "AI therapy",
+      "digital mental health",
+      "cognitive behavioural therapy",
+      "crisis intervention",
+    ],
+  };
+}
+
+/**
+ * Reviewer credit, emitted only when a qualified person has actually reviewed
+ * the content. Returns null otherwise: a fabricated reviewer on health content
+ * is worse than no reviewer at all, both for the reader and for the site.
+ */
+export function reviewerSchema() {
+  if (!REVIEWER) return null;
+  return {
+    "@type": "Person",
+    name: REVIEWER.name,
+    jobTitle: REVIEWER.credential,
+    ...(REVIEWER.url ? { url: REVIEWER.url } : {}),
+  };
+}
+
+/**
+ * Pages that discuss a condition are MedicalWebPage, not plain WebPage. It
+ * tells Google the page knows what it is, and carries the fields that YMYL
+ * assessment looks for: the last review date, who reviewed it, and the
+ * explicit statement that this is not medical advice.
+ */
+export function medicalWebPageSchema(args: {
+  title: string;
+  description: string;
+  path: string;
+  condition?: string;
+  reviewedAt?: string;
+}) {
+  const reviewer = reviewerSchema();
+  return {
+    "@context": "https://schema.org",
+    "@type": "MedicalWebPage",
+    name: args.title,
+    description: args.description,
+    url: `${BASE_URL}${args.path}`,
+    inLanguage: "en",
+    author: authorSchema(),
+    ...(reviewer ? { reviewedBy: reviewer, lastReviewed: args.reviewedAt } : {}),
+    ...(args.condition
+      ? { about: { "@type": "MedicalCondition", name: args.condition } }
+      : {}),
+    // Says out loud what the disclaimer says in prose.
+    medicalAudience: { "@type": "MedicalAudience", audienceType: "Patient" },
+    isPartOf: { "@type": "WebSite", name: BRAND.name, url: BASE_URL },
+  };
+}
+
+/** Renders a page's reference list into schema so the citations are machine-readable. */
+export function citationSchema(sources: Source[]) {
+  return sources.map((s) => ({
+    "@type": "CreativeWork",
+    name: s.label,
+    url: s.url,
+    ...(s.publisher ? { publisher: { "@type": "Organization", name: s.publisher } } : {}),
+    ...(s.year ? { datePublished: String(s.year) } : {}),
+  }));
 }
 
 export function faqSchema(faqs: { q: string; a: string }[]) {

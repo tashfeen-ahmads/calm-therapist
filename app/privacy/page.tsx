@@ -3,9 +3,9 @@ import { PageShell } from "@/components/seo/PageShell";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Privacy | What We Do With Your Data | Calm AI",
+  title: "Privacy | What We Do With Your Data | Calm AI Therapy",
   description:
-    "Calm AI's full privacy architecture. No training on your data. Stored for you, in your account. One-click delete.",
+    "Calm AI Therapy's full privacy architecture. No training on your data. Stored for you, in your account. One-click delete.",
   path: "/privacy",
 });
 
@@ -19,7 +19,7 @@ export default function PrivacyPage() {
           </p>
           <h1 style={{ marginBottom: 32 }}>Your data belongs to you. Always.</h1>
           <p className="body-large" style={{ color: "var(--calm-ink-40)", marginBottom: 56 }}>
-            What follows is the entire privacy architecture of Calm AI, in plain English.
+            What follows is the entire privacy architecture of Calm AI Therapy, in plain English.
             No legal smoke. No buried terms.
           </p>
 
@@ -78,8 +78,8 @@ export default function PrivacyPage() {
           <div id="terms" style={{ marginTop: 64 }}>
             <h2>Terms of use, in short</h2>
             <p style={{ marginTop: 16 }}>
-              Calm AI is not a replacement for clinical care. If you are in immediate
-              danger, call your local emergency number. By using Calm AI you agree not to
+              Calm AI Therapy is not a replacement for clinical care. If you are in immediate
+              danger, call your local emergency number. By using Calm AI Therapy you agree not to
               attempt to misuse it for harm to yourself or others. We reserve the right to
               terminate accounts engaged in clear abuse. That&apos;s it.
             </p>

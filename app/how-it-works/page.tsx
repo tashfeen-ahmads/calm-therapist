@@ -5,30 +5,30 @@ import { JsonLd, howToSchema, pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "How It Works | A Free AI Therapist That Remembers You",
   description:
-    "How Calm AI works: 5-minute onboarding, voice or chat sessions, memory across every conversation, weekly journaling, and monthly reflections.",
+    "How Calm AI Therapy works: 5-minute onboarding, voice or chat sessions, memory across every conversation, weekly journaling, and monthly reflections.",
   path: "/how-it-works",
 });
 
 const STEPS = [
   {
-    title: "1. Tell Calm AI who you are",
+    title: "1. Tell Calm AI Therapy who you are",
     body:
-      "Five questions. Less than five minutes. Calm AI learns your name, the things on your mind, the tone you want to be spoken to in, and what you'd like to be true a month from now. This is the foundation it builds everything on.",
+      "Five questions. Less than five minutes. Calm AI Therapy learns your name, the things on your mind, the tone you want to be spoken to in, and what you'd like to be true a month from now. This is the foundation it builds everything on.",
   },
   {
     title: "2. Choose your way in",
     body:
-      "Voice when typing is impossible. Chat when you'd rather write. The journal for the long view. Crisis Safe when things get serious. You can switch any time — Calm AI's memory is shared across every feature.",
+      "Voice when typing is impossible. Chat when you'd rather write. The journal for the long view. Crisis Safe when things get serious. You can switch any time — Calm AI Therapy's memory is shared across every feature.",
   },
   {
     title: "3. Build a longitudinal record",
     body:
-      "Every session feeds the next. Calm AI remembers what you said in week one when it talks to you in week eight. Memory isn't a feature — it's the architecture.",
+      "Every session feeds the next. Calm AI Therapy remembers what you said in week one when it talks to you in week eight. Memory isn't a feature — it's the architecture.",
   },
   {
     title: "4. Reflect monthly",
     body:
-      "Once a month, Calm AI surfaces your themes, your shifts, and your own quotes back to you. Not a dashboard — a piece of writing about you, in your own words.",
+      "Once a month, Calm AI Therapy surfaces your themes, your shifts, and your own quotes back to you. Not a dashboard — a piece of writing about you, in your own words.",
   },
 ];
 
@@ -43,7 +43,7 @@ export default function HowItWorksPage() {
           </p>
           <h1 style={{ marginBottom: 24 }}>Designed around how your mind actually works.</h1>
           <p className="body-large" style={{ color: "var(--calm-ink-40)", marginBottom: 56 }}>
-            Calm AI is not a chatbot. It&apos;s a longitudinal companion that remembers,
+            Calm AI Therapy is not a chatbot. It&apos;s a longitudinal companion that remembers,
             reflects, and adapts to you. Here&apos;s the full arc.
           </p>
 
@@ -72,10 +72,10 @@ export default function HowItWorksPage() {
           <h2 style={{ marginBottom: 32 }}>Common questions</h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             {[
-              { q: "Is Calm AI a replacement for a human therapist?", a: "No. It is a companion alongside human care, not a substitute for it. If you have a clinician, tell them what you and Aura have been working on; many people bring their patterns to sessions." },
+              { q: "Is Calm AI Therapy a replacement for a human therapist?", a: "No. It is a companion alongside human care, not a substitute for it. If you have a clinician, tell them what you and Aura have been working on; many people bring their patterns to sessions." },
               { q: "Does it train on my data?", a: "No. We do not train on your conversations. You can read the full architecture on the privacy page." },
               { q: "What languages does it support?", a: "English, Urdu, Hindi, Arabic, Spanish, and French, including Roman Urdu and Hinglish. Aura switches when you do, mid-sentence." },
-              { q: "Will I lose my data if I take a break?", a: "No. Calm AI holds your record indefinitely until you ask us to delete it. There is no streak system to lose." },
+              { q: "Will I lose my data if I take a break?", a: "No. Calm AI Therapy holds your record indefinitely until you ask us to delete it. There is no streak system to lose." },
             ].map((f) => (
               <details key={f.q} className="card" style={{ padding: 24 }}>
                 <summary style={{ fontSize: 16, fontWeight: 500 }}>{f.q}</summary>

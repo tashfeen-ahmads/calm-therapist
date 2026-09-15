@@ -17,7 +17,7 @@ const CAMPAIGNS: Record<string, Campaign> = {
   "anxiety-meta": {
     slug: "anxiety-meta",
     headline: "Still explaining yourself to a therapist who forgets?",
-    sub: "Calm AI remembers every session. Voice when typing is hard. Real help, no waiting list.",
+    sub: "Calm AI Therapy remembers every session. Voice when typing is hard. Real help, no waiting list.",
     bullets: [
       "Built for anxiety — voice mode for the moments typing is impossible.",
       "Memory across every session. You don't repeat your story.",
@@ -33,7 +33,7 @@ const CAMPAIGNS: Record<string, Campaign> = {
   "men-burnout": {
     slug: "men-burnout",
     headline: "You don't need therapy. You need somewhere to think.",
-    sub: "Calm AI is direct. No therapy vocabulary. No hand-holding. Just a tool that helps you see the shape of your week.",
+    sub: "Calm AI Therapy is direct. No therapy vocabulary. No hand-holding. Just a tool that helps you see the shape of your week.",
     bullets: [
       "Direct tone option. No comfort-speak.",
       "Voice mode while you walk, drive, or pace.",
@@ -72,7 +72,7 @@ export function generateMetadata({ params }: { params: { slug: string } }) {
   const c = CAMPAIGNS[params.slug];
   if (!c) return {};
   return {
-    ...pageMetadata({ title: `${c.headline} | Calm AI`, description: c.sub, path: `/lp/${c.slug}` }),
+    ...pageMetadata({ title: `${c.headline} | Calm AI Therapy`, description: c.sub, path: `/lp/${c.slug}` }),
     robots: { index: false, follow: true },
   };
 }

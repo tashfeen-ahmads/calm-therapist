@@ -36,5 +36,5 @@ export async function POST(req: Request) {
 
 function fallback(profile: UserProfile) {
   const focus = profile.focusAreas.slice(0, 2).join(" and ").toLowerCase();
-  return `So, ${profile.name} — what brings you here is ${focus || "something worth taking seriously"}. Calm AI will hold what you share, and build on every session. We can start whenever you're ready.`;
+  return `So, ${profile.name} — what brings you here is ${focus || "something worth taking seriously"}. Calm AI Therapy will hold what you share, and build on every session. We can start whenever you're ready.`;
 }

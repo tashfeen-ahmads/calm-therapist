@@ -37,7 +37,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
       <article style={{ padding: "120px 24px 80px" }}>
         <div className="container" style={{ maxWidth: 720 }}>
           <p className="micro-label micro-label-bordered" style={{ marginBottom: 24 }}>
-            Calm AI Editorial · {post.readingMinutes} min read
+            Calm AI Therapy Editorial · {post.readingMinutes} min read
           </p>
           <h1 style={{ marginBottom: 32, fontSize: 56, lineHeight: 1.1 }}>{post.title}</h1>
           <p className="body-large" style={{ color: "var(--calm-ink-40)", marginBottom: 24 }}>
@@ -98,7 +98,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
       <section className="section">
         <div className="container" style={{ maxWidth: 720, textAlign: "center" }}>
           <h2 style={{ marginBottom: 24 }}>Start your first session.</h2>
-          <Link href="/auth/signup" className="btn-primary">Begin with Calm AI</Link>
+          <Link href="/auth/signup" className="btn-primary">Begin with Calm AI Therapy</Link>
         </div>
       </section>
     </PageShell>

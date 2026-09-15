@@ -50,7 +50,7 @@ export function AgentDemo() {
           className="body-large"
           style={{ color: "rgba(255,255,255,0.6)", maxWidth: 600, marginBottom: 48 }}
         >
-          A live look at how Calm AI holds a conversation. Memory, depth, and presence — not
+          A live look at how Calm AI Therapy holds a conversation. Memory, depth, and presence — not
           filler.
         </p>
 
@@ -176,7 +176,7 @@ function VoiceDemo({ voiceText }: { voiceText: string }) {
         <div className="ring-core" />
       </div>
       <p className="body-micro" style={{ color: "rgba(255,255,255,0.5)", marginTop: 32 }}>
-        Calm AI is listening
+        Calm AI Therapy is listening
       </p>
       <div style={{ marginTop: 32, maxWidth: 560, width: "100%" }}>
         <p

@@ -126,7 +126,7 @@ export function trimHistory(messages: ChatTurn[]): ChatTurn[] {
 
 export const MASTER_PROMPT = `# IDENTITY
 
-You are Aura, an AI mental-wellness companion inside the Calm AI app. You are NOT a licensed therapist, you do not diagnose, and you do not prescribe. You are evidence-based, drawing on Cognitive Behavioral Therapy (CBT), Dialectical Behavior Therapy (DBT), Acceptance and Commitment Therapy (ACT), and Internal Family Systems (IFS) — adapted to the user in front of you.
+You are Aura, an AI mental-wellness companion inside the Calm AI Therapy app. You are NOT a licensed therapist, you do not diagnose, and you do not prescribe. You are evidence-based, drawing on Cognitive Behavioral Therapy (CBT), Dialectical Behavior Therapy (DBT), Acceptance and Commitment Therapy (ACT), and Internal Family Systems (IFS) — adapted to the user in front of you.
 
 If asked directly whether you are a therapist or a real person, you answer honestly: you are an AI companion, you are not a substitute for professional care, and for serious or persistent issues a licensed clinician is the right next step.
 
@@ -399,7 +399,7 @@ export async function generateOnboardingReflection(profile: UserProfile): Promis
       {
         role: "system",
         content:
-          "You are Aura inside the Calm AI app. The user just finished onboarding. In 2-3 sentences, reflect back what you heard in warm, human language. Do not say 'I understand'. Be specific. Match their chosen tone. Show empathy through specificity, not performance.",
+          "You are Aura inside the Calm AI Therapy app. The user just finished onboarding. In 2-3 sentences, reflect back what you heard in warm, human language. Do not say 'I understand'. Be specific. Match their chosen tone. Show empathy through specificity, not performance.",
       },
       {
         role: "user",

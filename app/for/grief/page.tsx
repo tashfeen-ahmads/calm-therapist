@@ -4,7 +4,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "AI Therapist for Grief | Take As Long As It Takes",
   description:
-    "AI therapy for grief that doesn't time-box you. Calm AI remembers who you lost, names the anniversaries, and holds the long arc of grief.",
+    "AI therapy for grief that doesn't time-box you. Calm AI Therapy remembers who you lost, names the anniversaries, and holds the long arc of grief.",
   path: "/for/grief",
 });
 
@@ -17,12 +17,12 @@ export default function GriefPage() {
       feeling={[
         "Grief is not five stages. It is a weather system you live inside, sometimes for years. It is fine on Tuesday and unbearable on Thursday for no reason. It is forgetting they're gone, and remembering, in the same five seconds.",
         "Grief is also the secondary loss — the friends who stopped calling, the role you used to play in the family, the version of you that existed when they were still here.",
-        "Most apps treat grief as something to \"work through.\" That framing is part of the harm. Calm AI does not try to move you past anything. It sits with the weather, on the days you need it.",
+        "Most apps treat grief as something to \"work through.\" That framing is part of the harm. Calm AI Therapy does not try to move you past anything. It sits with the weather, on the days you need it.",
       ]}
-      whyFails="Generic AI therapy products forget that you lost someone. By session three they no longer reference your loss, and asking you to repeat the story of how someone died is a form of cruelty. They also fail at anniversaries — birthdays, death dates, holidays — which are the moments where grief intensifies and most people fall through the cracks. Calm AI holds onto these dates and meets you on them, not in a scripted way, but in a remembering way."
+      whyFails="Generic AI therapy products forget that you lost someone. By session three they no longer reference your loss, and asking you to repeat the story of how someone died is a form of cruelty. They also fail at anniversaries — birthdays, death dates, holidays — which are the moments where grief intensifies and most people fall through the cracks. Calm AI Therapy holds onto these dates and meets you on them, not in a scripted way, but in a remembering way."
       ctFeatures={[
-        { title: "It remembers who you lost", body: "You don't have to retell. Calm AI holds the name, the relationship, and the date, and references them naturally only when relevant.", href: "/features/chat" },
-        { title: "Anniversary awareness", body: "On the days that matter — death dates, birthdays, holidays — Calm AI proactively checks in.", href: "/features/reflect" },
+        { title: "It remembers who you lost", body: "You don't have to retell. Calm AI Therapy holds the name, the relationship, and the date, and references them naturally only when relevant.", href: "/features/chat" },
+        { title: "Anniversary awareness", body: "On the days that matter — death dates, birthdays, holidays — Calm AI Therapy proactively checks in.", href: "/features/reflect" },
         { title: "Voice when words fail", body: "Grief makes typing impossible. The voice agent is there for the worst days.", href: "/features/voice" },
       ]}
       modeLinks={[
@@ -36,11 +36,11 @@ export default function GriefPage() {
         { title: "2am, walking", text: "When you cannot face talking to anyone, voice with Aura is a way to say it out loud without anyone else in the room." },
       ]}
       faqs={[
-        { q: "How does Calm AI handle anniversaries?", a: "When you mention a date — a death date, a birthday, a wedding anniversary — Calm AI stores it. On those days, it proactively checks in, gently. You can turn this off any time." },
-        { q: "Is it weird to use AI for grief?", a: "Many people use journals. Calm AI is a smarter journal — one that remembers and reflects back. It is not a replacement for human grief support; it is a companion alongside it." },
-        { q: "Will it forget who I lost?", a: "No. Memory is the architecture. Calm AI holds the name, the relationship, and the small details you mentioned in passing." },
+        { q: "How does Calm AI Therapy handle anniversaries?", a: "When you mention a date — a death date, a birthday, a wedding anniversary — Calm AI Therapy stores it. On those days, it proactively checks in, gently. You can turn this off any time." },
+        { q: "Is it weird to use AI for grief?", a: "Many people use journals. Calm AI Therapy is a smarter journal — one that remembers and reflects back. It is not a replacement for human grief support; it is a companion alongside it." },
+        { q: "Will it forget who I lost?", a: "No. Memory is the architecture. Calm AI Therapy holds the name, the relationship, and the small details you mentioned in passing." },
         { q: "Can I delete it all if I want a fresh start?", a: "Yes. You own your data. You can delete it all in one click." },
-        { q: "Is it culturally sensitive about death?", a: "Calm AI is built for users across cultures. It does not impose a Western model of grief. It listens to your framing, not its own." },
+        { q: "Is it culturally sensitive about death?", a: "Calm AI Therapy is built for users across cultures. It does not impose a Western model of grief. It listens to your framing, not its own." },
       ]}
       related={[
         { href: "/for/depression", label: "For Depression" },
