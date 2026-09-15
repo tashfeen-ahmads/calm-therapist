@@ -4,10 +4,10 @@
  * Aura, the companion, keeps her name across brands.
  */
 export const BRAND = {
-  name: process.env.NEXT_PUBLIC_BRAND_NAME ?? "Calm Therapist",
+  name: process.env.NEXT_PUBLIC_BRAND_NAME ?? "Calm AI",
   shortName: process.env.NEXT_PUBLIC_BRAND_SHORT ?? "Calm",
   agent: "Aura",
-  url: process.env.NEXT_PUBLIC_APP_URL ?? "https://calm-therapist.netlify.app",
+  url: process.env.NEXT_PUBLIC_APP_URL ?? "https://calmaitherapy.com",
   tagline: "A free AI therapist that remembers you.",
   description:
     "Chat with Aura for free, any hour. Voice when typing is too much. Small anonymous circles, hosted by Aura, when you want company. Crisis-aware from the first message.",

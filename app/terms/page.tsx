@@ -163,8 +163,8 @@ export default function TermsPage() {
           <Section title="Contact">
             <p>
               Questions, disputes, or just want to talk to a human? Email{" "}
-              <a href="mailto:hello@calm-therapist.netlify.app" style={{ color: "var(--calm-forest)" }}>
-                hello@calm-therapist.netlify.app
+              <a href="mailto:hello@calmaitherapy.com" style={{ color: "var(--calm-forest)" }}>
+                hello@calmaitherapy.com
               </a>
               .
             </p>

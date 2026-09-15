@@ -19,7 +19,7 @@ travel back through the proxy and are stored for the public domain.
 2. Set the blank variables:
    - `DATABASE_URL`: Supabase pooled URL, port 6543, with `?pgbouncer=true`.
    - `DATABASE_DIRECT_URL`: Supabase direct URL, port 5432. Migrations use this.
-   - `NEXT_PUBLIC_APP_URL`: the public site address, for example `https://calm-therapist.netlify.app`.
+   - `NEXT_PUBLIC_APP_URL`: the public site address: `https://calmaitherapy.com`. No trailing slash.
    - `GOOGLE_REDIRECT_URI`: `<NEXT_PUBLIC_APP_URL>/api/auth/google/callback`. Register the same URL in Google Cloud.
    - `COOKIE_DOMAIN`: leave blank on a netlify.app address; set `.yourdomain.com` once the custom domain is live.
    - `ADMIN_EMAIL`, `ADMIN_INITIAL_PASSWORD` (12+ characters), `OPENAI_API_KEY`, ElevenLabs, Resend, Google, Ko-fi.
