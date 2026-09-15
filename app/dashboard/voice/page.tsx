@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { VoiceAgent } from "@/components/agents/VoiceAgent";
 import { UnlockDialog } from "@/components/dashboard/UnlockDialog";
+import { AI_DISCLOSURE_SHORT } from "@/lib/legal";
 import { ModeBar } from "@/components/agents/ModeBar";
 import { useServerProfile } from "@/components/dashboard/useServerProfile";
 import type { AgentModeKey, UserProfile } from "@/lib/aura";
@@ -69,6 +70,7 @@ export default function VoicePage() {
               ? "Aura is getting to know you"
               : `Aura remembers ${memoryCount} ${memoryCount === 1 ? "thing" : "things"} about you`}
           </span>
+          <span style={{ fontSize: 12, color: "var(--calm-ink-40)", marginTop: 2 }}>{AI_DISCLOSURE_SHORT}</span>
         </div>
         {hasVoice && <ModeBar active={activeMode} onChange={persistMode} />}
       </header>

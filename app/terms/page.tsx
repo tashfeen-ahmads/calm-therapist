@@ -25,17 +25,53 @@ export default function TermsPage() {
             Last updated {LAST_UPDATED}.
           </p>
 
-          <Section title="What Calm AI Therapy is — and isn't">
+          <Section title="What this is, and what it is not">
             <p>
-              Calm AI Therapy is an AI companion built to help you reflect, name what you&apos;re
-              feeling, and keep your space open between hard moments. It is <strong>not a
-              substitute for licensed mental-health care</strong>, a clinical diagnosis, or a crisis
-              service. If you are in danger or in immediate distress, please reach out to a
-              human — a trusted person, a clinician, or your country&apos;s crisis line.
+              <strong>Aura is software.</strong> She is not a therapist, not a counsellor, not a
+              psychologist, and not a person. Calm AI Therapy is a general wellness product for
+              reflecting on your own thinking. It is not a medical device, it is not healthcare,
+              and nothing here is a clinical service.
             </p>
             <p>
-              Aura, our AI companion, can make mistakes. Treat its responses as a thinking partner,
-              not a prescription.
+              Specifically, and without exception, we do not and cannot:
+            </p>
+            <ul style={{ paddingLeft: 20, display: "flex", flexDirection: "column", gap: 8 }}>
+              <li>diagnose any condition, or tell you whether you have one;</li>
+              <li>provide treatment, therapy, psychotherapy, or a treatment plan;</li>
+              <li>advise on medication, dosage, starting, stopping or changing anything;</li>
+              <li>act as a crisis or emergency service;</li>
+              <li>replace care from a licensed professional.</li>
+            </ul>
+            <p>
+              We make no claim that using this product improves, treats or cures any condition. No
+              clinical trial supports such a claim, and you should be sceptical of any product in
+              this category that makes one.
+            </p>
+            <p>
+              <strong>If you are in immediate danger, contact your local emergency number.</strong>{" "}
+              Aura will show you the crisis line for your country when the conversation calls for
+              it, but she is not a substitute for one and cannot summon help on your behalf.
+            </p>
+            <p>
+              Aura can be wrong. Language models state things confidently that are not true, and
+              hers is no exception. Treat what she says as a thinking partner talking, not as
+              guidance to act on without judgement.
+            </p>
+          </Section>
+
+          <Section title="Where you are, and what your law says">
+            <p>
+              Rules for AI mental health tools differ by country and, in the United States, by
+              state. Several states now restrict what such a product may do or be called, and at
+              least one restricts how it may be advertised. We build to the strictest rule we know
+              of rather than maintaining several versions of the truth: Aura tells you she is
+              software without being asked, she never presents herself as a clinician, and every
+              conversation passes through a crisis layer.
+            </p>
+            <p>
+              You are responsible for whether using this product is permitted where you are. If you
+              are a clinician, this product is not an instrument of care and must not be used as
+              one with the people you treat.
             </p>
           </Section>
 

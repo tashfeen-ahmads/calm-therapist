@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { AI_DISCLOSURE_SHORT } from "@/lib/legal";
 import { motion } from "framer-motion";
 import type { AgentModeKey, UserProfile } from "@/lib/aura";
 import type { ModeKey } from "@/lib/features";
@@ -227,6 +228,9 @@ export function ChatAgent({
               style={{ width: 6, height: 6, borderRadius: 999, background: "var(--calm-forest)", display: "inline-block" }}
             />
             {memoryCount === 0 ? "Aura is getting to know you" : `Aura remembers ${memoryCount} ${memoryCount === 1 ? "thing" : "things"} about you`}
+          </span>
+          <span style={{ fontSize: 12, color: "var(--calm-ink-40)", marginTop: 2 }}>
+            {AI_DISCLOSURE_SHORT}
           </span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
