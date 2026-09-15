@@ -3,9 +3,9 @@ import { PageShell } from "@/components/seo/PageShell";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "About Calm Therapist | Backed by Implenix",
+  title: "About Calm AI | A free AI therapist that remembers you",
   description:
-    "Calm Therapist is the AI therapy platform from Implenix. We exist to close the 12 documented failures in AI mental health products — for everyone.",
+    "Calm AI is a free AI therapist built to close the documented failures in AI mental health products: lost memory, hollow empathy, unsafe crisis handling, and cultural blindness.",
   path: "/about",
 });
 
@@ -20,11 +20,11 @@ export default function AboutPage() {
           <h1 style={{ marginBottom: 32 }}>This is not another wellness app.</h1>
 
           <Para>
-            Calm Therapist is built by Implenix because the AI therapy market is failing the people
+            Calm AI exists because the AI therapy market is failing the people
             who need it most. We mapped the 12 most common failure modes — memory loss, fake
             empathy, dangerous crisis responses, cultural blindness, the absence of a human
             handoff, the stigma men face when stepping into therapy spaces, and more — and built
-            Calm Therapist to solve each of them.
+            Calm AI to solve each of them.
           </Para>
 
           <Para>
@@ -32,17 +32,6 @@ export default function AboutPage() {
             engagement engine. We are trying to make a tool that, when a person is having a hard
             moment at 3am, actually helps. The bar is whether someone vulnerable feels safer
             after using it. That is the only metric we care about.
-          </Para>
-
-          <h2 style={{ marginTop: 48, marginBottom: 16 }}>About Implenix</h2>
-          <Para>
-            <a href="https://implenix.net" target="_blank" rel="noopener noreferrer">
-              Implenix.net
-            </a>{" "}
-            is the parent organisation that backs Calm Therapist. Implenix builds technology
-            products with long horizons. Our incentive structure is alignment with user wellbeing.
-            We are not optimising for venture-scale growth at the expense of the people the
-            product serves.
           </Para>
 
           <h2 style={{ marginTop: 48, marginBottom: 16 }}>What we believe</h2>
@@ -56,7 +45,7 @@ export default function AboutPage() {
           </ul>
 
           <div style={{ marginTop: 64 }}>
-            <Link href="/auth/signup" className="btn-primary">Start with Calm Therapist</Link>
+            <Link href="/auth/signup" className="btn-primary">Start with Calm AI</Link>
           </div>
         </div>
       </article>

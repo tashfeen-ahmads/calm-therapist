@@ -4,9 +4,9 @@ import { GLOSSARY } from "@/lib/seo-pages";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Calm Therapist Glossary | Plain-English Mental-Wellness Terms",
+  title: "Calm AI Glossary | Plain-English Mental-Wellness Terms",
   description:
-    "Cognitive distortions, rumination, self-reflection — the words mental-wellness people use, explained without jargon. Part of Calm Therapist.",
+    "Cognitive distortions, rumination, self-reflection — the words mental-wellness people use, explained without jargon. Part of Calm AI.",
   path: "/glossary",
 });
 

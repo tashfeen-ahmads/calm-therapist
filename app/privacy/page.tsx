@@ -3,9 +3,9 @@ import { PageShell } from "@/components/seo/PageShell";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Privacy | What We Do With Your Data | Calm Therapist",
+  title: "Privacy | What We Do With Your Data | Calm AI",
   description:
-    "Calm Therapist's full privacy architecture. No training on your data. Stored for you, in your account. One-click delete. Backed by Implenix.",
+    "Calm AI's full privacy architecture. No training on your data. Stored for you, in your account. One-click delete.",
   path: "/privacy",
 });
 
@@ -19,7 +19,7 @@ export default function PrivacyPage() {
           </p>
           <h1 style={{ marginBottom: 32 }}>Your data belongs to you. Always.</h1>
           <p className="body-large" style={{ color: "var(--calm-ink-40)", marginBottom: 56 }}>
-            What follows is the entire privacy architecture of Calm Therapist, in plain English.
+            What follows is the entire privacy architecture of Calm AI, in plain English.
             No legal smoke. No buried terms.
           </p>
 
@@ -66,22 +66,20 @@ export default function PrivacyPage() {
             </p>
           </Section>
 
-          <Section title="Backed by Implenix">
+          <Section title="Why we are built this way">
             <p>
-              Calm Therapist is backed by{" "}
-              <a href="https://implenix.net" target="_blank" rel="noopener noreferrer">
-                Implenix.net
-              </a>
-              . Implenix is not a venture-funded growth machine. The incentive structure here is
-              alignment with user wellbeing, not engagement metrics.
+              There is no investor here expecting a return on your attention. Nothing in this
+              product is measured on time-on-app, and nothing is designed to make leaving feel
+              bad. Chat is free because the point is that you can use it when you need it, and
+              the parts that cost us money per minute are the only parts we ask you to cover.
             </p>
           </Section>
 
           <div id="terms" style={{ marginTop: 64 }}>
             <h2>Terms of use, in short</h2>
             <p style={{ marginTop: 16 }}>
-              Calm Therapist is not a replacement for clinical care. If you are in immediate
-              danger, call your local emergency number. By using Calm Therapist you agree not to
+              Calm AI is not a replacement for clinical care. If you are in immediate
+              danger, call your local emergency number. By using Calm AI you agree not to
               attempt to misuse it for harm to yourself or others. We reserve the right to
               terminate accounts engaged in clear abuse. That&apos;s it.
             </p>

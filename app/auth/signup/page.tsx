@@ -74,7 +74,7 @@ function SignupInner() {
       <AuthDivider />
 
       <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-        <Field label="What should Calm Therapist call you?">
+        <Field label="What should Calm AI call you?">
           <input
             className="input"
             type="text"

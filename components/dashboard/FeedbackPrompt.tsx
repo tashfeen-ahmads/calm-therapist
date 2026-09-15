@@ -161,7 +161,7 @@ export function FeedbackPrompt({ initialOpen = true }: Props) {
               checked={consent}
               onChange={(e) => setConsent(e.target.checked)}
             />
-            Calm Therapist may share my words on its public site (first name only).
+            Calm AI may share my words on its public site (first name only).
           </label>
         )}
 

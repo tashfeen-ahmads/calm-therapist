@@ -53,7 +53,7 @@ export default function Step3Page() {
     <OnboardingShell step={3}>
       <h2 style={{ marginBottom: 16 }}>Choose your tone.</h2>
       <p className="body-large" style={{ color: "var(--calm-ink-40)", marginBottom: 32 }}>
-        Calm Therapist adapts to how you want to be spoken to.
+        Calm AI adapts to how you want to be spoken to.
       </p>
 
       <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: 32 }}>

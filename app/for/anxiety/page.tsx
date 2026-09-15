@@ -2,7 +2,7 @@ import { ConditionPageTemplate } from "@/components/seo/ConditionPage";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "AI Therapist for Anxiety | Free, Remembers You | Calm Therapist",
+  title: "AI Therapist for Anxiety | Free, Remembers You | Calm AI",
   description:
     "AI therapy designed for anxiety. Voice-first when typing is too much, full session memory, and a longitudinal record so you don't start over every time.",
   path: "/for/anxiety",
@@ -21,8 +21,8 @@ export default function AnxietyPage() {
       ]}
       whyFails={`Standard AI therapy products treat anxiety as a category to look up, not a state to meet. They forget you between sessions, so every conversation begins by re-establishing context — the worst possible task for an anxious mind. They fall back on canned reassurances ("that sounds really hard") that anxious users see through immediately. And they have no way to handle the moments when anxiety becomes panic — no clear handoff, no grounding protocol, no human backup. Anxiety needs continuity. Most tools only offer episodes.`}
       ctFeatures={[
-        { title: "Voice-first when needed", body: "When typing is impossible, you can speak. Calm Therapist's voice agent is built for anxious moments — short responses, slow pacing, no rush.", href: "/features/voice" },
-        { title: "Memory that holds", body: "Anxious people repeat themselves because they have to. Calm Therapist remembers — your job, your relationships, your triggers — so you don't.", href: "/features/chat" },
+        { title: "Voice-first when needed", body: "When typing is impossible, you can speak. Calm AI's voice agent is built for anxious moments — short responses, slow pacing, no rush.", href: "/features/voice" },
+        { title: "Memory that holds", body: "Anxious people repeat themselves because they have to. Calm AI remembers — your job, your relationships, your triggers — so you don't.", href: "/features/chat" },
         { title: "Pattern detection", body: "Most anxiety has triggers you haven't named yet. The weekly journal surfaces them in your own words.", href: "/features/journal" },
       ]}
       modeLinks={[
@@ -36,11 +36,11 @@ export default function AnxietyPage() {
         { title: "Not explaining your whole life again", text: "Aura already knows the context you gave her. The conversation starts where you are, not where a form begins." },
       ]}
       faqs={[
-        { q: "Is Calm Therapist a replacement for an anxiety therapist?", a: "No. Calm Therapist is a companion that helps you between sessions — or for moments where therapy isn't accessible. If you have a clinician, the longitudinal record is something you can share with them." },
-        { q: "Does it help during a panic attack?", a: "Calm Therapist's voice mode is built for high-anxiety moments. It speaks slowly, uses grounding techniques, and never adds to your cognitive load. Crisis Safe activates automatically if your language indicates immediate danger." },
+        { q: "Is Calm AI a replacement for an anxiety therapist?", a: "No. Calm AI is a companion that helps you between sessions — or for moments where therapy isn't accessible. If you have a clinician, the longitudinal record is something you can share with them." },
+        { q: "Does it help during a panic attack?", a: "Calm AI's voice mode is built for high-anxiety moments. It speaks slowly, uses grounding techniques, and never adds to your cognitive load. Crisis Safe activates automatically if your language indicates immediate danger." },
         { q: "Can it work without me typing?", a: "Yes. The voice agent uses ElevenLabs for natural conversation. You can have a full session without typing anything." },
-        { q: "Will it remember my triggers?", a: "Yes. Memory is built into every mode. The longer you use Calm Therapist, the more accurately it understands your specific anxiety pattern." },
-        { q: "Is my data safe?", a: "Calm Therapist does not train on your conversations. Your record is stored for you, in your account, and you can delete everything at any time." },
+        { q: "Will it remember my triggers?", a: "Yes. Memory is built into every mode. The longer you use Calm AI, the more accurately it understands your specific anxiety pattern." },
+        { q: "Is my data safe?", a: "Calm AI does not train on your conversations. Your record is stored for you, in your account, and you can delete everything at any time." },
       ]}
       related={[
         { href: "/for/depression", label: "For Depression" },

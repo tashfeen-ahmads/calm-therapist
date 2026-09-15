@@ -21,7 +21,7 @@ export function pageMetadata({ title, description, path, ogImage = "/og-image.pn
       title,
       description,
       url,
-      siteName: "Calm Therapist",
+      siteName: "Calm AI",
       images: [{ url: ogImage, width: 1200, height: 630 }],
       type: "website",
     },
@@ -36,8 +36,7 @@ export function organizationSchema() {
     name: BRAND.name,
     url: BASE_URL,
     logo: `${BASE_URL}/og-image.png`,
-    parentOrganization: { "@type": "Organization", name: BRAND.parent.name, url: BRAND.parent.url },
-    sameAs: [BRAND.parent.url, ...(process.env.NEXT_PUBLIC_SOCIAL_URLS ?? "").split(",").map((s) => s.trim()).filter(Boolean)],
+    sameAs: (process.env.NEXT_PUBLIC_SOCIAL_URLS ?? "").split(",").map((s) => s.trim()).filter(Boolean),
     description: BRAND.description,
   };
 }
@@ -50,7 +49,7 @@ export function webSiteSchema() {
     name: BRAND.name,
     url: BASE_URL,
     inLanguage: ["en", "ur", "hi", "ar", "es", "fr"],
-    publisher: { "@type": "Organization", name: BRAND.parent.name, url: BRAND.parent.url },
+    publisher: { "@type": "Organization", name: BRAND.name, url: BASE_URL },
   };
 }
 
@@ -123,7 +122,7 @@ export function softwareApplicationSchema() {
     description: BRAND.description,
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD", description: "Chat with Aura is free for everyone." },
     featureList: ["Free AI therapist chat", "Voice sessions", "Anonymous support circles", "Crisis-aware safety layer", "Memory across sessions", "English, Urdu, Hindi, Arabic, Spanish, French"],
-    publisher: { "@type": "Organization", name: BRAND.parent.name, url: BRAND.parent.url },
+    publisher: { "@type": "Organization", name: BRAND.name, url: BASE_URL },
   };
 }
 

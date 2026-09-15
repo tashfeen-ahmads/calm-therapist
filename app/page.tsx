@@ -9,8 +9,6 @@ import { SafetyBlock } from "@/components/landing/SafetyBlock";
 import { Languages } from "@/components/landing/Languages";
 import { HomeFaq } from "@/components/landing/HomeFaq";
 import { PrivacyBlock } from "@/components/landing/Privacy";
-import { Pricing } from "@/components/landing/Pricing";
-import { FoundingStrip } from "@/components/landing/FoundingStrip";
 import { CirclesSection } from "@/components/landing/CirclesSection";
 import { FinalCTA } from "@/components/landing/FinalCTA";
 import { LeadPopupLazy } from "@/components/landing/LeadPopupLazy";
@@ -33,7 +31,6 @@ export default function HomePage() {
       <Navbar />
       <main>
         <FeelItFirst />
-        <FoundingStrip />
         <ThreeWays />
         <HowAuraTalks />
         <AgentDemo />
@@ -43,7 +40,6 @@ export default function HomePage() {
         <ConditionPaths />
         <PrivacyBlock />
         <HomeFaq />
-        <Pricing />
         <FinalCTA />
       </main>
       <Footer />

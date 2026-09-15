@@ -17,7 +17,7 @@ export function ConditionPaths() {
     <section style={{ background: "var(--calm-mist)", padding: "120px 24px" }}>
       <div className="container">
         <h2 style={{ marginBottom: 56, maxWidth: 760 }}>
-          You don&apos;t need to be in crisis to use Calm Therapist.
+          You don&apos;t need to be in crisis to use Calm AI.
         </h2>
 
         <div

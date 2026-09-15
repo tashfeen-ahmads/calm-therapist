@@ -17,7 +17,7 @@ const CAMPAIGNS: Record<string, Campaign> = {
   "anxiety-meta": {
     slug: "anxiety-meta",
     headline: "Still explaining yourself to a therapist who forgets?",
-    sub: "Calm Therapist remembers every session. Voice when typing is hard. Real help, no waiting list.",
+    sub: "Calm AI remembers every session. Voice when typing is hard. Real help, no waiting list.",
     bullets: [
       "Built for anxiety — voice mode for the moments typing is impossible.",
       "Memory across every session. You don't repeat your story.",
@@ -33,7 +33,7 @@ const CAMPAIGNS: Record<string, Campaign> = {
   "men-burnout": {
     slug: "men-burnout",
     headline: "You don't need therapy. You need somewhere to think.",
-    sub: "Calm Therapist is direct. No therapy vocabulary. No hand-holding. Just a tool that helps you see the shape of your week.",
+    sub: "Calm AI is direct. No therapy vocabulary. No hand-holding. Just a tool that helps you see the shape of your week.",
     bullets: [
       "Direct tone option. No comfort-speak.",
       "Voice mode while you walk, drive, or pace.",
@@ -72,7 +72,7 @@ export function generateMetadata({ params }: { params: { slug: string } }) {
   const c = CAMPAIGNS[params.slug];
   if (!c) return {};
   return {
-    ...pageMetadata({ title: `${c.headline} | Calm Therapist`, description: c.sub, path: `/lp/${c.slug}` }),
+    ...pageMetadata({ title: `${c.headline} | Calm AI`, description: c.sub, path: `/lp/${c.slug}` }),
     robots: { index: false, follow: true },
   };
 }
@@ -157,11 +157,7 @@ export default function LpPage({ params }: { params: { slug: string } }) {
             {c.ctaLabel}
           </Link>
           <p style={{ marginTop: 16, fontSize: 13, color: "var(--calm-ink-40)" }}>
-            Backed by{" "}
-            <a href="https://implenix.net" target="_blank" rel="noopener noreferrer">
-              Implenix.net
-            </a>
-            . Your data belongs to you.
+            Free to start. No card. Your data belongs to you.
           </p>
         </section>
       </main>

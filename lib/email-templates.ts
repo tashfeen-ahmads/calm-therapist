@@ -66,15 +66,14 @@ const wrap = (title: string, body: string) => `
   <tr><td align="center">
     <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;background:#FAFAF8;">
       <tr><td style="padding:0 0 24px 0;">
-        <span style="font-family:Georgia,'Times New Roman',serif;font-size:22px;font-weight:500;color:#2D2D2D;">Calm Therapist</span>
-        <span style="font-size:12px;color:#7C7C7C;margin-left:8px;letter-spacing:0.06em;text-transform:uppercase;">Backed by Implenix</span>
+        <span style="font-family:Georgia,'Times New Roman',serif;font-size:22px;font-weight:500;color:#2D2D2D;">Calm AI</span>
       </td></tr>
       <tr><td style="background:#FFFFFF;border:1px solid rgba(45,45,45,0.10);border-radius:14px;padding:32px;">
         <h1 style="font-family:Georgia,'Times New Roman',serif;font-size:28px;font-weight:500;line-height:1.2;margin:0 0 16px;color:#2D2D2D;">${title}</h1>
         ${body}
       </td></tr>
       <tr><td style="padding:24px 8px;font-size:12px;color:#7C7C7C;line-height:1.6;">
-        You're getting this because you opened a space at Calm Therapist. We don't sell your data. Reply if you want to talk to a real person.
+        You're getting this because you opened a space at Calm AI. We don't sell your data. Reply if you want to talk to a real person.
       </td></tr>
     </table>
   </td></tr>
@@ -96,7 +95,7 @@ ${appUrl}/dashboard/session
 
 I'll be here. No streaks. No guilt. Coming back is the only thing that matters.
 
-— Aura at Calm Therapist`;
+— Aura at Calm AI`;
       return {
         subject,
         text,
@@ -364,13 +363,13 @@ Top-up of $${topupAmountUsd ?? 12} applied. 30 more voice minutes this week, 50 
 
 Your space: ${appUrl}/dashboard/voice
 
-— Calm Therapist`,
+— Calm AI`,
       html: wrap(
         "Voice top-up applied.",
         `<p style="font-size:16px;line-height:1.7;margin:0 0 12px;">${name},</p>
          <p style="font-size:16px;line-height:1.7;margin:0 0 12px;">Top-up of $${topupAmountUsd ?? 12} applied. <strong>30 more voice minutes this week</strong>, <strong>50 more for the month</strong>.</p>
          <p style="margin:24px 0;"><a href="${appUrl}/dashboard/voice" style="display:inline-block;background:#4A7A6D;color:#FFFFFF;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:500;">Talk it out</a></p>
-         <p style="font-size:14px;color:#5C5C5C;margin:18px 0 0;">— Calm Therapist</p>`
+         <p style="font-size:14px;color:#5C5C5C;margin:18px 0 0;">— Calm AI</p>`
       ),
     }),
   },
@@ -379,7 +378,7 @@ Your space: ${appUrl}/dashboard/voice
     key: "verify-email",
     delayMinutes: 0,
     build: ({ name, actionUrl }) => ({
-      subject: "Confirm your email — Calm Therapist",
+      subject: "Confirm your email — Calm AI",
       text: `${name},
 
 One quick step before we can keep your space safe across devices: confirm this is your email.
@@ -388,14 +387,14 @@ ${actionUrl}
 
 The link is good for 24 hours. If you didn't sign up, you can ignore this.
 
-— Calm Therapist`,
+— Calm AI`,
       html: wrap(
         "Confirm your email.",
         `<p style="font-size:16px;line-height:1.7;margin:0 0 12px;">${name},</p>
          <p style="font-size:16px;line-height:1.7;margin:0 0 12px;">One quick step before we can keep your space safe across devices: confirm this is your email.</p>
          <p style="margin:24px 0;"><a href="${actionUrl}" style="display:inline-block;background:#4A7A6D;color:#FFFFFF;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:500;">Confirm email</a></p>
          <p style="font-size:14px;color:#5C5C5C;margin:18px 0 0;">The link is good for 24 hours. If you didn't sign up, you can ignore this.</p>
-         <p style="font-size:14px;color:#5C5C5C;margin:18px 0 0;">— Calm Therapist</p>`
+         <p style="font-size:14px;color:#5C5C5C;margin:18px 0 0;">— Calm AI</p>`
       ),
     }),
   },
@@ -404,7 +403,7 @@ The link is good for 24 hours. If you didn't sign up, you can ignore this.
     key: "password-reset",
     delayMinutes: 0,
     build: ({ name, actionUrl }) => ({
-      subject: "Reset your Calm Therapist password",
+      subject: "Reset your Calm AI password",
       text: `${name},
 
 Someone asked to reset the password for this account. If that was you, open this link to set a new one:
@@ -413,14 +412,14 @@ ${actionUrl}
 
 The link is good for one hour. If it wasn't you, you can ignore this — your account is still safe.
 
-— Calm Therapist`,
+— Calm AI`,
       html: wrap(
         "Reset your password.",
         `<p style="font-size:16px;line-height:1.7;margin:0 0 12px;">${name},</p>
          <p style="font-size:16px;line-height:1.7;margin:0 0 12px;">Someone asked to reset the password for this account. If that was you, open this link to set a new one.</p>
          <p style="margin:24px 0;"><a href="${actionUrl}" style="display:inline-block;background:#4A7A6D;color:#FFFFFF;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:500;">Set a new password</a></p>
          <p style="font-size:14px;color:#5C5C5C;margin:18px 0 0;">The link is good for one hour. If it wasn't you, you can ignore this — your account is still safe.</p>
-         <p style="font-size:14px;color:#5C5C5C;margin:18px 0 0;">— Calm Therapist</p>`
+         <p style="font-size:14px;color:#5C5C5C;margin:18px 0 0;">— Calm AI</p>`
       ),
     }),
   },

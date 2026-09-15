@@ -202,7 +202,7 @@ export function LeadPopup() {
             transition={{ duration: 0.4, ease: "easeOut" }}
             className="lead-popup"
             role="dialog"
-            aria-label="Start a free Calm Therapist session"
+            aria-label="Start a free Calm AI session"
           >
             <button
               type="button"
@@ -222,7 +222,7 @@ export function LeadPopup() {
                 </span>
                 <h4 style={{ marginTop: 10, marginBottom: 8 }}>{headline}</h4>
                 <p style={{ fontSize: 14, color: "var(--calm-ink-70)", lineHeight: 1.6, marginBottom: 16 }}>
-                  Drop your email and Calm Therapist will hold your spot. Your first conversation
+                  Drop your email and Calm AI will hold your spot. Your first conversation
                   is one minute away.
                 </p>
                 <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -255,7 +255,7 @@ export function LeadPopup() {
                   Take a breath. We&apos;re ready when you are.
                 </h4>
                 <p style={{ fontSize: 14, color: "var(--calm-ink-70)", lineHeight: 1.6, marginBottom: 16 }}>
-                  Continue to your account — onboarding takes about 3 minutes and Calm Therapist
+                  Continue to your account — onboarding takes about 3 minutes and Calm AI
                   will know you by the end.
                 </p>
                 <Link
@@ -324,7 +324,7 @@ export function LeadPopup() {
 
 function headlineForPath(pathname: string | null): string {
   if (!pathname) return "Try one session — no signup screen first.";
-  if (pathname.startsWith("/for/anxiety")) return "Anxiety doesn't wait. Neither does Calm Therapist.";
+  if (pathname.startsWith("/for/anxiety")) return "Anxiety doesn't wait. Neither does Calm AI.";
   if (pathname.startsWith("/for/depression")) return "Coming back doesn't have to be hard.";
   if (pathname.startsWith("/for/grief")) return "Memory matters most when it's grief.";
   if (pathname.startsWith("/for/burnout")) return "See the shape of your week — for free.";

@@ -2,9 +2,9 @@ import { FeaturePageTemplate } from "@/components/seo/FeaturePage";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Monthly Reflect | Real Progress, Not Performance | Calm Therapist",
+  title: "Monthly Reflect | Real Progress, Not Performance | Calm AI",
   description:
-    "Monthly Reflect by Calm Therapist gives you a real summary of your inner life across the month. See your shift, your themes, and your own quotes back to you.",
+    "Monthly Reflect by Calm AI gives you a real summary of your inner life across the month. See your shift, your themes, and your own quotes back to you.",
   path: "/features/reflect",
 });
 
@@ -20,9 +20,9 @@ export default function ReflectModePage() {
           "Most AI tools leak everything you say. Monthly Reflect catches it. It returns to you in a coherent form — themes, shifts, and the words you said yourself.",
       }}
       steps={[
-        { title: "End of month trigger", body: "Calm Therapist generates the reflection without you asking." },
+        { title: "End of month trigger", body: "Calm AI generates the reflection without you asking." },
         { title: "Three sections", body: "What came up most. Where you shifted. Quotes you said about yourself." },
-        { title: "Set focus for next month", body: "One sentence. Calm Therapist orients itself around it." },
+        { title: "Set focus for next month", body: "One sentence. Calm AI orients itself around it." },
       ]}
       who={[
         { title: "If you can't remember the month", body: "Most people can't. The Reflect surfaces what you'd already forgotten." },
@@ -35,10 +35,10 @@ export default function ReflectModePage() {
         { href: "/for/depression", label: "For Depression" },
       ]}
       body={[
-        "Monthly Reflect is the slowest, most patient mode in Calm Therapist. It is the mode you don't need every week, but the one that, looking back, you'll be glad existed. It compresses 30 days of voice, chat, and journal data into a coherent retrospective — not as a dashboard, but as a piece of writing.",
+        "Monthly Reflect is the slowest, most patient mode in Calm AI. It is the mode you don't need every week, but the one that, looking back, you'll be glad existed. It compresses 30 days of voice, chat, and journal data into a coherent retrospective — not as a dashboard, but as a piece of writing.",
         "The most powerful section of the reflect is \"What you said about yourself.\" It pulls direct quotes from your sessions — your exact words, in italics, organized chronologically. People often see themselves clearly for the first time when they read this section.",
-        "There is no scoring. There are no points. There is no streak. Calm Therapist refuses gamification because gamification destroys the work. The reflect is contemplative by design.",
-        "At the end of the reflect, Calm Therapist asks you for one sentence: a focus for next month. That sentence becomes the lens for the month ahead. Calm Therapist references it in chat, in voice, in your weekly journal. The reflect is the only mode where Calm Therapist proactively reaches out to you — once a month, when you're ready.",
+        "There is no scoring. There are no points. There is no streak. Calm AI refuses gamification because gamification destroys the work. The reflect is contemplative by design.",
+        "At the end of the reflect, Calm AI asks you for one sentence: a focus for next month. That sentence becomes the lens for the month ahead. Calm AI references it in chat, in voice, in your weekly journal. The reflect is the only mode where Calm AI proactively reaches out to you — once a month, when you're ready.",
       ]}
     />
   );

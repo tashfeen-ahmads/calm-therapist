@@ -3,12 +3,11 @@ import { JsonLd, faqSchema } from "@/lib/seo";
 import { BRAND } from "@/lib/brand";
 import { CIRCLES_OPEN_AT } from "@/lib/circle-themes";
 
-const MIN_SUPPORT = process.env.NEXT_PUBLIC_MIN_SUPPORT_USD ?? "5";
 
 export const HOME_FAQS = [
   {
     q: "Is this really a free AI therapist?",
-    a: `Yes. Chat with Aura is free for everyone, with no session cap, no trial and no card. Voice and circles are the two parts that cost real money to run, so they open once you tell us how Aura is going and support the work, from $${MIN_SUPPORT}. Ko-fi shows monthly support by default; you can switch to a single payment, or cancel a monthly one at any time from your Ko-fi account. Chat never becomes paid either way.`,
+    a: "Yes. Talking to Aura is free for everyone — no session cap, no trial, no card, and no upgrade prompt in the middle of a hard night. You sign up with an email address and start. That is the whole thing.",
   },
   {
     q: "Is an AI therapist a replacement for a real therapist?",
@@ -23,8 +22,8 @@ export const HOME_FAQS = [
     a: `Small anonymous text rooms of up to eight people carrying the same thing, 45 minutes a night, hosted by Aura with a human on call. You join as an anonymous animal and talk to each other. They open when ${CIRCLES_OPEN_AT} members have joined.`,
   },
   {
-    q: "How do I unlock voice and circles?",
-    a: `Two things, both inside your dashboard. First, tell us honestly how Aura has been — any rating, high or low, kept private unless you choose to be quoted. Then buy the work a coffee on Ko-fi, from $${MIN_SUPPORT}, whatever it is worth to you. Ko-fi defaults to monthly support — keep it if you want minutes topped up each month, or switch it to a single payment. Voice minutes land on your account and are yours to keep; they do not reset, and cancelling never takes back minutes you already have.`,
+    q: "Do I need a credit card?",
+    a: "No. There is no card field anywhere in signing up, and nothing to cancel later. You give an email address so Aura can remember you between conversations, and that is all we ask for.",
   },
   {
     q: "Which languages does Aura speak?",

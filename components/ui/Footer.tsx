@@ -11,7 +11,7 @@ const productLinks = [
   { href: "/circles", label: "Circles" },
   { href: "/features/crisis", label: "Crisis safety" },
   { href: "/features", label: "All features" },
-  { href: "/#pricing", label: "What it costs" },
+  { href: "/circles", label: "Circles" },
 ];
 
 const learnLinks = [
@@ -62,10 +62,7 @@ export function Footer() {
           <div>
             <Logo animated={false} />
             <p style={{ marginTop: 16, color: "rgba(255,255,255,0.6)", fontSize: 14, lineHeight: 1.7 }}>
-              Backed by{" "}
-              <a href="https://implenix.net" style={{ color: "white", textDecoration: "underline" }} target="_blank" rel="noopener noreferrer">
-                Implenix.net
-              </a>
+              A free AI therapist that remembers you.
             </p>
             <p style={{ marginTop: 24, color: "rgba(255,255,255,0.85)", fontSize: 14, fontStyle: "italic", maxWidth: 280 }}>
               Your data belongs to you. Always.
@@ -91,7 +88,7 @@ export function Footer() {
             gap: 16,
           }}
         >
-          <span>© {new Date().getFullYear()} {BRAND.name}. Backed by {BRAND.parent.name}.</span>
+          <span>© {new Date().getFullYear()} {BRAND.name}.</span>
           <span style={{ display: "flex", gap: 24 }}>
             <Link href="/privacy">Privacy</Link>
             <Link href="/terms">Terms</Link>

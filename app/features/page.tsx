@@ -4,7 +4,7 @@ import { FEATURE_LIST } from "@/lib/features";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Features | Chat, Voice, Circles, Crisis Safety | Calm Therapist",
+  title: "Features | Chat, Voice, Circles, Crisis Safety | Calm AI",
   description:
     "Everything Aura does: free chat that remembers you, voice when typing is too much, anonymous circles, a crisis-aware safety layer, and a weekly journal and monthly reflect built on one memory.",
   path: "/features",
@@ -20,9 +20,8 @@ export default function FeaturesIndex() {
           </p>
           <h1 style={{ marginBottom: 24 }}>One memory. Every way in.</h1>
           <p className="body-large" style={{ color: "var(--calm-ink-70)", marginBottom: 40 }}>
-            Chat is free for everyone, always. Voice and circles open when you support the work,
-            from $5. Everything shares one memory, so what you said in voice is there in next
-            week&apos;s journal.
+            Free to use, with no card and no trial. Everything shares one memory, so what you
+            said out loud on Tuesday is there in next week&apos;s journal.
           </p>
           <Link href="/circles" className="card" style={{ display: "block", textDecoration: "none", marginBottom: 16, background: "var(--calm-ink)", color: "white" }}>
             <h3 style={{ marginBottom: 8, color: "white" }}>Circles</h3>

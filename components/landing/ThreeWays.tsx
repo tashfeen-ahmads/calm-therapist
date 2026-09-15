@@ -12,9 +12,9 @@ const WAYS = [
     cta: "How chat works",
   },
   {
-    eyebrow: "Voice · opens from $5",
+    eyebrow: "Voice · when typing is too much",
     title: "Talk to Aura",
-    body: "When typing is too much. Shorter turns, slower pace, the same memory. Minutes land on your account when you support the work, and they are yours to keep.",
+    body: "Some nights typing is too much. Speak instead, at your own pace, and Aura carries the same memory into the room with you.",
     href: "/features/voice",
     cta: "How voice works",
   },

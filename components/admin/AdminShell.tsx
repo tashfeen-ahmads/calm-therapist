@@ -31,7 +31,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       <aside className="admin-side">
         <div className="admin-side-header">
           <span className="micro-label" style={{ color: "var(--calm-forest)" }}>Admin</span>
-          <span style={{ fontFamily: "var(--font-heading)", fontSize: 18 }}>Calm Therapist</span>
+          <span style={{ fontFamily: "var(--font-heading)", fontSize: 18 }}>Calm AI</span>
         </div>
         <nav style={{ display: "flex", flexDirection: "column", gap: 4 }}>
           {ITEMS.map((it) => {

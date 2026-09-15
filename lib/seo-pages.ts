@@ -59,12 +59,12 @@ const COMPARE_RELATED = [
 export const PAGES: Record<string, SeoPage> = {
   "free-ai-therapist": {
     slug: "free-ai-therapist",
-    title: "Free AI Therapist | No Card, No Session Cap | Calm Therapist",
+    title: "Free AI Therapist | No Card, No Session Cap | Calm AI",
     description:
       "A free AI therapist you can talk to any hour. Aura remembers you, pushes back kindly, never diagnoses, and shows the crisis line for your country. Free, always.",
     h1: "A free AI therapist, without the catch.",
     intro:
-      "Most \"free AI therapist\" apps are free for three messages, or free until the timer runs out, or free until you want the one feature that made you download it. Calm Therapist is different in one boring, important way: chat with Aura is free for everyone, with no session cap, no card, and no upgrade prompt in the middle of a hard night. This page says exactly what free means here, what it does not, and how we pay for it.",
+      "Most \"free AI therapist\" apps are free for three messages, or free until the timer runs out, or free until you want the one feature that made you download it. Calm AI is different in one boring, important way: chat with Aura is free for everyone, with no session cap, no card, and no upgrade prompt in the middle of a hard night. This page says exactly what free means here, what it does not, and how we pay for it.",
     sections: [
       {
         heading: "What free means here",
@@ -82,7 +82,7 @@ export const PAGES: Record<string, SeoPage> = {
       {
         heading: "What is not free, and why",
         paragraphs: [
-          "Two things are not free: voice, and a seat in the nightly circles. Both are metered — a voice minute costs us real money at the provider the moment it runs — so they open when you support the work, from $5. What you give decides how many voice minutes land on your account, and those minutes are yours outright: they do not reset at the end of a month. Ko-fi shows monthly support by default, so you can either keep it and have your minutes topped up each month, or switch it to a single payment; a monthly one can be cancelled from Ko-fi whenever you like, and cancelling never takes back minutes you already have. Chat is not affected by any of it. We would rather tell you that plainly than take the more common route of a free trial that quietly stops.",
+          "Free here means free. There is no card field in the signup, no trial clock, no message counter, and no upgrade prompt waiting inside a hard conversation. You give an email address so Aura can remember you between visits, and you start talking. Most apps in this category are free for three messages, or free until a timer runs out, or free until you want the one feature you downloaded them for. We would rather say plainly what this is: a free AI therapist you can use at 3am without being sold anything.",
         ],
       },
       {
@@ -101,14 +101,14 @@ export const PAGES: Record<string, SeoPage> = {
       {
         heading: "How it compares to other free options",
         paragraphs: [
-          "A general chatbot is free too, and it forgets you every time, agrees with whatever you frame, and has no crisis pathway. A free trial of a therapy app ends. A helpline is for a crisis, not for the ordinary Tuesday that is slowly going wrong. Calm Therapist is built for the space between: the recurring thought, the argument you are rehearsing, the night you cannot switch off. Read the comparison pages linked below if you want the detail.",
+          "A general chatbot is free too, and it forgets you every time, agrees with whatever you frame, and has no crisis pathway. A free trial of a therapy app ends. A helpline is for a crisis, not for the ordinary Tuesday that is slowly going wrong. Calm AI is built for the space between: the recurring thought, the argument you are rehearsing, the night you cannot switch off. Read the comparison pages linked below if you want the detail.",
         ],
       },
     ],
     faqs: [
       { q: "Is the free AI therapist really unlimited?", a: "Yes. Chat with Aura has no session cap and no daily limit. We rate-limit only to stop abuse, at a level no person talking normally will ever reach." },
       { q: "Do I need a card to sign up?", a: "No. An email and a password, or Google sign-in. Nothing is charged, and nothing can be charged, because there is nothing for sale on this site." },
-      { q: "Is there a catch, or a trial that runs out?", a: "No trial and no timer. Chat with Aura is free for everyone indefinitely, with no session cap and no card. The only paid parts are voice and circles, which open when you support the work, from $5. Ko-fi offers that monthly by default and you can switch it to a single payment, or cancel a monthly one at any time. You can use the chat for as long as you like without ever paying." },
+      { q: "Is there a catch, or a trial that runs out?", a: "No trial, no timer, no message cap, and no card. Talking to Aura is free for everyone, indefinitely. You sign up with an email so she can remember you between conversations, and that is the only thing asked of you." },
       { q: "Is it free in my language?", a: "Yes. Aura works in English, Urdu, Hindi, Arabic, Spanish, and French at no charge, and switches when you do." },
       { q: "Is a free AI therapist safe to use?", a: "Aura runs every message through a safety layer that reads six languages, shows the crisis line for your country when something serious surfaces, and stays careful for the rest of the conversation. She is not an emergency service; for immediate danger, call your local emergency number." },
     ],
@@ -161,7 +161,7 @@ export const PAGES: Record<string, SeoPage> = {
       { q: "Does voice work in my language?", a: "Voice follows the same profile as chat. Quality varies by language and accent; chat is the most reliable place to start in Urdu, Hindi, or Arabic." },
       { q: "Is the crisis line for my country?", a: "Yes. Aura shows the crisis line for the country in your profile, never a default from elsewhere. If you have not set a country, she shows international options and asks." },
       { q: "Does Aura understand cultural context, or just translate?", a: "She reads the profile you give her: family system, diaspora status, stigma, and how you express distress. Advice is adapted to that, not translated from a Western default." },
-      { q: "Is this free?", a: "Chat with Aura is free for everyone, in every supported language, with no session cap and no card. Voice and circles open separately when you support the work, from $5, monthly or as a single payment." },
+      { q: "Is this free?", a: "Yes, in every supported language, with no session cap and no card. Sign up with an email address and start talking." },
     ],
     related: COMMON_RELATED,
     ctaLine: "Write the first sentence in whichever language it comes in.",
@@ -169,17 +169,17 @@ export const PAGES: Record<string, SeoPage> = {
 
   "ai-therapist": {
     slug: "ai-therapist",
-    title: "AI Therapist | Free, Remembers You, Any Hour | Calm Therapist",
+    title: "AI Therapist | Free, Remembers You, Any Hour | Calm AI",
     description:
       "Talk through what's on your mind, anytime. An AI that listens, reflects, and helps you see your own thoughts more clearly. No appointment, private, free to start.",
     h1: "AI therapist — a quiet place to think out loud.",
     intro:
-      "Calm Therapist is an AI companion built for the moments you can't stop thinking. Not a chatbot. Not a wellness app. A quiet space to write or speak, and to be heard back with specificity instead of script. You don't need to be in crisis to use it. You just need somewhere to put what's in your head.",
+      "Calm AI is an AI companion built for the moments you can't stop thinking. Not a chatbot. Not a wellness app. A quiet space to write or speak, and to be heard back with specificity instead of script. You don't need to be in crisis to use it. You just need somewhere to put what's in your head.",
     sections: [
       {
         heading: "What you can use it for",
         paragraphs: [
-          "Most people open Calm Therapist for one of three reasons: a thought that's been on a loop, a conversation they're rehearsing, or a feeling that won't name itself. The agent meets you wherever you arrive. You can write three lines or talk for twenty minutes.",
+          "Most people open Calm AI for one of three reasons: a thought that's been on a loop, a conversation they're rehearsing, or a feeling that won't name itself. The agent meets you wherever you arrive. You can write three lines or talk for twenty minutes.",
         ],
         bullets: [
           "Untangle an argument before it happens",
@@ -189,9 +189,9 @@ export const PAGES: Record<string, SeoPage> = {
         ],
       },
       {
-        heading: "What makes Calm Therapist different from a generic chatbot",
+        heading: "What makes Calm AI different from a generic chatbot",
         paragraphs: [
-          "Generic AI chats start over every conversation. Calm Therapist remembers. Names, dates, the dreams you mentioned in passing — held quietly until you bring them up again. The tone shifts to match yours: warm if you want warm, direct if you want direct. And the agent is trained to refuse to feed worry-loops with reassurance, because reassurance is what makes anxiety worse over time.",
+          "Generic AI chats start over every conversation. Calm AI remembers. Names, dates, the dreams you mentioned in passing — held quietly until you bring them up again. The tone shifts to match yours: warm if you want warm, direct if you want direct. And the agent is trained to refuse to feed worry-loops with reassurance, because reassurance is what makes anxiety worse over time.",
         ],
       },
       {
@@ -202,11 +202,11 @@ export const PAGES: Record<string, SeoPage> = {
       },
     ],
     faqs: [
-      { q: "Is an AI therapist a real therapist?", a: "No. Calm Therapist is an AI companion. It is not a substitute for a licensed clinician, and we are clear about that everywhere it matters. For acute issues, please connect with a human." },
+      { q: "Is an AI therapist a real therapist?", a: "No. Calm AI is an AI companion. It is not a substitute for a licensed clinician, and we are clear about that everywhere it matters. For acute issues, please connect with a human." },
       { q: "Do I need to sign up to try it?", a: "No. The landing page lets you type one message and get one response with no account. After that, opening a space takes 30 seconds." },
       { q: "Is it private?", a: "Yes. We do not train on your messages. You can export or delete everything anytime." },
-      { q: "How is it different from journaling apps?", a: "Calm Therapist actively reflects what you wrote and noticed across sessions. Journaling apps store; Calm Therapist responds." },
-      { q: "Is it free?", a: "Chat with Aura is free for everyone, with no cap and no card. Voice and circles cost real money per minute to run, so they open when you support the work, from $5 — monthly by default on Ko-fi, or a single payment, and cancellable any time." },
+      { q: "How is it different from journaling apps?", a: "Calm AI actively reflects what you wrote and noticed across sessions. Journaling apps store; Calm AI responds." },
+      { q: "Is it free?", a: "Yes. No cap, no card, no trial. You sign up with an email address so Aura can remember you, and start." },
     ],
     related: COMMON_RELATED,
     ctaLine: "Try one sentence on the landing page. No signup screen first.",
@@ -214,7 +214,7 @@ export const PAGES: Record<string, SeoPage> = {
 
   "what-is-an-ai-therapist": {
     slug: "what-is-an-ai-therapist",
-    title: "What Is an AI Therapist? | Calm Therapist",
+    title: "What Is an AI Therapist? | Calm AI",
     description:
       "An AI therapist is a software companion you can talk to like a thoughtful friend. Here's what they're useful for, what they're not, and how to tell a good one from a bad one.",
     h1: "What is an AI therapist?",
@@ -243,15 +243,15 @@ export const PAGES: Record<string, SeoPage> = {
     faqs: [
       { q: "Is an AI therapist safe?", a: "Used as a companion alongside human care, yes — and safer than no support at all. For crisis, AI is not a substitute for professional help." },
       { q: "Can an AI therapist help with anxiety?", a: "It can support reflection on anxious patterns. The best ones avoid feeding reassurance loops, which is what actually moves anxiety over time." },
-      { q: "Is an AI therapist confidential?", a: "Calm Therapist does not train on your data and gives you delete in one click. Read the privacy page." },
+      { q: "Is an AI therapist confidential?", a: "Calm AI does not train on your data and gives you delete in one click. Read the privacy page." },
     ],
     related: COMMON_RELATED,
-    ctaLine: "Try Calm Therapist with one sentence — no signup first.",
+    ctaLine: "Try Calm AI with one sentence — no signup first.",
   },
 
   "how-does-ai-therapy-work": {
     slug: "how-does-ai-therapy-work",
-    title: "How Does AI Therapy Work? | Calm Therapist",
+    title: "How Does AI Therapy Work? | Calm AI",
     description:
       "AI therapy combines a memory layer, a trained therapeutic stance, and a safety system. Here's how each piece works — and what to look for in any product that calls itself one.",
     h1: "How does AI therapy work?",
@@ -261,7 +261,7 @@ export const PAGES: Record<string, SeoPage> = {
       {
         heading: "The model: trained for stance, not just chat",
         paragraphs: [
-          "The underlying model in Calm Therapist is prompted into a specific therapeutic stance — validate-and-change, not yes-person. Anti-sycophancy rules. Anti-reassurance in anxiety contexts. Cultural humility. The model is the tool; the prompt is the training. Both matter.",
+          "The underlying model in Calm AI is prompted into a specific therapeutic stance — validate-and-change, not yes-person. Anti-sycophancy rules. Anti-reassurance in anxiety contexts. Cultural humility. The model is the tool; the prompt is the training. Both matter.",
         ],
       },
       {
@@ -278,9 +278,9 @@ export const PAGES: Record<string, SeoPage> = {
       },
     ],
     faqs: [
-      { q: "Does AI therapy use ChatGPT?", a: "Calm Therapist runs on a model from OpenAI — and the difference is the prompt, memory, and safety architecture wrapped around it. The model is one input; the system is the product." },
+      { q: "Does AI therapy use ChatGPT?", a: "Calm AI runs on a model from OpenAI — and the difference is the prompt, memory, and safety architecture wrapped around it. The model is one input; the system is the product." },
       { q: "Is the memory accurate?", a: "It's only as accurate as what you've shared. If you contradict something, the system updates — you're always the source of truth." },
-      { q: "Does AI therapy follow CBT or DBT?", a: "Calm Therapist draws from CBT, DBT, ACT and IFS, and adapts to the user — it doesn't impose one framework." },
+      { q: "Does AI therapy follow CBT or DBT?", a: "Calm AI draws from CBT, DBT, ACT and IFS, and adapts to the user — it doesn't impose one framework." },
     ],
     related: COMMON_RELATED,
     ctaLine: "See it in one message on the landing page.",
@@ -325,7 +325,7 @@ export const PAGES: Record<string, SeoPage> = {
 
   "ai-therapist-vs-human-therapist": {
     slug: "ai-therapist-vs-human-therapist",
-    title: "AI Therapist vs Human Therapist | Calm Therapist",
+    title: "AI Therapist vs Human Therapist | Calm AI",
     description:
       "An honest comparison of an AI therapist vs a human therapist. What each is for, what each isn't, and how to use both well together.",
     h1: "AI therapist vs human therapist.",
@@ -352,22 +352,22 @@ export const PAGES: Record<string, SeoPage> = {
       },
     ],
     faqs: [
-      { q: "Is an AI therapist cheaper than a human therapist?", a: "Chat with Calm Therapist is free, with no session cap, while human therapy is priced per session. That does not make AI a replacement; it makes both possible, and it makes something available on the nights nothing else is." },
+      { q: "Is an AI therapist cheaper than a human therapist?", a: "Chat with Calm AI is free, with no session cap, while human therapy is priced per session. That does not make AI a replacement; it makes both possible, and it makes something available on the nights nothing else is." },
       { q: "Can my therapist see what I told the AI?", a: "Only if you choose to tell them. Your record is yours, and nothing leaves your account unless you copy it out yourself." },
       { q: "Will my human therapist be offended?", a: "A good clinician welcomes anything that helps you between sessions, including this." },
     ],
     related: COMMON_RELATED,
-    ctaLine: "Try Calm Therapist alongside whatever care you already have.",
+    ctaLine: "Try Calm AI alongside whatever care you already have.",
   },
 
   "ai-therapist-vs-betterhelp": {
     slug: "ai-therapist-vs-betterhelp",
-    title: "AI Therapist vs BetterHelp | Calm Therapist",
+    title: "AI Therapist vs BetterHelp | Calm AI",
     description:
-      "BetterHelp is human therapists over text and video. Calm Therapist is an AI companion that fits between sessions. Here's how they actually compare.",
+      "BetterHelp is human therapists over text and video. Calm AI is an AI companion that fits between sessions. Here's how they actually compare.",
     h1: "AI therapist vs BetterHelp.",
     intro:
-      "Different tools for different moments. BetterHelp connects you with a licensed human therapist. Calm Therapist gives you an AI companion that's available the rest of the time. They're not really competitors — they're complements, and people who use both report each one working better.",
+      "Different tools for different moments. BetterHelp connects you with a licensed human therapist. Calm AI gives you an AI companion that's available the rest of the time. They're not really competitors — they're complements, and people who use both report each one working better.",
     sections: [
       {
         heading: "What BetterHelp is good for",
@@ -376,7 +376,7 @@ export const PAGES: Record<string, SeoPage> = {
         ],
       },
       {
-        heading: "Where Calm Therapist fits",
+        heading: "Where Calm AI fits",
         paragraphs: [
           "Between BetterHelp sessions. At hours your therapist isn't available. For the recurring thought that doesn't quite warrant a session of its own. For the days you can't afford or access a human appointment. The AI is the container for everything that doesn't fit into 50 minutes a week.",
         ],
@@ -384,24 +384,24 @@ export const PAGES: Record<string, SeoPage> = {
       {
         heading: "Honest cost comparison",
         paragraphs: [
-          "BetterHelp charges a monthly subscription for weekly sessions with a licensed counsellor. Calm Therapist chat is free, with no session cap, and is not a licensed service. They are different products. Use whichever fits your situation, or use both — many people do.",
+          "BetterHelp charges a monthly subscription for weekly sessions with a licensed counsellor. Calm AI chat is free, with no session cap, and is not a licensed service. They are different products. Use whichever fits your situation, or use both — many people do.",
         ],
       },
     ],
     faqs: [
-      { q: "Should I use BetterHelp or Calm Therapist?", a: "If you have not started any care at all, both are reasonable starting points. If you can afford it, BetterHelp + Calm Therapist works well together." },
-      { q: "Is Calm Therapist a replacement for BetterHelp?", a: "No. Calm Therapist is an AI companion; BetterHelp connects you to a human therapist. They do different things." },
-      { q: "Does Calm Therapist share data with BetterHelp?", a: "No. Your data stays yours and is not shared with anyone." },
+      { q: "Should I use BetterHelp or Calm AI?", a: "If you have not started any care at all, both are reasonable starting points. If you can afford it, BetterHelp + Calm AI works well together." },
+      { q: "Is Calm AI a replacement for BetterHelp?", a: "No. Calm AI is an AI companion; BetterHelp connects you to a human therapist. They do different things." },
+      { q: "Does Calm AI share data with BetterHelp?", a: "No. Your data stays yours and is not shared with anyone." },
     ],
     related: COMMON_RELATED,
-    ctaLine: "Try Calm Therapist for the time between human sessions.",
+    ctaLine: "Try Calm AI for the time between human sessions.",
   },
 
   "ai-therapist-vs-chatgpt": {
     slug: "ai-therapist-vs-chatgpt",
     title: "AI Therapist vs ChatGPT | Why Generic AI Isn't Built for This",
     description:
-      "ChatGPT can talk. Calm Therapist is built for therapeutic conversation. The difference is memory, stance, and a safety system that's been clinically reviewed.",
+      "ChatGPT can talk. Calm AI is built for therapeutic conversation. The difference is memory, stance, and a safety system that's been clinically reviewed.",
     h1: "AI therapist vs ChatGPT.",
     intro:
       "ChatGPT is a brilliant general-purpose assistant. It is not built for therapeutic conversation, and using it that way creates risks — sycophancy, reassurance loops in anxiety, and dangerous gaps in crisis. A purpose-built AI therapist solves all three.",
@@ -409,25 +409,25 @@ export const PAGES: Record<string, SeoPage> = {
       {
         heading: "Memory: the part ChatGPT doesn't really have",
         paragraphs: [
-          "ChatGPT's session memory is improving but is not designed for longitudinal therapeutic care. Calm Therapist's memory is structured: facts about you, episodes from past sessions, what coping techniques actually worked for you specifically. The agent is meaningfully different in week eight than it was in week one.",
+          "ChatGPT's session memory is improving but is not designed for longitudinal therapeutic care. Calm AI's memory is structured: facts about you, episodes from past sessions, what coping techniques actually worked for you specifically. The agent is meaningfully different in week eight than it was in week one.",
         ],
       },
       {
         heading: "Stance: the part the prompt does",
         paragraphs: [
-          "Calm Therapist is prompted into anti-sycophancy: it disagrees gently, names cognitive distortions, refuses to give reassurance in anxiety contexts. ChatGPT, by default, agrees with whatever you frame for it — which is the opposite of what helps.",
+          "Calm AI is prompted into anti-sycophancy: it disagrees gently, names cognitive distortions, refuses to give reassurance in anxiety contexts. ChatGPT, by default, agrees with whatever you frame for it — which is the opposite of what helps.",
         ],
       },
       {
         heading: "Safety: the part that has to never fail",
         paragraphs: [
-          "Calm Therapist runs every user message through a tier classifier and a clinician-written crisis protocol. When something serious surfaces, the agent cannot freelance — it follows a script that has been triple-tested. ChatGPT improvises, and improvisation in crisis is dangerous.",
+          "Calm AI runs every user message through a tier classifier and a clinician-written crisis protocol. When something serious surfaces, the agent cannot freelance — it follows a script that has been triple-tested. ChatGPT improvises, and improvisation in crisis is dangerous.",
         ],
       },
     ],
     faqs: [
       { q: "Can I just use ChatGPT instead?", a: "You can, and many people do. We'd suggest reading our piece on what makes that risky for therapeutic conversation specifically." },
-      { q: "Is Calm Therapist using ChatGPT under the hood?", a: "We use a model from OpenAI, but not the ChatGPT product. The difference is the system around it: prompt, memory, cultural profile, and a safety classifier that reads six languages." },
+      { q: "Is Calm AI using ChatGPT under the hood?", a: "We use a model from OpenAI, but not the ChatGPT product. The difference is the system around it: prompt, memory, cultural profile, and a safety classifier that reads six languages." },
       { q: "Why not use any general chatbot directly?", a: "Same reason — without memory, prompt, and safety, a model is a model. The product is everything around it, and the crisis pathway is the part a general chatbot does not have." },
     ],
     related: COMMON_RELATED,
@@ -441,7 +441,7 @@ export const PAGES: Record<string, SeoPage> = {
       "When the thoughts won't stop and there's no one to call. An AI therapist for late-night, designed to slow you down — not feed you reassurance.",
     h1: "An AI therapist for the 3am thoughts.",
     intro:
-      "The thoughts that wake you up don't care that no one is awake. Calm Therapist is built for those hours specifically — slower, quieter, designed to interrupt the loop instead of feeding it.",
+      "The thoughts that wake you up don't care that no one is awake. Calm AI is built for those hours specifically — slower, quieter, designed to interrupt the loop instead of feeding it.",
     sections: [
       {
         heading: "Why nights are different",
@@ -463,9 +463,9 @@ export const PAGES: Record<string, SeoPage> = {
       },
     ],
     faqs: [
-      { q: "Will Calm Therapist wake me up with notifications?", a: "Only if you've asked us to. Default is silent." },
+      { q: "Will Calm AI wake me up with notifications?", a: "Only if you've asked us to. Default is silent." },
       { q: "Can it help me actually fall asleep?", a: "Indirectly — by helping you put the thought down. We don't pretend to be a sleep app." },
-      { q: "Is it free at night?", a: "Yes. Chat is free at any hour, with nothing that expires at 3am and no upgrade prompt in the middle of a hard night. Voice and circles are the only paid parts, and they open when you support the work, from $5, whenever you want them." },
+      { q: "Is it free at night?", a: "Yes, at any hour. Nothing expires at 3am, nothing counts down, and there is no upgrade prompt waiting in the middle of a hard night." },
     ],
     related: COMMON_RELATED,
     ctaLine: "If it's late and the thought won't stop — try one sentence.",
@@ -489,7 +489,7 @@ export const PAGES: Record<string, SeoPage> = {
       {
         heading: "What Aura is",
         paragraphs: [
-          "Aura is a free AI therapist built on a general language model with a written therapeutic stance rather than a decision tree. She remembers your name, your sister's name, the argument from last Tuesday, and what helped before. She replies in two or three sentences, asks one question at most, and pushes back when you are being unfair to yourself. Chat is free for everyone with no session cap. Voice and circles open when you support the work, from $5.",
+          "Aura is a free AI therapist built on a general language model with a written therapeutic stance rather than a decision tree. She remembers your name, your sister's name, the argument from last Tuesday, and what helped before. She replies in two or three sentences, asks one question at most, and pushes back when you are being unfair to yourself. Free for everyone, with no session cap and no card.",
         ],
         bullets: [
           "Memory across every conversation, on any device",
@@ -519,7 +519,7 @@ export const PAGES: Record<string, SeoPage> = {
       },
     ],
     faqs: [
-      { q: "Is Wysa free?", a: "Wysa's core scripted chatbot is free. The premium tools and human coaching are paid. Aura's chat is free with no cap; voice and circles open when you support the work, from $5, monthly or as a single payment." },
+      { q: "Is Wysa free?", a: "Wysa's core scripted chatbot is free; its premium tools and human coaching are paid. Aura is free with no cap and no card." },
       { q: "Does Wysa remember previous conversations?", a: "Not in the way people expect. Reviews consistently cite missing memory. Aura stores your profile and memories on the server and carries them into every conversation." },
       { q: "Does Wysa work in Urdu?", a: "Wysa's bot does not; Urdu is available only via its human coaches. Aura replies in Urdu, including Roman Urdu, directly." },
       { q: "Which is safer?", a: "Both have crisis detection. Aura runs a two-layer safety check in six languages before every reply and attaches the crisis line for your country. Wysa was rated unacceptable for teens by Common Sense Media in 2026; Aura is for adults." },
@@ -573,7 +573,7 @@ export const PAGES: Record<string, SeoPage> = {
     faqs: [
       { q: "Why did Woebot shut down?", a: "Woebot Health closed its consumer app on 30 June 2025 and refocused on enterprise and clinical work. Its founder cited regulation lagging behind the technology." },
       { q: "Is Aura like Woebot?", a: "In shape, yes: short, daily, text-first. In substance, Aura is conversational rather than scripted, remembers you, and works in six languages." },
-      { q: "Is Aura free?", a: "Chat is free for everyone with no cap and no card. Voice and circles open when you support the work, from $5." },
+      { q: "Is Aura free?", a: "Yes, for everyone, with no cap and no card." },
       { q: "Can I bring my Woebot data?", a: "There is no importer. Tell Aura what matters in your first conversation, or add memories from your space." },
       { q: "Is Aura safe in a crisis?", a: "Aura runs a two-layer safety check before every reply, shows the crisis line for your country, and stays careful for the rest of the conversation. She is not an emergency service." },
     ],
@@ -593,7 +593,7 @@ export const PAGES: Record<string, SeoPage> = {
       {
         heading: "The three complaints, and how Aura answers them",
         paragraphs: [
-          "Paywall mid-conversation: Aura's chat is free for everyone with no session cap and no upgrade prompt inside a conversation, ever. Voice and circles are the only things that carry a price, they are asked for in your dashboard rather than sprung on you at a hard moment, and cancelling monthly support never claws back the voice minutes you already have.",
+          "Paywall mid-conversation: Aura's chat is free for everyone with no session cap and no upgrade prompt inside a conversation, ever. Voice and circles are the only things that carry a price, they are asked for in your dashboard rather than sprung on you at a hard moment, and there is no card on file to be charged in the first place.",
           "No memory: Aura stores your profile and memories on the server and reads them before every reply. She does not re-ask what you told her last week.",
           "English only: Aura works in English, Urdu, Hindi, Arabic, Spanish, and French, including Roman Urdu and Hinglish, and switches mid-sentence when you do.",
         ],
@@ -619,7 +619,7 @@ export const PAGES: Record<string, SeoPage> = {
     ],
     faqs: [
       { q: "When does Youper shut down?", a: "Youper has announced a closing date of 30 September 2026." },
-      { q: "Is Aura a paid app?", a: "No. Chat is free, always, with no session cap. Voice and circles open when you support the work, from $5 — monthly or a single payment, your choice, cancellable any time, and never asked for inside a conversation." },
+      { q: "Is Aura a paid app?", a: "No. It is free to sign up and free to use, with no session cap and no card, and you are never asked for money inside a conversation." },
       { q: "Does Aura remember me?", a: "Yes. Profile, goals, and memories are stored on the server and used in every reply." },
       { q: "Does Aura track mood?", a: "There is a daily check-in in the dashboard. Aura is primarily a conversation, not a tracker." },
       { q: "Is there an Android or iPhone app?", a: "Aura is a web app that installs to your home screen from the browser. Store apps come once members have rated the product." },
@@ -822,7 +822,7 @@ export const GLOSSARY: Record<string, SeoPage> = {
         ],
       },
       {
-        heading: "How Calm Therapist treats them",
+        heading: "How Calm AI treats them",
         paragraphs: [
           "When the agent notices one of these patterns in your message, it gently names it and invites you to look at it from a different angle. It does not lecture you or list distortions in a wall of text. It picks one and asks one question.",
         ],
@@ -858,7 +858,7 @@ export const GLOSSARY: Record<string, SeoPage> = {
       {
         heading: "What actually shifts a rumination loop",
         paragraphs: [
-          "Modality switch. If you're stuck in your head, the way out is rarely through more thought. It's a body, a place, an action — even small. A walk. A different room. Naming what you can see. The agent in Calm Therapist is trained to interrupt loops, not feed them.",
+          "Modality switch. If you're stuck in your head, the way out is rarely through more thought. It's a body, a place, an action — even small. A walk. A different room. Naming what you can see. The agent in Calm AI is trained to interrupt loops, not feed them.",
         ],
       },
     ],
@@ -892,7 +892,7 @@ export const GLOSSARY: Record<string, SeoPage> = {
       {
         heading: "Why it works",
         paragraphs: [
-          "The act of putting an internal experience into language changes the experience. The same thought, written or spoken, becomes more handle-able. Calm Therapist is built around this — it's not a feed of advice, it's a place to think out loud.",
+          "The act of putting an internal experience into language changes the experience. The same thought, written or spoken, becomes more handle-able. Calm AI is built around this — it's not a feed of advice, it's a place to think out loud.",
         ],
       },
     ],
